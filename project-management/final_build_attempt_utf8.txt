@@ -1,0 +1,16 @@
+﻿
+> project-management@0.0.0 build
+> vue-tsc -b && vite build
+
+src/features/jobCards/components/InventoryRequisitionGrid.vue(308,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(326,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(339,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(358,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(370,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(383,172): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.

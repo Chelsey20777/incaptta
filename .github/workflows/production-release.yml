@@ -1,0 +1,75 @@
+name: Production release
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: Git commit SHA that passed staging and UAT
+        required: true
+      uat_approved:
+        description: Confirm UAT approval for this exact SHA
+        required: true
+        type: boolean
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+  statuses: read
+
+concurrency:
+  group: incaptta-projects-production
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    if: ${{ inputs.uat_approved }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Pin production project
+        run: |
+          test "${{ vars.PRODUCTION_FIREBASE_PROJECT_ID }}" = "incaptta-pro"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - name: Require a successful staging release for this SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
+        run: |
+          state="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${RELEASE_SHA}/statuses" \
+            --jq '[.[] | select(.context=="incaptta-staging-release")] | first | .state // empty')"
+          test "$state" = "success"
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_PRODUCTION_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Deploy tested commit to production
+        run: >-
+          npx --yes firebase-tools@15.28.1 apphosting:rollouts:create
+          "${{ vars.PRODUCTION_APPHOSTING_BACKEND_ID }}"
+          --project incaptta-pro
+          --git-commit "${{ inputs.commit_sha }}"
+          --force
+
+      - name: Verify production health
+        run: |
+          response="$(curl --fail --silent --show-error --retry 12 --retry-delay 10 "${{ vars.PRODUCTION_BASE_URL }}/api/health")"
+          node -e '
+            const h = JSON.parse(process.argv[1]);
+            const host = String(h.legacyApiHost || "");
+            const ok = h.status === "ok"
+              && h.environment === "production"
+              && h.firebaseProjectId === "incaptta-pro"
+              && h.allowRealEmail === true
+              && h.enableScheduledJobs === true
+              && host.includes("us-central1-incaptta-pro.cloudfunctions.net")
+              && !host.includes("incaptta-pro-staging");
+            if (!ok) process.exit(1);
+          ' "$response"

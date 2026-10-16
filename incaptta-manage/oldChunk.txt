@@ -1,0 +1,75 @@
+<!-- 1. Key Performance Tiles — premium dark-green, matches main project -->
+                      <div class="rounded-2xl overflow-hidden border border-white/5">
+                        <!-- Row 1 -->
+                        <div class="grid grid-cols-2 gap-px" style="background:#132b16">
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.18em]" style="color:#3d6645">INVOICE VALUE</p>
+                            <p class="text-[22px] font-black tracking-tight text-white leading-none">${{ fmt(fin.invoiceValue) }}</p>
+                            <p class="text-[8px] italic mt-1" style="color:#3d6645">Agreed value from CRM / Manager</p>
+                            <div v-if="fin.linkedCrmNumber" class="flex items-center gap-1.5 pt-1">
+                              <span class="text-[7px] font-black uppercase px-1.5 py-0.5 rounded" style="background:#1c3a21;color:#5a9c64">{{ fin.linkedCrmType }}</span>
+                              <span class="text-[7px] font-mono" style="color:#3d6645">{{ fin.linkedCrmNumber }}</span>
+                            </div>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.18em]" style="color:#3d6645">DIRECT COSTS</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none" style="color:#ef4444">${{ fmt(fin.irdBaseCost + fin.implementationCost + (fin.referrerCommission || 0)) }}</p>
+                            <p class="text-[8px] italic mt-1" style="color:#3d6645">Materials + Labor + Expenses + Commission</p>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.18em]" style="color:#22c55e">NET PROFIT</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none" style="color:#22c55e">${{ fmt(fin.netProfit) }}</p>
+                            <p class="text-[8px] italic mt-1" style="color:#3d6645">The bottom line for this job</p>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.18em]" style="color:#3d6645">PROFIT MARGIN</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none text-white">{{ fin.profitMargin.toFixed(1) }}%</p>
+                            <div class="h-1 rounded-full mt-3 overflow-hidden" style="background:#1c3a21">
+                              <div class="h-full rounded-full" style="background:#22c55e;transition:width 1s" :style="{width:Math.min(100,Math.max(0,fin.profitMargin))+'%'}" />
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="grid grid-cols-2 gap-px mt-px" style="background:#132b16">
+                          <div class="p-4 space-y-1" style="background:#0c2210">
+                            <p class="text-[9px] font-black uppercase tracking-[0.18em]" style="color:#22c55e">INITIAL INVOICE VALUE</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none" style="color:#22c55e">${{ fmt(fin.invoiceValue) }}</p>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#1a0a0a">
+                            <p class="text-[9px] font-black uppercase tracking-[0.1em] leading-tight" style="color:#ef4444">IRD GROSS + STAFF + ADHOC + COMMISSION</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none" style="color:#ef4444">${{ fmt(fin.irdGrossRevenue + fin.implementationCost + (fin.referrerCommission || 0)) }}</p>
+                            <p class="text-[8px] font-black uppercase tracking-widest" style="color:#ef4444">OPERATIONAL COSTS</p>
+                          </div>
+                          <div class="p-4 space-y-1" :style="{background: fin.twidNetAfterAdjustments < 0 ? '#1c1000' : '#101a00'}">
+                            <p class="text-[9px] font-black uppercase tracking-[0.1em]" style="color:#f59e0b">T.W.I.D CUMULATIVE NET AMOUNT</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none" :style="{color: fin.twidNetAfterAdjustments < 0 ? '#ef4444' : '#f59e0b'}">${{ fmt(fin.twidNetAfterAdjustments) }}</p>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.1em]" style="color:#3d6645">TWID REVENUE PERCENTAGE</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none text-white">{{ fin.twidRevenuePercentage.toFixed(2) }}%</p>
+                          </div>
+                        </div>
+                        <!-- Row 3 -->
+                        <div class="grid grid-cols-2 gap-px mt-px" style="background:#132b16">
+                          <div class="p-4 space-y-1" style="background:#b80027">
+                            <p class="text-[9px] font-black uppercase tracking-[0.18em]" style="color:rgba(255,255,255,0.65)">INVENTORY GROSS VALUE</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none text-white">${{ fmt(fin.irdGrossRevenue) }}</p>
+                            <p class="text-[8px] font-black uppercase" style="color:rgba(255,255,255,0.45)">(PURCHASING + MARKUP)</p>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.1em]" style="color:#3d6645">I.R.D INVENTORY PURCHASING PRICE</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none text-white">${{ fmt(fin.irdBaseCost) }}</p>
+                            <p class="text-[8px] font-black uppercase" style="color:#3d6645">(CUMULATIVE)</p>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.1em]" style="color:#3d6645">I.R.D CUMULATIVE NET REVENUE</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none text-white">${{ fmt(fin.irdNetRevenue) }}</p>
+                          </div>
+                          <div class="p-4 space-y-1" style="background:#0d1f10">
+                            <p class="text-[9px] font-black uppercase tracking-[0.1em]" style="color:#3d6645">I.R.D REVENUE PERCENTAGE</p>
+                            <p class="text-[22px] font-black tracking-tight leading-none text-white">{{ fin.irdRevenuePercentage.toFixed(1) }}%</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      

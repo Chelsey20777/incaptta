@@ -1,0 +1,91 @@
+import React, { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Users, User, Calendar, Wallet, ClipboardList, Briefcase, Landmark, AlertTriangle, Plus, Trash2, Check, X, FileText, Percent, DollarSign, Phone, Mail, Building2, ShieldCheck, ShieldAlert, Clock, CheckCircle2, XCircle, Edit3, Search } from 'lucide-react'
+import { toast } from 'sonner'
+
+// ─── TASKS TAB ──────────────────────────────────────────────────────────────
+export function TasksTab({ store, fmt, getEmpName }: any) {
+  const [showAdd, setShowAdd] = useState(false)
+  const [showNote, setShowNote] = useState('')
+  const [noteText, setNoteText] = useState('')
+  const [form, setForm] = useState({ title: '', description: '', assignedTo: '', priority: 'Medium', dueDate: '', kpiCategory: '' })
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xs font-black uppercase text-muted-foreground">Tasks</h3>
+        <Button size="sm" className="bg-[#ff8903] text-white font-bold text-xs" onClick={() => setShowAdd(true)}><Plus className="size-3" /> New</Button>
+      </div>
+      {store.hrTasks.map((t: any) => (
+        <Card key={t.id} className="border shadow-sm"><CardContent className="p-3">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-1.5">
+                <h4 className="text-sm font-bold">{t.title}</h4>
+                <Badge variant="outline" className={`text-[8px] font-bold ${t.status === 'Completed' ? 'text-green-600 border-green-500/30' : t.status === 'Overdue' ? 'text-red-600 border-red-500/30' : 'text-amber-600 border-amber-500/30'}`}>{t.status}</Badge>
+              </div>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Assigned to: {t.assignedToName || t.assignedTo} | Due: {t.dueDate || '—'}</p>
+              {t.description && <p className="text-[9px] text-muted-foreground mt-1">{t.description}</p>}
+              <div className="flex gap-2 mt-2">
+                {['Pending', 'In Progress', 'Completed'].map(s => (
+                  <Button key={s} size="sm" variant={t.status === s ? 'default' : 'ghost'}
+                    className={`text-[8px] h-6 px-2 rounded-full font-bold ${t.status === s ? 'bg-[#ff8903] text-white' : 'text-muted-foreground'}`}
+                    onClick={() => store.updateTaskStatus(t.id, { status: s })}>{s}</Button>
+                ))}
+                <Button size="sm" variant="ghost" className="h-6 text-[8px] font-bold" onClick={() => { setShowNote(t.id); setNoteText('') }}>Add Note</Button>
+              </div>
+            </div>
+          </div>
+        </CardContent></Card>
+      ))}
+
+      {showAdd && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <Card className="w-full max-w-md bg-card border shadow-2xl rounded-3xl">
+            <CardHeader className="pb-3"><CardTitle className="text-lg font-black">New Task</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              <div className="space-y-1"><Label className="text-xs font-black uppercase text-muted-foreground">Title</Label><Input value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="h-10" /></div>
+              <div className="space-y-1"><Label className="text-xs font-black uppercase text-muted-foreground">Description</Label><Input value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="h-10" /></div>
+              <div className="space-y-1"><Label className="text-xs font-black uppercase text-muted-foreground">Assigned To</Label>
+                <select value={form.assignedTo} onChange={e => setForm({...form, assignedTo: e.target.value})} className="w-full h-10 px-3 rounded-xl border bg-background text-sm">
+                  <option value="">Select</option>
+                  {store.employees.map((e: any) => <option key={e.id} value={e.id}>{getEmpName(e)}</option>)}
+                </select></div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1"><Label className="text-xs font-black uppercase text-muted-foreground">Priority</Label>
+                  <select value={form.priority} onChange={e => setForm({...form, priority: e.target.value})} className="w-full h-10 px-3 rounded-xl border bg-background text-sm">
+                    <option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
+                  </select></div>
+                <div className="space-y-1"><Label className="text-xs font-black uppercase text-muted-foreground">Due Date</Label><Input type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} className="h-10" /></div>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <Button variant="outline" className="flex-1 rounded-xl font-bold" onClick={() => setShowAdd(false)}>Cancel</Button>
+                <Button className="flex-1 rounded-xl font-bold bg-[#ff8903] text-white" onClick={async () => { await store.addTask(form); setShowAdd(false) }}>Create</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {showNote && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <Card className="w-full max-w-sm bg-card border shadow-2xl rounded-3xl">
+            <CardContent className="p-6 space-y-4">
+              <h3 className="text-lg font-black">Add Note</h3>
+              <Input value={noteText} onChange={e => setNoteText(e.target.value)} placeholder="Enter note..." className="h-10" />
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1 rounded-xl font-bold" onClick={() => setShowNote('')}>Cancel</Button>
+                <Button className="flex-1 rounded-xl font-bold bg-[#ff8903] text-white" onClick={async () => { await store.addTaskNote(showNote, { text: noteText, userId: '', userName: '' }); setShowNote('') }}>Add</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  )
+}
+

@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Improvement Report — Incaptta Pvt Ltd</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --orange:       #f97316;
+      --orange-light: #fff7ed;
+      --orange-dark:  #c2410c;
+      --orange-mid:   #fed7aa;
+      --green:        #16a34a;
+      --green-light:  #f0fdf4;
+      --green-mid:    #bbf7d0;
+      --red:          #dc2626;
+      --red-light:    #fef2f2;
+      --red-mid:      #fecaca;
+      --amber:        #d97706;
+      --amber-light:  #fffbeb;
+      --amber-mid:    #fde68a;
+      --blue:         #2563eb;
+      --blue-light:   #eff6ff;
+      --blue-mid:     #bfdbfe;
+      --purple:       #7c3aed;
+      --purple-light: #f5f3ff;
+      --dark:         #111827;
+      --gray-700:     #374151;
+      --gray-500:     #6b7280;
+      --gray-300:     #d1d5db;
+      --gray-100:     #f3f4f6;
+      --border:       #e5e7eb;
+      --white:        #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px;
+      color: var(--dark);
+      background: #f9fafb;
+      line-height: 1.6;
+    }
+
+    /* ── Page wrapper ── */
+    .page {
+      max-width: 1020px;
+      margin: 0 auto;
+      background: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: var(--orange);
+      padding: 6px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topbar-left {
+      font-size: 11px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
+    }
+
+    .topbar-right {
+      font-size: 11px;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── Header ── */
+    .header {
+      padding: 32px 40px 24px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 20px;
+    }
+
+    .brand-block .brand-name {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--orange);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .brand-block .brand-tagline {
+      font-size: 11px;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 2px;
+      margin-bottom: 16px;
+    }
+
+    .brand-block .report-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+    }
+
+    .brand-block .report-subtitle {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    .header-meta {
+      text-align: right;
+      font-size: 11px;
+      color: var(--gray-500);
+      line-height: 1.8;
+    }
+
+    .header-meta .doc-id {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    /* ── Stat banner ── */
+    .stat-banner {
+      background: var(--orange-light);
+      border-bottom: 1px solid var(--orange-mid);
+      padding: 16px 40px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-item .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--orange-dark);
+    }
+
+    .stat-item .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    /* ── Main body ── */
+    .body {
+      padding: 32px 40px;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 36px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--orange);
+    }
+
+    .section-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .section-desc {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 1px;
+    }
+
+    /* ── Improvement cards ── */
+    .improvement-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .badge-red    { background: var(--red-light);    color: var(--red);    border: 1px solid var(--red-mid);    }
+    .badge-amber  { background: var(--amber-light);  color: var(--amber);  border: 1px solid var(--amber-mid);  }
+    .badge-green  { background: var(--green-light);  color: var(--green);  border: 1px solid var(--green-mid);  }
+    .badge-blue   { background: var(--blue-light);   color: var(--blue);   border: 1px solid var(--blue-mid);   }
+    .badge-purple { background: var(--purple-light); color: var(--purple); border: 1px solid #ddd6fe;           }
+    .badge-orange { background: var(--orange-light); color: var(--orange-dark); border: 1px solid var(--orange-mid); }
+
+    .card-body {
+      padding: 0 20px 18px;
+    }
+
+    .finding-block {
+      background: var(--red-light);
+      border-left: 3px solid var(--red);
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+
+    .finding-block .finding-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--red);
+      margin-bottom: 4px;
+    }
+
+    .finding-block .finding-text {
+      font-size: 12.5px;
+      color: var(--gray-700);
+      line-height: 1.5;
+    }
+
+    .fix-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--green);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .fix-label::before {
+      content: '';
+      display: inline-block;
+      width: 12px;
+      height: 2px;
+      background: var(--green);
+      border-radius: 2px;
+    }
+
+    .fix-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .fix-points li {
+      font-size: 12.5px;
+      color: var(--gray-700);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .fix-points li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    .fix-points li strong { color: var(--dark); }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+    /* ── Priority table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      margin-bottom: 8px;
+    }
+
+    thead th {
+      background: var(--orange);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 9px 14px;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) { background: var(--gray-100); }
+
+    tbody td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    td.priority-dot {
+      font-size: 18px;
+      text-align: center;
+      width: 40px;
+    }
+
+    td.bold { font-weight: 600; color: var(--dark); }
+    td.gray  { color: var(--gray-500); font-size: 12px; }
+
+    /* ── Process controls table ── */
+    .process-row td { vertical-align: top; }
+    .action-cell { color: var(--gray-700); font-size: 12px; line-height: 1.5; }
+
+    /* ── Two column grid ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── Info box ── */
+    .info-box {
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    .info-box.blue   { background: var(--blue-light);   border: 1px solid var(--blue-mid);   color: #1e3a8a; }
+    .info-box.amber  { background: var(--amber-light);  border: 1px solid var(--amber-mid);  color: #78350f; }
+    .info-box.green  { background: var(--green-light);  border: 1px solid var(--green-mid);  color: #14532d; }
+    .info-box.orange { background: var(--orange-light); border: 1px solid var(--orange-mid); color: var(--orange-dark); }
+
+    .info-box .info-title {
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 20px 40px;
+      border-top: 1px solid var(--border);
+      background: var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    .footer .brand { font-weight: 700; color: var(--orange); font-size: 13px; }
+    .footer .confidential { color: var(--orange-dark); font-weight: 700; }
+
+    /* ── Print button ── */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--orange);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+      z-index: 999;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .print-btn:hover { background: var(--orange-dark); }
+
+    /* ── ToC ── */
+    .toc {
+      background: var(--gray-100);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+    }
+
+    .toc-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 10px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 20px;
+    }
+
+    .toc-item {
+      font-size: 12px;
+      color: var(--gray-700);
+      padding: 3px 0;
+      border-bottom: 1px dashed var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .toc-item .toc-num { color: var(--orange); font-weight: 600; }
+
+    /* ── Print styles ── */
+    @media print {
+      body { background: white; }
+      .print-btn { display: none !important; }
+      .topbar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .improvement-card { page-break-inside: avoid; }
+      .section { page-break-inside: avoid; }
+      @page { margin: 1.5cm; size: A4; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF</button>
+
+<div class="page">
+
+  <!-- ── TOP BAR ── -->
+  <div class="topbar">
+    <div class="topbar-left">Incaptta Pvt Ltd · System Improvement Report</div>
+    <div class="topbar-right">Confidential · Internal Use Only · 3/11/2026</div>
+  </div>
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="brand-block">
+      <div class="brand-name">Incaptta</div>
+      <div class="brand-tagline">Poultry Equipment Supplies</div>
+      <div class="report-title">Project Management System<br>Improvement Report</div>
+      <div class="report-subtitle">Based on Financial & Operational Ledger Audit — All Accounts · All Time</div>
+    </div>
+    <div class="header-meta">
+      <div class="doc-id">RPT-AUDIT-2026-001</div>
+      <div>Generated: 3/11/2026</div>
+      <div>Audited by: AI Audit Assistant</div>
+      <div>Reviewed by: adonismuzataet@gmail.com</div>
+      <div style="margin-top:8px; font-size:10px; color:var(--orange-dark); font-weight:600;">BASIS: Ledger Report · 54 Transactions</div>
+    </div>
+  </div>
+
+  <!-- ── STAT BANNER ── -->
+  <div class="stat-banner">
+    <div class="stat-item">
+      <div class="stat-value">8</div>
+      <div class="stat-label">System Improvements</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">5</div>
+      <div class="stat-label">Process Controls</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Critical (Red) Flags</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">$14,018</div>
+      <div class="stat-label">Untracked / At-Risk Spend</div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+
+    <!-- Table of Contents -->
+    <div class="toc">
+      <div class="toc-title">Contents</div>
+      <div class="toc-grid">
+        <div class="toc-item"><span>1. Fix Closing Balance Bug</span><span class="toc-num">🔴 Immediate</span></div>
+        <div class="toc-item"><span>5. Outstanding Receivables Dashboard</span><span class="toc-num">🟡 Next Sprint</span></div>
+        <div class="toc-item"><span>2. Mandatory Job Card Linking</span><span class="toc-num">🟠 This Week</span></div>
+        <div class="toc-item"><span>6. Loan / Financing Register</span><span class="toc-num">🟡 Next Sprint</span></div>
+        <div class="toc-item"><span>3. External Project Bridge</span><span class="toc-num">🟢 Backlog</span></div>
+        <div class="toc-item"><span>7. Transfer Charge Alerting</span><span class="toc-num">🟢 Backlog</span></div>
+        <div class="toc-item"><span>4. Revenue Classification Fix</span><span class="toc-num">🟠 This Week</span></div>
+        <div class="toc-item"><span>8. Approval Gate for Withdrawals</span><span class="toc-num">🟠 This Week</span></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SECTION 1 — SYSTEM IMPROVEMENTS
+    ══════════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">⚙️</div>
+        <div>
+          <div class="section-title">System Feature Improvements</div>
+          <div class="section-desc">Code-level changes required in the Project Management application</div>
+        </div>
+      </div>
+
+      <!-- Card 1 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--red-light); border-bottom:1px solid var(--red-mid);">
+          <div class="card-header-left">
+            <div class="card-number">1</div>
+            <div class="card-title">Fix the Closing Balance Calculation Bug</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-red">Critical</span>
+            <span class="badge badge-orange">Finance</span>
+            <span class="badge badge-red">Immediate</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              The report header states Closing Balance = <strong>$2,938.00</strong>, but the running balance at the most recent transaction is <strong>$362.37</strong>. The unexplained gap is <strong>$2,575.63</strong>. This is an "All Time" report so the opening balance should be $0 — making the true closing balance equal to the net movement (+$362.37), not $2,938.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li>The <strong>Closing Balance</strong> in the PDF summary header is sourced from a Firestore account balance document (a stored value), while the running balance in the table is <strong>calculated live</strong> from transaction entries. These two are out of sync.</li>
+            <li>The summary header should derive its closing balance from the <strong>same running balance computation</strong> as the last row in the transaction table — not from a separate document read.</li>
+            <li>Add a <strong>reconciliation check</strong>: if stored account balance ≠ computed running balance at report generation time, show a warning banner on the ledger page before allowing PDF export.</li>
+            <li>Run a one-time Firestore migration to recalculate and correct all stored account balances against their transaction histories.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--orange-light); border-bottom:1px solid var(--orange-mid);">
+          <div class="card-header-left">
+            <div class="card-number">2</div>
+            <div class="card-title">Mandatory Job Card Linking for Cash Expenses</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-red">High</span>
+            <span class="badge badge-blue">Job Cards</span>
+            <span class="badge badge-amber">This Week</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              <strong>$6,907.30</strong> (Withdrawal — Mr Mufambisi) and <strong>$250.00</strong> (Roll Top Ridges — Mrs Uchena) were posted as CASH expenses with no job card reference, no purpose code, and no approval trail. These represent <strong>29.1% of total outflows</strong> that are completely unattributed.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li>In the expense / opex creation form, if account = <strong>CASH</strong> and amount ≥ <strong>$100</strong>, require one of:
+              <br>&nbsp;&nbsp;&nbsp;• A <strong>Job Card ID</strong> selection from open job cards, or
+              <br>&nbsp;&nbsp;&nbsp;• A <strong>Purpose Code</strong> from a dropdown (Wages / Supplies / Overhead / Loan Repayment / Other), or
+              <br>&nbsp;&nbsp;&nbsp;• An explicit <em>"No Job Card"</em> toggle with a mandatory <strong>description ≥ 20 characters</strong>.
+            </li>
+            <li>Add a <strong>Job Card Expenses</strong> sub-tab inside each job card detail page showing all linked expenses, running total, and remaining budget.</li>
+            <li>On the <strong>Ledger view</strong>, highlight unlinked cash expenses > $100 in amber so they are immediately visible without running a full audit.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--amber-light); border-bottom:1px solid var(--amber-mid);">
+          <div class="card-header-left">
+            <div class="card-number">3</div>
+            <div class="card-title">"Old System" / External Project Transfer Bridge</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-amber">Medium</span>
+            <span class="badge badge-blue">Fund Transfers</span>
+            <span class="badge badge-green">Backlog</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              <strong>$4,755.50</strong> across 7 transactions (24.5% of all outflows) was transferred to an untracked "old system" for WVZ project costs — materials, labour, transport. No corresponding WVZ revenue appears in this ledger. It is impossible to calculate the profitability of the WVZ project from this system alone.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li>Add an <strong>External Project Transfer</strong> transaction type in the Fund Transfers module with required fields: <strong>External Project Name</strong>, <strong>Cost Category</strong> (Materials / Labour / Transport / Other), and <strong>Expected Settlement Date</strong>.</li>
+            <li>Create an <strong>External Projects register</strong> that aggregates all transfers by project name, showing total spent, total recovered, and net position.</li>
+            <li>When a client payment is eventually received for an externally-tracked project, link it back to the register to close the loop — showing the full profit/loss.</li>
+            <li>Long term: migrate WVZ transaction history into the new system retroactively so all financial data lives in one place.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--amber-light); border-bottom:1px solid var(--amber-mid);">
+          <div class="card-header-left">
+            <div class="card-number">4</div>
+            <div class="card-title">Revenue Classification Enforcement</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-amber">Medium</span>
+            <span class="badge badge-orange">Finance</span>
+            <span class="badge badge-amber">This Week</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              Mr Mabhena's <strong>$3,000.00</strong> client payment was logged as <strong>TOPUP</strong> instead of <strong>INCOME</strong>, with no invoice or quote linked. This misclassification understates recognised revenue and makes it impossible to track the outstanding balance on this client's contract.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li><strong>Restrict TOPUP</strong> to internal-only transactions: owner capital injections, loan receipts, and inter-account top-ups. Remove TOPUP as an option for named client payments.</li>
+            <li>Any payment from a <strong>named client</strong> must be linked to an <strong>Invoice ID</strong> or <strong>Quote ID</strong>. Add a client name lookup field on the payment form.</li>
+            <li>Add a <strong>"Part Payment"</strong> payment type that records: amount received, total invoice value, and automatically calculates and displays the outstanding balance.</li>
+            <li>Show an <strong>Outstanding Payments</strong> badge on each client's CRM profile page.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--blue-light); border-bottom:1px solid var(--blue-mid);">
+          <div class="card-header-left">
+            <div class="card-number">5</div>
+            <div class="card-title">Outstanding Receivables Dashboard Widget</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-blue">Medium</span>
+            <span class="badge badge-purple">Dashboard</span>
+            <span class="badge badge-amber">Next Sprint</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              Two open receivable balances exist with no visibility in the system: (1) JC-2026-0128 10% balance ≈ <strong>$1,538.89</strong>, and (2) Mr Mabhena — full contract value unknown, partial payment of $3,000 received. There is no single place in the system to see what money is owed to the business.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li>Add a <strong>Receivables widget</strong> on the main dashboard showing: Client Name · Contract Value · Received · Outstanding · Days Overdue.</li>
+            <li>Colour-code rows: <span style="color:var(--green);font-weight:600;">green</span> (&lt;14 days) · <span style="color:var(--amber);font-weight:600;">amber</span> (14–30 days) · <span style="color:var(--red);font-weight:600;">red</span> (&gt;30 days).</li>
+            <li>Add a <strong>Send Reminder</strong> action button per row that generates a payment reminder notification.</li>
+            <li>Show a headline <strong>"Total Outstanding"</strong> figure prominently. Flag if outstanding exceeds 40% of total invoiced (per the audit framework threshold).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--blue-light); border-bottom:1px solid var(--blue-mid);">
+          <div class="card-header-left">
+            <div class="card-number">6</div>
+            <div class="card-title">Loan &amp; Financing Register</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-blue">Medium</span>
+            <span class="badge badge-orange">Finance</span>
+            <span class="badge badge-amber">Next Sprint</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              The <strong>$2,938.00</strong> loan repayment received from Rutendo Mufambisi is included in Total Credits, inflating the headline revenue figure. True operational revenue is <strong>$16,850.00</strong>, not $20,798.00. Loan movements mixed with trading revenue distorts profitability analysis.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li>Create a separate <strong>Loans &amp; Financing</strong> module with fields: Lender/Borrower Name · Principal Amount · Interest Rate · Repayment Schedule · Outstanding Balance.</li>
+            <li>Loan receipts and repayments flow through this register and are <strong>excluded from revenue/expense totals</strong> on financial reports — shown as a separate "Financing Activities" section.</li>
+            <li>On the Dashboard, show a <strong>Loans Summary</strong> card: Total owed to others · Total owed by others · Net financing position.</li>
+            <li>Link existing TOPUP entries tagged as loan-related to this register retroactively.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--green-light); border-bottom:1px solid var(--green-mid);">
+          <div class="card-header-left">
+            <div class="card-number">7</div>
+            <div class="card-title">Transfer Charge Rate Alerting</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-green">Low</span>
+            <span class="badge badge-blue">Fund Transfers</span>
+            <span class="badge badge-green">Backlog</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              EcoCash transfer fee was <strong>$50 on a $1,000 transfer = 5%</strong>, exceeding the 2% audit threshold. Total bank/transfer charges were <strong>$103.34 in just 3 days</strong>. Excessive fees reduce net cash position and are not being monitored.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li>When recording a transfer with a fee, auto-calculate <strong>fee % = (fee / amount) × 100</strong> and display it inline on the form.</li>
+            <li>If fee % exceeds <strong>2%</strong>, show a warning: <em>"This fee rate is above the 2% threshold. Consider batching transfers or using an alternative payment method."</em></li>
+            <li>Add a <strong>Monthly Bank Charges</strong> summary on the Finance dashboard showing total fees paid by account type (BANK / ECOCASH) for the current month.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="improvement-card">
+        <div class="card-header" style="background:var(--orange-light); border-bottom:1px solid var(--orange-mid);">
+          <div class="card-header-left">
+            <div class="card-number">8</div>
+            <div class="card-title">Approval Gate for Large Cash Withdrawals</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-red">High</span>
+            <span class="badge badge-purple">HR / Access Control</span>
+            <span class="badge badge-amber">This Week</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding-top:14px;">
+          <div class="finding-block">
+            <div class="finding-label">Audit Finding</div>
+            <div class="finding-text">
+              <strong>$6,907.30</strong> left as a single CASH withdrawal with no visible approval chain. Per the audit framework, expenses ≥ $5,000 must be verified against an authorised signatory. No such control currently exists in the system — any user can post large cash expenses without a second approval.
+            </div>
+          </div>
+          <div class="fix-label">Recommended Fix</div>
+          <ul class="fix-points">
+            <li>Implement a <strong>two-step approval workflow</strong> for expenses above a configurable threshold (default: <strong>$500 cash / $1,000 any account</strong>).</li>
+            <li>The submitter posts the expense as <strong>"Pending Approval"</strong> — it does not post to the ledger until an authorised approver (Manager / Admin role) confirms it.</li>
+            <li>Approvers receive an <strong>in-app notification</strong> and can approve or reject with a mandatory comment.</li>
+            <li>The audit trail must record: submittedBy · submittedAt · approvedBy · approvedAt · approverComment. Rejection reason is required.</li>
+            <li>Block the <strong>self-approval</strong> conflict of interest — submitter cannot approve their own expense. This is already flagged in the audit framework (Query 39).</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /section -->
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════════
+         SECTION 2 — PROCESS CONTROLS
+    ══════════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">📋</div>
+        <div>
+          <div class="section-title">Process Controls — No Code Required</div>
+          <div class="section-desc">Immediate manual actions to address existing data issues</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px;">#</th>
+            <th>Issue</th>
+            <th>Amount at Risk</th>
+            <th>Required Action</th>
+            <th style="width:110px;">Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="process-row">
+            <td class="priority-dot">🔴</td>
+            <td class="bold">Mr Mufambisi Withdrawal — Undocumented</td>
+            <td class="bold" style="color:var(--red);">$6,907.30</td>
+            <td class="action-cell">Attach a signed payment voucher or receipt. Record the purpose, authorising person, and job reference. Update the transaction description in the system.</td>
+            <td>Finance / Management</td>
+          </tr>
+          <tr class="process-row">
+            <td class="priority-dot">🔴</td>
+            <td class="bold">WVZ Project — Migrate to New System</td>
+            <td class="bold" style="color:var(--red);">$4,755.50</td>
+            <td class="action-cell">Enter all WVZ project transactions currently in the old system into the new PM system. Create a job card for the WVZ project and link all costs. Record the corresponding WVZ revenue entry.</td>
+            <td>Finance</td>
+          </tr>
+          <tr class="process-row">
+            <td class="priority-dot">🟠</td>
+            <td class="bold">Mr Mabhena — Reclassify &amp; Invoice</td>
+            <td class="bold" style="color:var(--amber);">$3,000.00</td>
+            <td class="action-cell">Reclassify the $3,000 entry from TOPUP to INCOME. Create a quote/invoice for the full contract value (70mx20m Curtains and water system). Record outstanding balance.</td>
+            <td>Finance / Sales</td>
+          </tr>
+          <tr class="process-row">
+            <td class="priority-dot">🟠</td>
+            <td class="bold">Mrs Uchena Ridges — Create Job/Invoice</td>
+            <td class="bold" style="color:var(--amber);">$250.00</td>
+            <td class="action-cell">Create a job card or sales order for the Roll Top Ridges supply to Mrs Uchena. Link the $250 expense. Generate an invoice if not yet billed. Confirm payment status.</td>
+            <td>Sales</td>
+          </tr>
+          <tr class="process-row">
+            <td class="priority-dot">🟡</td>
+            <td class="bold">JC-2026-0128 — Chase 10% Balance</td>
+            <td class="bold" style="color:var(--amber);">~$1,538.89</td>
+            <td class="action-cell">Send formal payment reminder to client for the outstanding 10% project balance. Set a follow-up date. Update payment status in the job card once received.</td>
+            <td>Sales / Finance</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════════
+         SECTION 3 — PRIORITY ROADMAP
+    ══════════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">🗺️</div>
+        <div>
+          <div class="section-title">Implementation Priority Roadmap</div>
+          <div class="section-desc">Sequenced execution plan ordered by business impact and urgency</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px;"></th>
+            <th>Item</th>
+            <th style="width:110px;">Timeline</th>
+            <th style="width:80px;">Type</th>
+            <th>Business Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="priority-dot">🔴</td>
+            <td class="bold">Fix closing balance calculation bug</td>
+            <td><span class="badge badge-red">Immediate</span></td>
+            <td class="gray">Code Fix</td>
+            <td class="gray">Restores trust in all financial reports. $2,575.63 discrepancy creates compliance risk.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🔴</td>
+            <td class="bold">Document the $6,907 withdrawal retroactively</td>
+            <td><span class="badge badge-red">Immediate</span></td>
+            <td class="gray">Process</td>
+            <td class="gray">Eliminates largest single audit risk. Must be resolved before any external reporting.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟠</td>
+            <td class="bold">Mandatory job card linking on expenses</td>
+            <td><span class="badge badge-amber">This Week</span></td>
+            <td class="gray">Code Build</td>
+            <td class="gray">Prevents future unattributed expenses. Enables accurate job profitability tracking.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟠</td>
+            <td class="bold">Revenue classification enforcement (TOPUP → INCOME)</td>
+            <td><span class="badge badge-amber">This Week</span></td>
+            <td class="gray">Code Build</td>
+            <td class="gray">Fixes revenue understatement. Enables proper client balance tracking.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟠</td>
+            <td class="bold">Approval gate for large cash withdrawals</td>
+            <td><span class="badge badge-amber">This Week</span></td>
+            <td class="gray">Code Build</td>
+            <td class="gray">Prevents unauthorised high-value payments. Directly addresses the $6,907 control gap.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟠</td>
+            <td class="bold">Reclassify Mr Mabhena + create invoice</td>
+            <td><span class="badge badge-amber">This Week</span></td>
+            <td class="gray">Process</td>
+            <td class="gray">Unlocks $3,000 receivable tracking and corrects revenue figures.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟡</td>
+            <td class="bold">Outstanding receivables dashboard widget</td>
+            <td><span class="badge badge-blue">Next Sprint</span></td>
+            <td class="gray">Code Build</td>
+            <td class="gray">Real-time visibility on ~$1,539+ in outstanding collections.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟡</td>
+            <td class="bold">Loan / financing register</td>
+            <td><span class="badge badge-blue">Next Sprint</span></td>
+            <td class="gray">Code Build</td>
+            <td class="gray">Separates financing from revenue. Cleans up headline credit figures.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟢</td>
+            <td class="bold">External project bridge for old-system transfers</td>
+            <td><span class="badge badge-green">Backlog</span></td>
+            <td class="gray">Code Build</td>
+            <td class="gray">Brings $4,755+ of WVZ project spend into full visibility.</td>
+          </tr>
+          <tr>
+            <td class="priority-dot">🟢</td>
+            <td class="bold">Transfer charge rate alerting</td>
+            <td><span class="badge badge-green">Backlog</span></td>
+            <td class="gray">Code Build</td>
+            <td class="gray">Reduces future bank charge bleed. Helps optimise payment methods.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════════
+         SECTION 4 — INFO BOXES
+    ══════════════════════════════════════════════ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">💡</div>
+        <div>
+          <div class="section-title">Key Takeaways</div>
+          <div class="section-desc">Summary insights from the audit for management review</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="info-box blue">
+          <div class="info-title">True Financial Position</div>
+          True operational revenue for the period is <strong>$16,850</strong> — not the $20,798 headline figure. The difference ($3,948) consists of a $2,938 loan receipt and $1,000 internal transfer, both of which are non-revenue credits. Job profitability for JC-2026-0128 is strong at <strong>48.7% gross margin</strong>.
+        </div>
+        <div class="info-box amber">
+          <div class="info-title">Untracked Spend Risk</div>
+          <strong>$14,018</strong> of the period's outflows is either unattributed ($6,907 withdrawal + $4,755 old-system transfers + $250 unlinked + $106 unclassified) — representing <strong>72.1% of non-job-card spend</strong> with no audit trail in this system.
+        </div>
+        <div class="info-box green">
+          <div class="info-title">What's Working Well</div>
+          Job card expense tracking for JC-2026-0128 is detailed and accurate across 29 line items. Taxes were paid on time. The system correctly handles BANK ↔ ECOCASH transfers as internal movements. Job card income was correctly classified.
+        </div>
+        <div class="info-box orange">
+          <div class="info-title">System Maturity Note</div>
+          All 54 transactions span only <strong>3 days</strong> (3/9–3/11/2026), indicating the system was recently deployed. The improvements above will be much easier to implement now — before the data volume grows — than to retrofit later. Prioritise the critical items before more transactions accumulate.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div>
+      <div class="brand">Incaptta Pvt Ltd</div>
+      <div>Poultry Equipment Supplies · NO 45 Northampton Crescent · Reg. 6502/2015</div>
+    </div>
+    <div style="text-align:right;">
+      <div>Report Reference: RPT-AUDIT-2026-001</div>
+      <div>Prepared: 3/11/2026 · AI Audit Assistant</div>
+      <div class="confidential" style="margin-top:4px;">CONFIDENTIAL — INTERNAL USE ONLY</div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

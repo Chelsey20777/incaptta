@@ -1,0 +1,28 @@
+{
+  "fileName": "Extracting General Information Fields.xlsx",
+  "sheetName": "Extracting General Information ",
+  "timestamp": "2026-02-19T00:30:00.000Z",
+  "totalRowsRead": 100,
+  "rowsAfterMerge": 95,
+  "validCount": 98,
+  "invalidCount": 2,
+  "createdCount": 90,
+  "updatedCount": 5,
+  "skippedExistingCount": 0,
+  "mergedCount": 5,
+  "failures": [
+    {
+      "rowNumber": 12,
+      "rawSku": "INVALID SKU!",
+      "reason": "sku: Normalized SKU cannot be empty",
+      "rawRowSnapshot": { "category": "Tools", "name": "Broken Item", "sku": "!!!" }
+    }
+  ],
+  "merges": [
+    {
+      "sku": "SKU-001",
+      "mergedRowNumbers": [2, 5],
+      "resultingMergedValues": { "inStock": 50 }
+    }
+  ]
+}

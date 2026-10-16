@@ -1,0 +1,47 @@
+# Firebase App Hosting configuration for project-management-next
+# See https://firebase.google.com/docs/app-hosting/configure for details
+
+runConfig:
+  minInstances: 0        # Scale down to 0 when idle to save costs
+  maxInstances: 15       # Max instances for autoscaling (higher limit for calculation loads)
+  concurrency: 80        # Concurrent requests handled by a single instance
+  cpu: 1                 # 1 vCPU
+  memoryMiB: 1024        # 1 GB RAM
+
+env:
+  # Safe default for the existing backend. Staging overrides every resource
+  # identifier in apphosting.staging.yaml. Do not bind staging-* secrets here.
+  - variable: DEPLOYMENT_ENV
+    value: production
+  - variable: NEXT_PUBLIC_DEPLOYMENT_ENV
+    value: production
+  - variable: FIREBASE_PROJECT_ID
+    value: incaptta-pro
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: "AIzaSyACvXyeSdEkpWXIPoV1sBXH8h84XNjBtSo"
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: incaptta-pro.firebaseapp.com
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: incaptta-pro
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: incaptta-pro.firebasestorage.app
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "408940478113"
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:408940478113:web:8ea03252b84d1e29e7bae0"
+  - variable: LEGACY_API_BASE_URL
+    value: https://us-central1-incaptta-pro.cloudfunctions.net/api
+  - variable: ALLOW_REAL_EMAIL
+    value: "true"
+  - variable: ENABLE_SCHEDULED_JOBS
+    value: "true"
+  - variable: GEMINI_API_KEY
+    secret: gemini-api-key
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: CRON_SECRET
+    secret: cron-secret
+    availability:
+      - RUNTIME

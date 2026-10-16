@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ledger Analysis Report — Incaptta Pvt Ltd</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --orange: #f97316;
+      --orange-light: #fff7ed;
+      --orange-dark: #c2410c;
+      --green: #16a34a;
+      --green-light: #f0fdf4;
+      --red: #dc2626;
+      --red-light: #fef2f2;
+      --dark: #1e1e1e;
+      --gray: #6b7280;
+      --gray-light: #f8fafc;
+      --border: #e5e7eb;
+      --amber: #d97706;
+      --amber-light: #fffbeb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--dark);
+      background: #fff;
+      padding: 32px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--orange);
+    }
+
+    .brand-name {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .report-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .report-meta {
+      font-size: 11px;
+      color: var(--gray);
+      display: flex;
+      gap: 16px;
+    }
+
+    .report-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 24px; }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--orange);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    /* ── Summary grid ── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: var(--gray-light);
+    }
+
+    .summary-card .label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .summary-card .value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .summary-card.credits .value { color: var(--green); }
+    .summary-card.debits  .value { color: var(--red); }
+    .summary-card.net     .value { color: var(--green); }
+    .summary-card.closing .value { color: var(--amber); }
+
+    .summary-card .sub {
+      font-size: 10px;
+      color: var(--gray);
+      margin-top: 3px;
+    }
+
+    /* ── Period badge ── */
+    .period-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--orange-light);
+      border: 1px solid #fed7aa;
+      color: var(--orange-dark);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      margin-bottom: 16px;
+    }
+
+    thead th {
+      background: var(--orange);
+      color: #fff;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 9px 12px;
+      text-align: left;
+    }
+
+    thead th.right { text-align: right; }
+    thead th.center { text-align: center; }
+
+    tbody tr:nth-child(even) { background: var(--gray-light); }
+    tbody tr:hover { background: var(--orange-light); }
+
+    tbody td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    td.right  { text-align: right; font-weight: 600; }
+    td.center { text-align: center; }
+    td.credit { color: var(--green); font-weight: 700; }
+    td.debit  { color: var(--red);   font-weight: 700; }
+    td.label  { font-weight: 600; color: var(--dark); background: var(--gray-light) !important; }
+
+    /* ── Flag cards ── */
+    .flags { display: flex; flex-direction: column; gap: 10px; }
+
+    .flag-card {
+      border-radius: 8px;
+      padding: 12px 16px;
+      border-left: 4px solid;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .flag-card.high   { border-color: var(--red);   background: var(--red-light);   }
+    .flag-card.medium { border-color: var(--amber);  background: var(--amber-light);  }
+    .flag-card.low    { border-color: var(--green);  background: var(--green-light);  }
+
+    .flag-badge {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .flag-card.high   .flag-badge { background: var(--red);   color: #fff; }
+    .flag-card.medium .flag-badge { background: var(--amber);  color: #fff; }
+    .flag-card.low    .flag-badge { background: var(--green);  color: #fff; }
+
+    .flag-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--dark);
+      margin-bottom: 3px;
+    }
+
+    .flag-body {
+      font-size: 12px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .flag-amount {
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    /* ── Profitability ── */
+    .profit-table td.total-row {
+      font-weight: 700;
+      font-size: 14px;
+      background: var(--orange-light) !important;
+      border-top: 2px solid var(--orange);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--gray);
+    }
+
+    .footer .brand { font-weight: 700; color: var(--orange); font-size: 12px; }
+
+    /* ── Print styles ── */
+    @media print {
+      body { padding: 16px 24px; font-size: 11.5px; }
+      .no-print { display: none !important; }
+      .section { page-break-inside: avoid; }
+      .flag-card { page-break-inside: avoid; }
+      thead { display: table-header-group; }
+      @page { margin: 1.5cm; size: A4; }
+    }
+
+    /* ── Print button ── */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+      z-index: 999;
+    }
+
+    .print-btn:hover { background: var(--orange-dark); }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+    /* ── Two-col layout for smaller tables ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF</button>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="brand-name">Incaptta</div>
+  <div class="brand-sub">Poultry Equipment Supplies</div>
+  <div class="report-title">Ledger Analysis Report</div>
+  <div class="report-meta">
+    <span>Account: All Accounts</span>
+    <span>Period: All Time</span>
+    <span>Generated: 3/11/2026</span>
+    <span>By: adonismuzataet@gmail.com</span>
+  </div>
+</div>
+
+<!-- ── PERIOD BADGE ── -->
+<div class="period-badge">
+  Data range: 3/9/2026 – 3/11/2026 &nbsp;|&nbsp; 54 transactions &nbsp;|&nbsp; 3 accounts (CASH · BANK · ECOCASH)
+</div>
+
+<!-- ── SUMMARY ── -->
+<div class="section">
+  <div class="section-title">Summary Metrics</div>
+  <div class="summary-grid">
+    <div class="summary-card credits">
+      <div class="label">Total Credits</div>
+      <div class="value">+$20,798.00</div>
+      <div class="sub">6 credit entries</div>
+    </div>
+    <div class="summary-card debits">
+      <div class="label">Total Debits</div>
+      <div class="value">-$20,435.63</div>
+      <div class="sub">48 debit entries</div>
+    </div>
+    <div class="summary-card net">
+      <div class="label">Net Movement</div>
+      <div class="value">+$362.37</div>
+      <div class="sub">Net cash position</div>
+    </div>
+    <div class="summary-card closing">
+      <div class="label">Stated Closing Balance</div>
+      <div class="value">$2,938.00</div>
+      <div class="sub" style="color:var(--red); font-weight:600;">⚠ Discrepancy — see flags</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── INCOME BREAKDOWN ── -->
+<div class="section">
+  <div class="section-title">Income Breakdown</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Classification</th>
+        <th>Account</th>
+        <th class="right">Amount</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>JC-2026-0128 — 90% Deposit</td>
+        <td>INCOME</td>
+        <td>CASH</td>
+        <td class="right credit">+$13,783.50</td>
+        <td>Main job payment</td>
+      </tr>
+      <tr>
+        <td>JC-2026-0128 — Part of 90% deposit</td>
+        <td>INCOME</td>
+        <td>CASH</td>
+        <td class="right credit">+$66.50</td>
+        <td>Supplementary deposit</td>
+      </tr>
+      <tr>
+        <td>Mr Mabhena — Curtains &amp; water system</td>
+        <td>TOPUP <span style="color:var(--amber);font-size:10px;">(should be INCOME)</span></td>
+        <td>CASH</td>
+        <td class="right credit">+$3,000.00</td>
+        <td>Part payment — full contract unknown</td>
+      </tr>
+      <tr>
+        <td>Loan payback — Rutendo Mufambisi</td>
+        <td>TOPUP</td>
+        <td>BANK</td>
+        <td class="right" style="color:var(--amber);font-weight:700;">+$2,938.00</td>
+        <td>Financing inflow — not revenue</td>
+      </tr>
+      <tr>
+        <td>BANK → ECOCASH (internal transfer)</td>
+        <td>TRANSFER</td>
+        <td>BANK/ECOCASH</td>
+        <td class="right" style="color:var(--gray);font-weight:600;">+$1,000.00</td>
+        <td>Internal — double-counted in total</td>
+      </tr>
+      <tr>
+        <td>InDrive set-off — Emeldah Muzhewe</td>
+        <td>TOPUP</td>
+        <td>ECOCASH</td>
+        <td class="right credit">+$10.00</td>
+        <td>Reimbursement</td>
+      </tr>
+      <tr>
+        <td class="label">Total (per ledger)</td>
+        <td class="label"></td>
+        <td class="label"></td>
+        <td class="right label">$20,798.00</td>
+        <td class="label"></td>
+      </tr>
+      <tr>
+        <td class="label">True Revenue (excl. loan &amp; internal transfer)</td>
+        <td class="label"></td>
+        <td class="label"></td>
+        <td class="right credit" style="font-size:15px;">$16,850.00</td>
+        <td class="label"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── EXPENSE BREAKDOWN ── -->
+<div class="section">
+  <div class="section-title">Expense Breakdown</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th class="right">Amount</th>
+        <th class="right">% of Total Outflow</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>JC-2026-0128 — Direct job costs</td>
+        <td class="right debit">-$7,110.70</td>
+        <td class="right">36.6%</td>
+        <td>Materials, labour, transport, commission</td>
+      </tr>
+      <tr>
+        <td>Withdrawal — Mr Mufambisi</td>
+        <td class="right debit">-$6,907.30</td>
+        <td class="right">35.5%</td>
+        <td style="color:var(--red);font-weight:600;">⚠ No job card / purpose reference</td>
+      </tr>
+      <tr>
+        <td>"Old system" transfers (WVZ project)</td>
+        <td class="right debit">-$4,755.50</td>
+        <td class="right">24.5%</td>
+        <td>7 transactions to external tracking system</td>
+      </tr>
+      <tr>
+        <td>PAYE &amp; Self Assessment Taxes</td>
+        <td class="right debit">-$136.79</td>
+        <td class="right">0.7%</td>
+        <td>Statutory compliance</td>
+      </tr>
+      <tr>
+        <td>Bank / Transfer charges</td>
+        <td class="right debit">-$99.24</td>
+        <td class="right">0.5%</td>
+        <td>Includes $50 EcoCash fee (5% rate)</td>
+      </tr>
+      <tr>
+        <td>Roll Top Ridges — Mrs Uchena</td>
+        <td class="right debit">-$250.00</td>
+        <td class="right">1.3%</td>
+        <td>Standalone supply — no job card</td>
+      </tr>
+      <tr>
+        <td>Wheelbarrows, tools</td>
+        <td class="right debit">-$152.00</td>
+        <td class="right">0.8%</td>
+        <td>Equipment purchase</td>
+      </tr>
+      <tr>
+        <td>Affidavit</td>
+        <td class="right debit">-$10.00</td>
+        <td class="right">0.1%</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>InDrive transport</td>
+        <td class="right debit">-$10.00</td>
+        <td class="right">0.1%</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="label">Total Actual Outflows (excl. internal transfer)</td>
+        <td class="right label debit" style="font-size:15px;">-$19,435.63</td>
+        <td class="right label">100%</td>
+        <td class="label"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── JOB CARD PROFITABILITY ── -->
+<div class="section">
+  <div class="section-title">JC-2026-0128 — Job Profitability</div>
+
+  <div class="two-col">
+    <table class="profit-table">
+      <thead>
+        <tr><th>Item</th><th class="right">Amount</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Income received (90% deposit)</td><td class="right credit">+$13,850.00</td></tr>
+        <tr><td style="color:var(--gray);font-size:11px;padding-left:20px;">› 90% Deposit</td><td class="right" style="color:var(--gray);font-size:11px;">$13,783.50</td></tr>
+        <tr><td style="color:var(--gray);font-size:11px;padding-left:20px;">› Part payment</td><td class="right" style="color:var(--gray);font-size:11px;">$66.50</td></tr>
+        <tr><td>Direct material &amp; labour costs</td><td class="right debit">-$6,648.70</td></tr>
+        <tr><td>Commission paid</td><td class="right debit">-$462.00</td></tr>
+        <tr class="profit-table">
+          <td class="total-row">Gross Profit</td>
+          <td class="right total-row credit" style="font-size:16px;">$6,739.30</td>
+        </tr>
+        <tr>
+          <td style="color:var(--gray);">Gross Margin</td>
+          <td class="right" style="font-weight:700;">48.7%</td>
+        </tr>
+        <tr>
+          <td style="color:var(--amber);font-size:11px;">10% balance still outstanding (~$1,538.89)</td>
+          <td class="right" style="color:var(--amber);font-size:11px;">Pending</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr><th>JC-2026-0128 Cost Category</th><th class="right">Amount</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Roofing Sheets 5.6m</td><td class="right">$2,556.40</td></tr>
+        <tr><td>50x50x5 Angle Iron</td><td class="right">$1,288.00</td></tr>
+        <tr><td>Commission</td><td class="right">$462.00</td></tr>
+        <tr><td>100x50 Channel Iron</td><td class="right">$756.00</td></tr>
+        <tr><td>40x40x5 Angle Iron</td><td class="right">$204.00</td></tr>
+        <tr><td>Cement</td><td class="right">$156.00</td></tr>
+        <tr><td>40x40x3 Angle Iron</td><td class="right">$114.00</td></tr>
+        <tr><td>80x6 Flat Bar</td><td class="right">$105.00</td></tr>
+        <tr><td>Welding Rods</td><td class="right">$125.00</td></tr>
+        <tr><td>Roll Top Ridges</td><td class="right">$190.00</td></tr>
+        <tr><td>Quarry Stones + Riversand</td><td class="right">$280.00</td></tr>
+        <tr><td>All other items (labour, transport, misc)</td><td class="right">$673.30</td></tr>
+        <tr><td class="label">Total</td><td class="right label debit">$7,110.70</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── OLD SYSTEM TRANSFERS ── -->
+<div class="section">
+  <div class="section-title">"Old System" Transfers — WVZ Project</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Account</th>
+        <th>Description</th>
+        <th class="right">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>3/11/2026</td><td>CASH</td>
+        <td>Transport topup for Mr Hove — WVZ Quary stones</td>
+        <td class="right debit">-$200.00</td>
+      </tr>
+      <tr>
+        <td>3/11/2026</td><td>BANK</td>
+        <td>Transfer from Bank to petty cash old system (WVZ pitsand, Quarystones, transport)</td>
+        <td class="right debit">-$995.00</td>
+      </tr>
+      <tr>
+        <td>3/11/2026</td><td>CASH</td>
+        <td>Cash Transfer — Top up WVZ Crusher run</td>
+        <td class="right debit">-$200.00</td>
+      </tr>
+      <tr>
+        <td>3/10/2026</td><td>CASH</td>
+        <td>David WV labour, Tinashe AU Labour, Budget Inforsolar solutions transport to site</td>
+        <td class="right debit">-$1,757.00</td>
+      </tr>
+      <tr>
+        <td>3/10/2026</td><td>ECOCASH</td>
+        <td>WVZ Quarystones, transport &amp; Tinashe AU Labour</td>
+        <td class="right debit">-$950.00</td>
+      </tr>
+      <tr>
+        <td>3/10/2026</td><td>BANK</td>
+        <td>Bank Transfer — WVZ Brickforce</td>
+        <td class="right debit">-$12.50</td>
+      </tr>
+      <tr>
+        <td>3/9/2026</td><td>BANK</td>
+        <td>Bank transfer — WVZ Pitsand, Riversand</td>
+        <td class="right debit">-$641.00</td>
+      </tr>
+      <tr>
+        <td class="label">Total transferred to old system</td>
+        <td class="label"></td><td class="label"></td>
+        <td class="right label debit" style="font-size:14px;">-$4,755.50</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px;color:var(--amber);margin-top:6px;">⚠ These costs are tracked in a separate external system and not linked to job cards in this ledger. No invoice or revenue entry for WVZ project is visible in this report period.</p>
+</div>
+
+<hr class="divider">
+
+<!-- ── FLAGS & ANOMALIES ── -->
+<div class="section">
+  <div class="section-title">Flags &amp; Anomalies</div>
+  <div class="flags">
+
+    <div class="flag-card high">
+      <span class="flag-badge">HIGH</span>
+      <div>
+        <div class="flag-title">Closing Balance Discrepancy</div>
+        <div class="flag-body">
+          The report header states Closing Balance = <span class="flag-amount">$2,938.00</span>, but the running balance at the final (most recent) transaction shows <span class="flag-amount">$362.37</span>. The unexplained gap is <span class="flag-amount">$2,575.63</span>. Since this is an "All Time" report, opening balance should be $0 and closing should equal net movement (+$362.37). This is either a system calculation bug or an undisclosed opening balance.
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-card high">
+      <span class="flag-badge">HIGH</span>
+      <div>
+        <div class="flag-title">Undocumented Large Withdrawal — Mr Mufambisi</div>
+        <div class="flag-body">
+          Transaction #19 (3/9/2026): <span class="flag-amount">-$6,907.30</span> CASH — described only as "Withdrawal-Mr Mufambisi". This is the single largest outflow with no job card reference, no purpose code, and no approval chain visible. Requires supporting documentation and authorisation record.
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-card high">
+      <span class="flag-badge">HIGH</span>
+      <div>
+        <div class="flag-title">Shadow "Old System" Tracking Gap</div>
+        <div class="flag-body">
+          <span class="flag-amount">$4,755.50</span> (24.5% of all outflows) was transferred to an external "old system" across 7 transactions for the WVZ project. These costs are not linked to any job card in this system, making it impossible to calculate the true profitability of the WVZ job. No corresponding WVZ revenue entry exists in this ledger.
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-card medium">
+      <span class="flag-badge">MEDIUM</span>
+      <div>
+        <div class="flag-title">Revenue Classification Error — Mr Mabhena</div>
+        <div class="flag-body">
+          The <span class="flag-amount">$3,000.00</span> received from Mr Mabhena (curtains &amp; water system) is classified as <strong>TOPUP</strong> instead of <strong>INCOME</strong>. This understates recognised revenue and distorts income reporting. Should be reclassified and linked to a quote/invoice.
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-card medium">
+      <span class="flag-badge">MEDIUM</span>
+      <div>
+        <div class="flag-title">Partial Payments — Outstanding Receivables</div>
+        <div class="flag-body">
+          Two incomplete payment positions exist: (1) JC-2026-0128 — 10% balance of approximately <span class="flag-amount">~$1,538.89</span> still outstanding. (2) Mr Mabhena received "part payment" of $3,000 — total contract value unknown, full outstanding balance not determinable from this report.
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-card medium">
+      <span class="flag-badge">MEDIUM</span>
+      <div>
+        <div class="flag-title">Excessive Transfer Charges</div>
+        <div class="flag-body">
+          Total bank/transfer charges: <span class="flag-amount">$103.34</span> in 3 days. Notably, the EcoCash transfer fee was <span class="flag-amount">$50 on a $1,000 transfer (5%)</span> — exceeding the standard 2% threshold in the audit framework. Bank charges: $30 + $19.24 + $4.10.
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-card low">
+      <span class="flag-badge">LOW</span>
+      <div>
+        <div class="flag-title">Roll Top Ridges — Mrs Uchena (No Job Card)</div>
+        <div class="flag-body">
+          <span class="flag-amount">$250.00</span> CASH expense on 3/11/2026 for Roll Top Ridges for Mrs Uchena has no associated job card or invoice reference. Should be linked to a job or sales order to ensure it is billed to the customer.
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-card low">
+      <span class="flag-badge">LOW</span>
+      <div>
+        <div class="flag-title">Loan Inflow Inflates Total Credits</div>
+        <div class="flag-body">
+          The <span class="flag-amount">$2,938.00</span> loan repayment received (Rutendo Mufambisi) is included in Total Credits, inflating the headline figure. True operational revenue for the period is <span class="flag-amount">$16,850.00</span>, not $20,798.00.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── QUICK REFERENCE ── -->
+<div class="section">
+  <div class="section-title">Quick Reference — Key Figures</div>
+  <div class="two-col">
+    <table>
+      <thead><tr><th>Metric</th><th class="right">Value</th></tr></thead>
+      <tbody>
+        <tr><td>True revenue (excl. loan)</td><td class="right credit">$16,850.00</td></tr>
+        <tr><td>JC-2026-0128 gross profit</td><td class="right credit">$6,739.30</td></tr>
+        <tr><td>JC-2026-0128 margin</td><td class="right" style="font-weight:700;">48.7%</td></tr>
+        <tr><td>Commission rate (JC-0128)</td><td class="right">3.34%</td></tr>
+        <tr><td>JC-0128 balance outstanding</td><td class="right" style="color:var(--amber);font-weight:700;">~$1,538.89</td></tr>
+        <tr><td>Total transfer charges</td><td class="right debit">$103.34</td></tr>
+        <tr><td>Taxes paid</td><td class="right debit">$140.89</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Control Item</th><th class="right">Status</th></tr></thead>
+      <tbody>
+        <tr><td>Closing balance consistency</td><td class="right" style="color:var(--red);font-weight:700;">⚠ FAIL</td></tr>
+        <tr><td>Large withdrawal documented</td><td class="right" style="color:var(--red);font-weight:700;">⚠ FAIL</td></tr>
+        <tr><td>WVZ costs in-system</td><td class="right" style="color:var(--red);font-weight:700;">⚠ FAIL</td></tr>
+        <tr><td>Revenue correctly classified</td><td class="right" style="color:var(--amber);font-weight:700;">⚠ PARTIAL</td></tr>
+        <tr><td>All income linked to invoices</td><td class="right" style="color:var(--amber);font-weight:700;">⚠ PARTIAL</td></tr>
+        <tr><td>Job card expenses tracked</td><td class="right" style="color:var(--green);font-weight:700;">✓ PASS</td></tr>
+        <tr><td>Taxes paid current</td><td class="right" style="color:var(--green);font-weight:700;">✓ PASS</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="footer">
+  <div>
+    <div class="brand">Incaptta Pvt Ltd</div>
+    <div>Poultry Equipment Supplies · NO 45 Northampton Crescent · Reg. 6502/2015</div>
+  </div>
+  <div style="text-align:right;">
+    <div>Analysis generated: 3/11/2026</div>
+    <div>Prepared by: Claude (AI Audit Assistant)</div>
+    <div style="margin-top:4px; color: var(--orange); font-weight:600;">CONFIDENTIAL — INTERNAL USE ONLY</div>
+  </div>
+</div>
+
+</body>
+</html>

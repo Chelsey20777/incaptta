@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IncapttaPro — Procurement Module User Guide</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #273549;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #3b82f6;
+    --accent2: #6366f1;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #a855f7;
+    --cyan: #06b6d4;
+    --sidebar-w: 280px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    display: flex;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    overflow-y: auto;
+    padding: 0 0 40px 0;
+    z-index: 100;
+  }
+  #sidebar .logo {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  #sidebar .logo span { color: var(--muted); font-weight: 400; display: block; font-size: 11px; margin-top: 2px; text-transform: none; letter-spacing: 0; }
+  #sidebar nav { padding: 12px 0; }
+  #sidebar .section-label {
+    padding: 14px 20px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  #sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all .15s;
+  }
+  #sidebar a:hover, #sidebar a.active {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+  #sidebar a .num {
+    margin-left: auto;
+    background: var(--surface2);
+    border-radius: 9px;
+    font-size: 10px;
+    padding: 1px 7px;
+    color: var(--muted);
+  }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 0 48px 80px;
+    max-width: 900px;
+  }
+  .page-header {
+    padding: 40px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .page-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .page-header p { color: var(--muted); font-size: 14px; }
+  .page-header .meta { display: flex; gap: 16px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .page-header .meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── SECTIONS ── */
+  section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; padding-top: 8px; border-top: 1px solid var(--border); padding-bottom: 14px; }
+  h3 { font-size: 15px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+  h4 { font-size: 13px; font-weight: 600; color: var(--accent); margin: 18px 0 8px; }
+  p { font-size: 14px; color: #cbd5e1; margin-bottom: 10px; }
+  p + p { margin-top: -4px; }
+  strong { color: var(--text); }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { font-size: 14px; color: #cbd5e1; margin-bottom: 5px; }
+  li strong { color: var(--text); }
+
+  /* ── TIPS / ALERTS ── */
+  .tip, .warning, .info, .danger {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 16px 0;
+    border-width: 1px;
+    border-style: solid;
+  }
+  .tip    { background: rgba(34,197,94,.07);  border-color: rgba(34,197,94,.25);  color: #86efac; }
+  .warning{ background: rgba(245,158,11,.07); border-color: rgba(245,158,11,.25); color: #fcd34d; }
+  .info   { background: rgba(59,130,246,.07); border-color: rgba(59,130,246,.25); color: #93c5fd; }
+  .danger { background: rgba(239,68,68,.07);  border-color: rgba(239,68,68,.25);  color: #fca5a5; }
+  .tip .icon, .warning .icon, .info .icon, .danger .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .tip    strong { color: #4ade80; }
+  .warning strong { color: #fbbf24; }
+  .info   strong { color: #60a5fa; }
+  .danger strong { color: #f87171; }
+
+  /* ── STEP FLOW ── */
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .flow-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-step .step-num {
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 6px;
+  }
+  .flow-step .step-name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .flow-step .step-sub  { font-size: 10px; color: var(--muted); margin-top: 3px; }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--muted);
+    font-size: 18px;
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── STEPS (numbered instructions) ── */
+  .steps { margin: 16px 0; }
+  .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .step .n {
+    width: 26px; height: 26px;
+    background: var(--accent);
+    border-radius: 50%;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step .content { flex: 1; }
+  .step .content strong { font-size: 14px; display: block; margin-bottom: 3px; }
+  .step .content p { font-size: 13px; color: var(--muted); margin: 0; }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 1px 2px;
+    vertical-align: middle;
+  }
+  .badge-green  { background: rgba(34,197,94,.15); color: #4ade80; border: 1px solid rgba(34,197,94,.3); }
+  .badge-amber  { background: rgba(245,158,11,.15); color: #fcd34d; border: 1px solid rgba(245,158,11,.3); }
+  .badge-red    { background: rgba(239,68,68,.15);  color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+  .badge-blue   { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+  .badge-purple { background: rgba(168,85,247,.15); color: #d8b4fe; border: 1px solid rgba(168,85,247,.3); }
+  .badge-gray   { background: rgba(148,163,184,.1); color: #94a3b8; border: 1px solid rgba(148,163,184,.2); }
+
+  /* ── TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+  .data-table thead tr { border-bottom: 2px solid var(--border); }
+  .data-table th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: #cbd5e1; vertical-align: top; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); }
+
+  /* ── ROLE MATRIX ── */
+  .role-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12px; }
+  .role-table th { background: var(--surface2); padding: 8px 10px; text-align: center; font-size: 11px; color: var(--muted); border: 1px solid var(--border); }
+  .role-table th:first-child { text-align: left; }
+  .role-table td { padding: 7px 10px; text-align: center; border: 1px solid var(--border); }
+  .role-table td:first-child { text-align: left; color: var(--text); font-weight: 500; }
+  .role-table .check { color: var(--green); font-size: 14px; }
+  .role-table .cross { color: #475569; font-size: 14px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 14px 0;
+  }
+  .card h4 { margin: 0 0 8px; color: var(--text); font-size: 14px; }
+  .card p { margin: 0; font-size: 13px; color: var(--muted); }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+  @media(max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ── STATUS PILL ── */
+  .status-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 13px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── HR ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* ── INLINE CODE ── */
+  code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #93c5fd; }
+
+  /* ── QUICK REF STRIP ── */
+  .strip {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0;
+  }
+  .strip-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  .strip-item strong { display: block; color: var(--accent); font-size: 13px; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media(max-width: 768px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<nav id="sidebar">
+  <div class="logo">IncapttaPro<span>Procurement — User Guide</span></div>
+  <nav>
+    <div class="section-label">Getting Started</div>
+    <a href="#overview">Overview</a>
+    <a href="#roles">Who Can Do What</a>
+    <a href="#workflow">Full Workflow Map</a>
+
+    <div class="section-label">Module Sections</div>
+    <a href="#suppliers">1. Suppliers</a>
+    <a href="#requisitions">2. Purchase Requisitions</a>
+    <a href="#purchase-orders">3. Purchase Orders</a>
+    <a href="#goods-receipts">4. Goods Receipts (GRN)</a>
+    <a href="#invoices">5. Supplier Invoices</a>
+    <a href="#payments">6. Processing Payments</a>
+
+    <div class="section-label">Job Card Integration</div>
+    <a href="#jobcard-overview">How It Connects</a>
+    <a href="#jobcard-stock-badge">Stock Badges</a>
+    <a href="#jobcard-raise-pr">Raising a PR from a Job Card</a>
+    <a href="#jobcard-pipeline">Procurement Pipeline Status</a>
+    <a href="#jobcard-full-flow">End-to-End Example</a>
+
+    <div class="section-label">Reference</div>
+    <a href="#status-guide">Status Reference</a>
+    <a href="#match-guide">3-Way Match Explained</a>
+    <a href="#faq">Common Questions</a>
+  </nav>
+</nav>
+
+<!-- ── MAIN ── -->
+<div id="main">
+
+<div class="page-header">
+  <h1>Procurement Module — User Guide</h1>
+  <p>Step-by-step guide for using the IncapttaPro Procurement module</p>
+  <div class="meta">
+    <span>📅 Last updated: March 2026</span>
+    <span>📦 Module: Procurement</span>
+    <span>🔖 Version: 1.0</span>
+  </div>
+</div>
+
+<!-- ════════════════ OVERVIEW ════════════════ -->
+<section id="overview">
+  <h2>Overview</h2>
+  <p>The Procurement module manages the entire process of purchasing goods and services — from raising an initial request, through receiving goods, to paying the supplier. Every step is tracked, approved, and linked together.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <h4>6 Sections</h4>
+      <p>Suppliers · Requisitions · Purchase Orders · Goods Receipts · Invoices · Payments</p>
+    </div>
+    <div class="card">
+      <h4>Full Audit Trail</h4>
+      <p>Every action is timestamped and linked back to the original request and the person who acted.</p>
+    </div>
+    <div class="card">
+      <h4>Finance Integration</h4>
+      <p>Payments are recorded directly into the Finance ledger — no double entry needed.</p>
+    </div>
+  </div>
+
+  <div class="info">
+    <span class="icon">ℹ️</span>
+    <div>Access the Procurement module from the top navigation bar. Look for the <strong>Procurement</strong> menu — it contains links to each section.</div>
+  </div>
+</section>
+
+<!-- ════════════════ ROLES ════════════════ -->
+<section id="roles">
+  <h2>Who Can Do What</h2>
+  <p>Actions in the Procurement module are controlled by your user role. Here is a quick summary of what each role can do:</p>
+
+  <table class="role-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Super Admin</th>
+        <th>Admin</th>
+        <th>Manager</th>
+        <th>Accountant</th>
+        <th>Storekeeper</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>View Suppliers</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Add / Edit Suppliers</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td><td class="cross">—</td></tr>
+      <tr><td>Create Requisition</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Approve Requisition</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td><td class="cross">—</td></tr>
+      <tr><td>Mark PO as Sent / Acknowledged</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td><td class="cross">—</td></tr>
+      <tr><td>Receive Goods (create GRN)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td></tr>
+      <tr><td>Create Supplier Invoice</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td></tr>
+      <tr><td>Approve / Dispute Invoice</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+      <tr><td>Process Payment</td><td class="check">✓</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning">
+    <span class="icon">⚠️</span>
+    <div><strong>Managers cannot process payments.</strong> Payment processing is restricted to Super Admin, Admin, and Accountant roles to maintain financial controls.</div>
+  </div>
+</section>
+
+<!-- ════════════════ WORKFLOW ════════════════ -->
+<section id="workflow">
+  <h2>Full Workflow Map</h2>
+  <p>From request to payment, procurement follows a structured 6-step process:</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-name">Requisition</div>
+      <div class="step-sub">Request raised</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-name">Purchase Order</div>
+      <div class="step-sub">Sent to supplier</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-name">GRN</div>
+      <div class="step-sub">Goods received</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <div class="step-name">Invoice</div>
+      <div class="step-sub">Supplier bill matched</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <div class="step-name">Approval</div>
+      <div class="step-sub">Invoice approved</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="step-num">6</div>
+      <div class="step-name">Payment</div>
+      <div class="step-sub">Finance recorded</div>
+    </div>
+  </div>
+
+  <p>Each step must be completed before the next one becomes available. The system links all records — you can always trace a payment back to the original requisition.</p>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>Jump between linked records.</strong> On any Purchase Order, GRN, or Invoice page you will see links to the related documents (e.g. "PO-2026-0012", "GRN-2026-0003"). Click them to navigate directly.</div>
+  </div>
+</section>
+
+<!-- ════════════════ SUPPLIERS ════════════════ -->
+<section id="suppliers">
+  <h2>1. Suppliers</h2>
+  <p>The Suppliers list is your master register of all companies and individuals you buy from. A supplier must exist here before you can include them on a Purchase Requisition or Purchase Order.</p>
+
+  <h3>Adding a New Supplier</h3>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="content"><strong>Open Procurement → Suppliers</strong><p>The suppliers list shows all active and inactive suppliers.</p></div></div>
+    <div class="step"><div class="n">2</div><div class="content"><strong>Click "Add Supplier"</strong><p>A panel slides in from the right with the supplier form.</p></div></div>
+    <div class="step"><div class="n">3</div><div class="content"><strong>Fill in the details</strong><p>Supplier Name and Payment Terms are required. Email and Phone are strongly recommended.</p></div></div>
+    <div class="step"><div class="n">4</div><div class="content"><strong>Click Save</strong><p>The supplier is immediately available to use on requisitions and orders.</p></div></div>
+  </div>
+
+  <h3>Key Fields</h3>
+  <table class="data-table">
+    <thead><tr><th>Field</th><th>Description</th><th>Required?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Supplier Name</strong></td><td>Legal name of the supplier company</td><td>Yes</td></tr>
+      <tr><td><strong>Contact Person</strong></td><td>Main point of contact at the supplier</td><td>No</td></tr>
+      <tr><td><strong>Email</strong></td><td>Used for communication and displayed on POs</td><td>No</td></tr>
+      <tr><td><strong>Phone</strong></td><td>Supplier phone number</td><td>No</td></tr>
+      <tr><td><strong>Payment Terms</strong></td><td>COD, NET30, NET60, or NET90 — affects due date on invoices</td><td>Yes</td></tr>
+      <tr><td><strong>Categories</strong></td><td>Tags for grouping (e.g. Building Materials, Fuel)</td><td>No</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Activating / Deactivating Suppliers</h3>
+  <p>Use the toggle switch on each supplier row to activate or deactivate them. Inactive suppliers cannot be selected on new requisitions but their historical records remain intact.</p>
+</section>
+
+<!-- ════════════════ REQUISITIONS ════════════════ -->
+<section id="requisitions">
+  <h2>2. Purchase Requisitions</h2>
+  <p>A Purchase Requisition (PR) is an internal request to purchase goods or services. It must be approved before a Purchase Order can be created and sent to a supplier.</p>
+
+  <h3>Creating a Requisition</h3>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="content"><strong>Go to Procurement → Requisitions → New Requisition</strong><p>Or click the "New Requisition" button on the Requisitions list.</p></div></div>
+    <div class="step"><div class="n">2</div><div class="content"><strong>Fill in the header details</strong><p>Title, Procurement Type, and Department are required. You can optionally link a Supplier at this stage.</p></div></div>
+    <div class="step"><div class="n">3</div><div class="content"><strong>Add line items</strong><p>Click "Add Line Item" for each item you need. Fill in the Item Name, SKU, Unit of Measure, Cost Price, and Markup %.</p></div></div>
+    <div class="step"><div class="n">4</div><div class="content"><strong>Save as Draft or Submit</strong><p>"Save as Draft" lets you come back and edit. "Submit" sends it for approval.</p></div></div>
+  </div>
+
+  <h3>Procurement Types</h3>
+  <div class="strip">
+    <div class="strip-item"><strong style="color:#3b82f6">Project Material</strong>Materials for a specific job/project</div>
+    <div class="strip-item"><strong style="color:#a855f7">Inventory</strong>Stock items for resale or production</div>
+    <div class="strip-item"><strong style="color:#f59e0b">CAPEX</strong>Capital equipment or assets</div>
+    <div class="strip-item"><strong style="color:#06b6d4">Service</strong>Labour or service contracts</div>
+    <div class="strip-item"><strong style="color:#94a3b8">Ad-hoc</strong>One-off or unplanned purchases</div>
+  </div>
+
+  <h3>Approval Process</h3>
+  <p>Once submitted, a Manager, Admin, or Super Admin must review and either <strong>Approve</strong> or <strong>Reject</strong> the requisition. Rejected requisitions require a written reason.</p>
+
+  <div class="flow">
+    <div class="flow-step"><div class="step-num" style="background:#64748b">D</div><div class="step-name">DRAFT</div><div class="step-sub">Being prepared</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="step-num" style="background:#3b82f6">S</div><div class="step-name">SUBMITTED</div><div class="step-sub">Awaiting review</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="step-num" style="background:#22c55e">A</div><div class="step-name">APPROVED</div><div class="step-sub">PO can be created</div></div>
+  </div>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>Once a PR is approved, a Purchase Order is created automatically.</strong> You will find the linked PO by clicking "Create Purchase Order" on the approved requisition.</div>
+  </div>
+
+  <div class="warning">
+    <span class="icon">⚠️</span>
+    <div><strong>Rejected requisitions cannot be resubmitted.</strong> If a PR is rejected, create a new one incorporating the requested changes.</div>
+  </div>
+</section>
+
+<!-- ════════════════ PURCHASE ORDERS ════════════════ -->
+<section id="purchase-orders">
+  <h2>3. Purchase Orders</h2>
+  <p>Purchase Orders (POs) are automatically created when an approved PR has a "Create Purchase Order" action triggered. You cannot create a PO from scratch — it must come from an approved requisition.</p>
+
+  <h3>PO Lifecycle</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="step-num" style="background:#64748b">1</div><div class="step-name">DRAFT</div><div class="step-sub">Just created</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="step-num" style="background:#3b82f6">2</div><div class="step-name">SENT</div><div class="step-sub">Sent to supplier</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="step-num" style="background:#a855f7">3</div><div class="step-name">ACKNOWLEDGED</div><div class="step-sub">Supplier confirmed</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="step-num" style="background:#f59e0b">4</div><div class="step-name">IN PROGRESS</div><div class="step-sub">Partially received</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="step-num" style="background:#22c55e">5</div><div class="step-name">COMPLETE</div><div class="step-sub">All goods received</div></div>
+  </div>
+
+  <h3>Managing a PO</h3>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="content"><strong>Mark as Sent</strong><p>After printing/emailing the PO to the supplier, click "Mark as Sent" to update the status. This is required before goods can be received.</p></div></div>
+    <div class="step"><div class="n">2</div><div class="content"><strong>Mark as Acknowledged (optional)</strong><p>When the supplier confirms they have received the PO, click "Mark as Acknowledged".</p></div></div>
+    <div class="step"><div class="n">3</div><div class="content"><strong>Receive Goods</strong><p>When the goods arrive, click "Receive Goods" to create a Goods Receipt Note (GRN). The PO must be SENT or ACKNOWLEDGED for this button to appear.</p></div></div>
+  </div>
+
+  <div class="info">
+    <span class="icon">ℹ️</span>
+    <div>The PO detail page shows a <strong>status timeline</strong> at the bottom — a visual trail of when each stage was completed and by whom.</div>
+  </div>
+</section>
+
+<!-- ════════════════ GRN ════════════════ -->
+<section id="goods-receipts">
+  <h2>4. Goods Receipt Notes (GRN)</h2>
+  <p>A Goods Receipt Note (GRN) records the actual goods received against a Purchase Order. It is the physical check — quantities received are compared to what was ordered, and any differences (variances) are flagged.</p>
+
+  <div class="warning">
+    <span class="icon">⚠️</span>
+    <div><strong>Only Storekeepers, Managers, Admins, and Super Admins</strong> can create GRNs. If you received goods but cannot see the "Receive Goods" button, ask your manager or storekeeper to record it.</div>
+  </div>
+
+  <h3>Recording a Goods Receipt</h3>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="content"><strong>Open the Purchase Order and click "Receive Goods"</strong><p>The PO must be in SENT or ACKNOWLEDGED status.</p></div></div>
+    <div class="step"><div class="n">2</div><div class="content"><strong>Set the Date Received</strong><p>Defaults to today. Change it if the goods were received on a different day.</p></div></div>
+    <div class="step"><div class="n">3</div><div class="content"><strong>Enter quantities received for each line item</strong><p>The "Ordered" column shows the PO quantity. Enter the actual quantity received in the "Received" column. The variance is calculated automatically.</p></div></div>
+    <div class="step"><div class="n">4</div><div class="content"><strong>Add notes for any issues</strong><p>Use the item-level notes field to record damage, substitutions, or anything else to note about specific items.</p></div></div>
+    <div class="step"><div class="n">5</div><div class="content"><strong>Confirm or save as draft</strong><p>If all quantities match, click "Confirm Receipt". If there are variances, you must tick the acknowledgement checkbox before you can confirm.</p></div></div>
+  </div>
+
+  <h3>Handling Variances</h3>
+  <p>A variance means the quantity received differs from the quantity ordered. The system highlights variances in amber (under-received) or blue (over-received).</p>
+
+  <table class="data-table">
+    <thead><tr><th>Variance Type</th><th>What it means</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-amber">Under-received</span></td><td>Fewer items arrived than ordered (negative variance)</td><td>Tick the acknowledgement and confirm — the outstanding qty remains on the PO</td></tr>
+      <tr><td><span class="badge badge-blue">Over-received</span></td><td>More items arrived than ordered (positive variance)</td><td>Confirm with acknowledgement, or mark as Disputed to flag with supplier</td></tr>
+      <tr><td><span class="badge badge-red">Disputed</span></td><td>Quality or quantity issues you cannot accept</td><td>Click "Mark as Disputed" and enter a reason — this flags the GRN for review</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Inventory Posting</h3>
+  <p>Once a GRN is confirmed, the system automatically updates inventory. You will see the posting status on the GRN detail page:</p>
+
+  <div class="grid-2">
+    <div class="card"><h4>⏳ PENDING</h4><p>The inventory update is queued. This is normal immediately after confirming.</p></div>
+    <div class="card"><h4>🔄 PROCESSING</h4><p>Inventory is being updated. Wait a moment.</p></div>
+    <div class="card"><h4>✅ COMPLETE</h4><p>Inventory updated. You can now create the supplier invoice.</p></div>
+    <div class="card"><h4>❌ FAILED</h4><p>Something went wrong. Contact your system administrator.</p></div>
+  </div>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>The "Create Invoice" button only appears once inventory posting is COMPLETE.</strong> If you do not see it, refresh the page and check the posting status.</div>
+  </div>
+</section>
+
+<!-- ════════════════ INVOICES ════════════════ -->
+<section id="invoices">
+  <h2>5. Supplier Invoices</h2>
+  <p>After goods are received and inventory is updated, you enter the supplier's invoice. The system performs a <strong>3-way match</strong> — comparing the invoice to the Purchase Order and the GRN — to detect discrepancies before payment is made.</p>
+
+  <h3>Creating an Invoice from a GRN</h3>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="content"><strong>Open the confirmed GRN</strong><p>Go to Procurement → Goods Receipts, find the confirmed GRN, and open it.</p></div></div>
+    <div class="step"><div class="n">2</div><div class="content"><strong>Click "Create Invoice"</strong><p>This button appears only when: GRN is CONFIRMED, inventory posting is COMPLETE, and no invoice has been created yet.</p></div></div>
+    <div class="step"><div class="n">3</div><div class="content"><strong>Enter the supplier's invoice number and date</strong><p>Match these exactly to the physical invoice you received from the supplier.</p></div></div>
+    <div class="step"><div class="n">4</div><div class="content"><strong>Check and adjust line item amounts</strong><p>The system pre-fills amounts from the GRN. Adjust the quantities or unit costs if the supplier's invoice differs.</p></div></div>
+    <div class="step"><div class="n">5</div><div class="content"><strong>Upload the invoice scan (recommended)</strong><p>Attach a photo or PDF of the physical invoice for records.</p></div></div>
+    <div class="step"><div class="n">6</div><div class="content"><strong>Review the match result and submit</strong><p>The system shows whether the invoice matches the GRN. Submit for approval.</p></div></div>
+  </div>
+
+  <h3>Understanding the Match Result</h3>
+  <p>The system compares what the supplier is charging to what was actually received. The result is one of:</p>
+
+  <table class="data-table">
+    <thead><tr><th>Match Status</th><th>What it means</th><th>What happens next</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-green">Matched</span></td>
+        <td>Invoice total equals the expected amount (within rounding)</td>
+        <td>Accountant can approve immediately</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-amber">Minor Variance</span></td>
+        <td>Difference is less than 10% — likely rounding or minor price changes</td>
+        <td>Accountant can approve with a note</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">Variance Exceeded</span></td>
+        <td>Difference is 10% or more — significant price discrepancy</td>
+        <td>An override reason is required before approval is possible</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-purple">Override Approved</span></td>
+        <td>A large variance was manually reviewed and accepted</td>
+        <td>Approval allowed — override reason is saved on record</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>Expected amount</strong> is calculated as: quantity received × unit cost from the PO. If the supplier charges more, there is a variance. Check the physical invoice carefully before entering amounts.</div>
+  </div>
+
+  <h3>Approving or Disputing an Invoice</h3>
+  <p>Accountants, Admins, and Super Admins can approve or dispute invoices from the Invoice Detail page.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4>✅ Approve Invoice</h4>
+      <p>Click "Approve Invoice" when the invoice is correct and ready for payment. The invoice moves to APPROVED status and becomes available for payment processing.</p>
+    </div>
+    <div class="card">
+      <h4>🚩 Flag as Disputed</h4>
+      <p>Click "Flag as Disputed" if there is a problem with the invoice (wrong amounts, items not received, etc.). Enter a reason — the supplier will need to be contacted.</p>
+    </div>
+  </div>
+
+  <h3>Invoice Statuses</h3>
+  <table class="data-table">
+    <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-gray">DRAFT</span></td><td>Invoice saved but not yet submitted for review</td></tr>
+      <tr><td><span class="badge badge-amber">PENDING</span></td><td>Submitted — awaiting accountant review</td></tr>
+      <tr><td><span class="badge badge-green">APPROVED</span></td><td>Approved and ready for payment</td></tr>
+      <tr><td><span class="badge badge-purple">PAYMENT PENDING</span></td><td>Payment is being processed</td></tr>
+      <tr><td><span class="badge badge-green">PAID</span></td><td>Payment has been recorded in the ledger</td></tr>
+      <tr><td><span class="badge badge-red">DISPUTED</span></td><td>Flagged for resolution with the supplier</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════ PAYMENTS ════════════════ -->
+<section id="payments">
+  <h2>6. Processing Payments</h2>
+  <p>Once an invoice is APPROVED, an Accountant, Admin, or Super Admin can process the payment. This records the expense in the Finance module and deducts the amount from the selected account balance.</p>
+
+  <div class="danger">
+    <span class="icon">🔒</span>
+    <div><strong>Managers cannot process payments.</strong> This is a system-enforced control. If you are a Manager and need a payment processed, ask your Accountant or Admin.</div>
+  </div>
+
+  <h3>Recording a Payment</h3>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="content"><strong>Open the approved invoice</strong><p>Go to Procurement → Invoices, filter by "Approved", and open the invoice.</p></div></div>
+    <div class="step"><div class="n">2</div><div class="content"><strong>Click "Process Payment"</strong><p>This button is only visible on APPROVED invoices.</p></div></div>
+    <div class="step"><div class="n">3</div><div class="content"><strong>Select the payment account</strong><p>Choose from Bank, EcoCash, Cash on Hand, or IRD. The current balance of each account is shown next to its name.</p></div></div>
+    <div class="step"><div class="n">4</div><div class="content"><strong>Enter the payment reference</strong><p>This should be the bank transaction reference, EcoCash transaction ID, or cash voucher number. It is your proof of payment.</p></div></div>
+    <div class="step"><div class="n">5</div><div class="content"><strong>Set the transaction date</strong><p>Defaults to today. Change if the payment was made on a different date.</p></div></div>
+    <div class="step"><div class="n">6</div><div class="content"><strong>Review the Finance Record Preview</strong><p>The blue preview card shows exactly how the expense will appear in the Finance ledger. Check that everything is correct.</p></div></div>
+    <div class="step"><div class="n">7</div><div class="content"><strong>Click "Record Payment"</strong><p>The payment is recorded, the invoice is marked as PAID, and the account balance is updated immediately.</p></div></div>
+  </div>
+
+  <h3>Payment Accounts</h3>
+  <table class="data-table">
+    <thead><tr><th>Account</th><th>Use for</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Bank</strong></td><td>Bank transfer payments — enter the bank reference number</td></tr>
+      <tr><td><strong>EcoCash</strong></td><td>Mobile money payments — enter the EcoCash transaction ID (e.g. ECO-20260328-001)</td></tr>
+      <tr><td><strong>Cash on Hand</strong></td><td>Physical cash payments — enter the cash voucher number</td></tr>
+      <tr><td><strong>IRD Account</strong></td><td>Payments via the IRD account — enter the relevant reference</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning">
+    <span class="icon">⚠️</span>
+    <div><strong>Insufficient balance warning:</strong> If the account you selected does not have enough funds, you will see an amber warning. Review your account balances and either top up the account or use a different payment method before proceeding.</div>
+  </div>
+
+  <h3>After Payment</h3>
+  <p>Once recorded, the invoice detail page shows a <strong>Payment Details</strong> card with the payment method, reference, and a link to the Finance ledger record. The payment cannot be reversed from this module — contact your Finance administrator if a correction is needed.</p>
+</section>
+
+<!-- ════════════════ JOB CARD INTEGRATION ════════════════ -->
+<section id="jobcard-overview">
+  <h2>Job Card Integration — Overview</h2>
+  <p>The Procurement module is directly embedded inside Job Cards. When a job card item has insufficient stock, staff can raise a Purchase Requisition without leaving the job card. Once raised, the entire procurement pipeline status is visible inline — from PR through to payment — without navigating to the Procurement module at all.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <h4>Stock Check</h4>
+      <p>Every job card inventory line shows a live stock badge — green if stock is sufficient, amber if stock is low, red if insufficient.</p>
+    </div>
+    <div class="card">
+      <h4>Raise PR in One Click</h4>
+      <p>When stock is insufficient, an amber "Raise PR" button appears. Click it to open the PR panel and submit a requisition pre-filled with the job card item details.</p>
+    </div>
+    <div class="card">
+      <h4>Live Pipeline Status</h4>
+      <p>After a PR is raised, the button is replaced by a live procurement pipeline tracker showing the current stage: PR → PO → GRN → Invoice → Paid.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>No double-entry.</strong> The job card item is automatically linked to the PR, PO, GRN, and Invoice as they are created. The pipeline status updates in real time — you never need to manually link records.</div>
+  </div>
+</section>
+
+<section id="jobcard-stock-badge">
+  <h2>Stock Badges on Job Card Items</h2>
+  <p>On the Job Card detail page, each inventory line item displays a <strong>stock badge</strong> in the Procurement column showing whether there is enough stock to fulfil the job card requirement.</p>
+
+  <table class="data-table">
+    <thead><tr><th>Badge</th><th>Meaning</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-green">✓ In Stock</span></td>
+        <td>Current on-hand stock meets or exceeds the job requirement</td>
+        <td>No action needed — stock will be allocated when the job is dispatched</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-amber">⚠ Low Stock</span></td>
+        <td>Some stock available but not enough to fully meet the requirement</td>
+        <td>Consider raising a PR for the shortfall amount</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">✗ No Stock</span></td>
+        <td>Zero stock — the item is not available at all</td>
+        <td>Raise a PR immediately to procure the item</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info">
+    <span class="icon">ℹ️</span>
+    <div>The stock count shown is a <strong>snapshot taken when the item was added</strong> to the job card. The badge reflects the current live stock from the inventory system, which may have changed since then.</div>
+  </div>
+</section>
+
+<section id="jobcard-raise-pr">
+  <h2>Raising a PR from a Job Card</h2>
+  <p>When a job card item does not have enough stock, an amber <strong>"Raise PR"</strong> button appears next to the stock badge. This is only visible to Managers, Admins, and Super Admins.</p>
+
+  <div class="warning">
+    <span class="icon">⚠️</span>
+    <div>The "Raise PR" button only appears when: (1) the item has an inventory item selected, (2) on-hand stock is less than the qty required, and (3) no PR has already been raised for this item.</div>
+  </div>
+
+  <h3>Steps to Raise a PR</h3>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="content"><strong>Open the Job Card detail page</strong><p>Navigate to Job Cards and open the relevant job card.</p></div></div>
+    <div class="step"><div class="n">2</div><div class="content"><strong>Find the item with insufficient stock</strong><p>Look for the amber or red stock badge in the Procurement column of the inventory items table.</p></div></div>
+    <div class="step"><div class="n">3</div><div class="content"><strong>Click "Raise PR"</strong><p>The amber outlined button with a shopping cart icon opens the PR panel on the right side of the screen.</p></div></div>
+    <div class="step"><div class="n">4</div><div class="content"><strong>Review the pre-filled details</strong><p>The panel pre-fills: item name, SKU, unit of measure, quantity needed (shortfall), cost price, markup %, and links the PR back to this job card and department automatically.</p></div></div>
+    <div class="step"><div class="n">5</div><div class="content"><strong>Select or confirm the supplier (optional)</strong><p>You can assign a preferred supplier at this stage or leave it blank for the approver to assign.</p></div></div>
+    <div class="step"><div class="n">6</div><div class="content"><strong>Submit or Save as Draft</strong><p>Click "Submit" to send the PR for approval immediately, or "Save as Draft" to review it first.</p></div></div>
+    <div class="step"><div class="n">7</div><div class="content"><strong>The panel closes and the status card appears</strong><p>The "Raise PR" button disappears and is replaced by the procurement pipeline status card, showing the PR number and current stage.</p></div></div>
+  </div>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>The PR is pre-linked to the job card.</strong> When the PR is approved and a PO is created, the job card item automatically picks up the PO link as well — no manual linking required.</div>
+  </div>
+</section>
+
+<section id="jobcard-pipeline">
+  <h2>Procurement Pipeline Status Card</h2>
+  <p>Once a PR has been raised for a job card item, the "Raise PR" button is permanently replaced by the <strong>Procurement Pipeline Status Card</strong>. This compact widget shows where the procurement is up to at a glance.</p>
+
+  <h3>Collapsed View (Default)</h3>
+  <p>By default the card shows a single line: the PR number and the current stage name. For example:</p>
+
+  <div class="card" style="max-width:340px">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+      <code>PR-2026-0042</code>
+      <span style="color:var(--muted)">—</span>
+      <span style="color:#f59e0b;font-weight:600">Requisition</span>
+      <span style="margin-left:auto;color:var(--muted);font-size:11px;">⌄</span>
+    </div>
+  </div>
+
+  <p style="margin-top:12px">Click the <strong>chevron (⌄)</strong> on the right to expand the full pipeline view.</p>
+
+  <h3>Expanded View — 5-Step Pipeline</h3>
+  <p>The expanded view shows all five procurement stages with their current state:</p>
+
+  <table class="data-table">
+    <thead><tr><th>Stage</th><th>Complete</th><th>In Progress</th><th>Not Started</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PR</strong></td><td>PR is APPROVED</td><td>PR is DRAFT or SUBMITTED</td><td>—</td></tr>
+      <tr><td><strong>PO</strong></td><td>PO is ACKNOWLEDGED, IN PROGRESS, or COMPLETE</td><td>PO is SENT</td><td>No PO created yet</td></tr>
+      <tr><td><strong>GRN</strong></td><td>A GRN has been CONFIRMED</td><td>A GRN exists in DRAFT</td><td>No GRN created yet</td></tr>
+      <tr><td><strong>Invoice</strong></td><td>Invoice is PAID</td><td>Invoice exists and is APPROVED, PENDING, or PAYMENT PENDING</td><td>No invoice created yet</td></tr>
+      <tr><td><strong>Paid</strong></td><td>Invoice status is PAYMENT PROCESSED</td><td>—</td><td>Not yet paid</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Step Indicators</h3>
+  <div class="grid-3">
+    <div class="card">
+      <h4 style="color:var(--green)">● Complete</h4>
+      <p>Filled green circle with a checkmark. This stage is done.</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--accent)">◉ In Progress</h4>
+      <p>Blue outlined circle with a pulsing dot. This is the current active stage.</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--muted)">○ Pending</h4>
+      <p>Empty gray circle. This stage has not started yet.</p>
+    </div>
+  </div>
+
+  <h3>Clickable Links</h3>
+  <p>Each step that has a document linked shows its number (e.g. <code>PO-2026-0003</code>) as a clickable link. Clicking it navigates directly to that document's detail page in the Procurement module — no need to search for it.</p>
+
+  <div class="info">
+    <span class="icon">ℹ️</span>
+    <div>The pipeline card loads data lazily — it only fetches procurement records when the job card detail page is open, so it does not slow down the job card list view.</div>
+  </div>
+</section>
+
+<section id="jobcard-full-flow">
+  <h2>End-to-End Example</h2>
+  <p>Here is a complete walkthrough of how a job card item moves from insufficient stock all the way through to supplier payment.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="n" style="background:#64748b">1</div>
+      <div class="content">
+        <strong>Job card item shows insufficient stock</strong>
+        <p>A job card for a poultry structure installation requires 50 roof sheets. The stock badge shows <span class="badge badge-red">✗ No Stock</span> — only 12 are on hand. The "Raise PR" button appears.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="n" style="background:#f59e0b">2</div>
+      <div class="content">
+        <strong>Manager raises a PR from the job card</strong>
+        <p>The manager clicks "Raise PR". The panel slides in pre-filled with 38 sheets (the shortfall), the unit cost, and the job card reference. They select the preferred supplier and click Submit.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="n" style="background:#3b82f6">3</div>
+      <div class="content">
+        <strong>Pipeline card appears — stage: Requisition</strong>
+        <p>The button is replaced by: <code>PR-2026-0042 — Requisition</code>. The PR is SUBMITTED and awaiting approval.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="n" style="background:#6366f1">4</div>
+      <div class="content">
+        <strong>Admin approves the PR and creates a PO</strong>
+        <p>In Procurement → Requisitions, the admin approves PR-2026-0042 and clicks "Create Purchase Order". The pipeline card on the job card automatically updates to show <strong>PO</strong> as the current stage.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="n" style="background:#8b5cf6">5</div>
+      <div class="content">
+        <strong>PO sent to supplier, goods arrive — GRN created</strong>
+        <p>The storekeeper clicks "Receive Goods" on the PO, records 38 sheets received, and confirms the GRN. Inventory is updated automatically. Pipeline stage advances to <strong>GRN</strong>.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="n" style="background:#0891b2">6</div>
+      <div class="content">
+        <strong>Accountant creates and approves the supplier invoice</strong>
+        <p>From the confirmed GRN, the accountant clicks "Create Invoice", enters the supplier's invoice number and amounts, checks the 3-way match result (Matched ✓), and submits for approval. They then approve it. Pipeline shows <strong>Invoice</strong> stage active.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="n" style="background:#22c55e">7</div>
+      <div class="content">
+        <strong>Payment processed — pipeline shows Paid</strong>
+        <p>The accountant clicks "Process Payment", selects Bank, enters the transaction reference, and records the payment. The pipeline card on the job card now shows all five steps complete with a green <strong>Paid</strong> stage. The job card item's procurement is fully resolved.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>At any point</strong> the job card manager can expand the pipeline card and click the document links (PR number, PO number, GRN number, Invoice number) to jump directly to those records and check details, add notes, or take action — without losing their place in the job card.</div>
+  </div>
+
+  <hr>
+
+  <h3>Roles Involved in the Job Card Procurement Flow</h3>
+  <table class="data-table">
+    <thead><tr><th>Stage</th><th>Who Acts</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>Raise PR</td><td>Manager / Admin / Super Admin</td><td>Job Card detail → "Raise PR" button</td></tr>
+      <tr><td>Approve PR</td><td>Manager / Admin / Super Admin</td><td>Procurement → Requisitions</td></tr>
+      <tr><td>Create &amp; manage PO</td><td>Manager / Admin / Super Admin</td><td>Procurement → Purchase Orders</td></tr>
+      <tr><td>Receive Goods (GRN)</td><td>Storekeeper / Manager / Admin / Super Admin</td><td>Procurement → Purchase Orders → "Receive Goods"</td></tr>
+      <tr><td>Create &amp; approve Invoice</td><td>Accountant / Admin / Super Admin</td><td>Procurement → GRN detail → "Create Invoice"</td></tr>
+      <tr><td>Process Payment</td><td>Accountant / Admin / Super Admin</td><td>Procurement → Invoice detail → "Process Payment"</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════ STATUS REFERENCE ════════════════ -->
+<section id="status-guide">
+  <h2>Status Reference</h2>
+
+  <h3>Purchase Requisitions</h3>
+  <table class="data-table">
+    <thead><tr><th>Status</th><th>Meaning</th><th>Next Steps</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-gray">DRAFT</span></td><td>Being written — not yet submitted</td><td>Edit and submit when ready</td></tr>
+      <tr><td><span class="badge badge-blue">SUBMITTED</span></td><td>Sent for approval — cannot be edited</td><td>Wait for manager approval</td></tr>
+      <tr><td><span class="badge badge-green">APPROVED</span></td><td>Approved — PO can be created</td><td>Click "Create Purchase Order"</td></tr>
+      <tr><td><span class="badge badge-red">REJECTED</span></td><td>Declined — reason provided</td><td>Read the rejection reason, create a new PR</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Purchase Orders</h3>
+  <table class="data-table">
+    <thead><tr><th>Status</th><th>Meaning</th><th>Next Steps</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-gray">DRAFT</span></td><td>PO created, not yet sent to supplier</td><td>Review, then "Mark as Sent"</td></tr>
+      <tr><td><span class="badge badge-blue">SENT</span></td><td>PO dispatched to supplier</td><td>When supplier confirms, "Mark as Acknowledged"</td></tr>
+      <tr><td><span class="badge badge-purple">ACKNOWLEDGED</span></td><td>Supplier confirmed receipt of PO</td><td>Await delivery, then "Receive Goods"</td></tr>
+      <tr><td><span class="badge badge-amber">IN PROGRESS</span></td><td>Some goods received, more expected</td><td>Continue receiving goods</td></tr>
+      <tr><td><span class="badge badge-green">COMPLETE</span></td><td>All goods received</td><td>Proceed to invoicing</td></tr>
+      <tr><td><span class="badge badge-red">CANCELLED</span></td><td>PO cancelled</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Goods Receipt Notes</h3>
+  <table class="data-table">
+    <thead><tr><th>Status</th><th>Meaning</th><th>Next Steps</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-gray">DRAFT</span></td><td>Saved but not confirmed</td><td>Review quantities and confirm</td></tr>
+      <tr><td><span class="badge badge-green">CONFIRMED</span></td><td>Receipt recorded and inventory updated</td><td>Create supplier invoice</td></tr>
+      <tr><td><span class="badge badge-red">DISPUTED</span></td><td>Quality or quantity issues flagged</td><td>Contact supplier, then resolve</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Supplier Invoices</h3>
+  <table class="data-table">
+    <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-gray">DRAFT</span></td><td>Invoice created but not submitted</td></tr>
+      <tr><td><span class="badge badge-amber">PENDING</span></td><td>Submitted — awaiting accountant review</td></tr>
+      <tr><td><span class="badge badge-green">APPROVED</span></td><td>Ready for payment</td></tr>
+      <tr><td><span class="badge badge-purple">PAYMENT PENDING</span></td><td>Payment in process</td></tr>
+      <tr><td><span class="badge badge-green">PAID</span></td><td>Payment recorded in Finance</td></tr>
+      <tr><td><span class="badge badge-red">DISPUTED</span></td><td>Flagged — contact supplier</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════ 3-WAY MATCH ════════════════ -->
+<section id="match-guide">
+  <h2>3-Way Match Explained</h2>
+  <p>The 3-way match is an automatic check that compares three documents before allowing payment:</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <h4>Document 1: Purchase Order</h4>
+      <p>What you agreed to buy, at what price, from which supplier.</p>
+    </div>
+    <div class="card">
+      <h4>Document 2: GRN</h4>
+      <p>What you actually received — the quantities recorded when goods arrived.</p>
+    </div>
+    <div class="card">
+      <h4>Document 3: Supplier Invoice</h4>
+      <p>What the supplier is charging you.</p>
+    </div>
+  </div>
+
+  <p>The system calculates the <strong>expected amount</strong> from the GRN (qty received × unit cost), then compares it to the <strong>invoice amount</strong>. The difference is the variance.</p>
+
+  <h3>Variance Thresholds</h3>
+  <table class="data-table">
+    <thead><tr><th>Variance</th><th>Result</th><th>Action Required</th></tr></thead>
+    <tbody>
+      <tr><td>0%</td><td><span class="badge badge-green">Matched</span></td><td>None — approve and pay</td></tr>
+      <tr><td>0.1% – 9.99%</td><td><span class="badge badge-amber">Minor Variance</span></td><td>Accountant can approve with acknowledgement</td></tr>
+      <tr><td>10% or more</td><td><span class="badge badge-red">Variance Exceeded</span></td><td>Override reason required before approval</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <span class="icon">💡</span>
+    <div><strong>A variance exceeding 10% is a red flag.</strong> Common causes include: supplier changed unit prices without notice, quantity discrepancy between GRN and invoice, additional charges (freight, handling) added to the invoice. Always investigate before providing an override reason.</div>
+  </div>
+</section>
+
+<!-- ════════════════ FAQ ════════════════ -->
+<section id="faq">
+  <h2>Common Questions</h2>
+
+  <h3>I confirmed the GRN but the "Create Invoice" button does not appear</h3>
+  <p>Wait a moment and refresh the page. The inventory posting happens automatically but can take 30–60 seconds. The "Create Invoice" button only appears once the posting status shows <strong>COMPLETE</strong>.</p>
+  <p>If it shows <strong>FAILED</strong> after several minutes, contact your system administrator.</p>
+
+  <h3>The invoice I need to enter has different prices than the PO</h3>
+  <p>Enter the supplier's actual invoice amounts in the line items on the Create Invoice form. The system will calculate the variance and flag it. If the variance is within 10%, the accountant can approve with a note. If over 10%, a written override reason is required. Do not change amounts to hide a real discrepancy — the variance is recorded for audit purposes.</p>
+
+  <h3>Can I create a GRN if only part of the order arrived?</h3>
+  <p>Yes. Enter the quantities actually received (even if less than ordered). The PO status will move to <strong>IN PROGRESS</strong>. You can create another GRN when the remaining items arrive.</p>
+
+  <h3>I made a mistake on the GRN — can I edit it?</h3>
+  <p>You can edit a GRN while it is in <strong>DRAFT</strong> status. Once it is <strong>CONFIRMED</strong>, it cannot be edited. If there is a confirmed error, mark the GRN as <strong>DISPUTED</strong> to flag it, and contact your manager.</p>
+
+  <h3>The wrong payment account was selected — can it be reversed?</h3>
+  <p>Payment records cannot be reversed from the Procurement module once recorded. Contact your Finance administrator or system admin for a correction in the Finance ledger.</p>
+
+  <h3>Why can I not see the "Approve Invoice" button?</h3>
+  <p>The Approve Invoice button is only visible to <strong>Accountants, Admins, and Super Admins</strong>. Managers cannot approve invoices — this is a system control. Also, invoices with a variance exceeding 10% cannot be approved until an override reason has been entered.</p>
+
+  <h3>Can I create a PO directly without a Requisition?</h3>
+  <p>No. All Purchase Orders must trace back to an approved Purchase Requisition. This ensures all purchases are authorised before being placed with a supplier.</p>
+
+  <h3>What is the due date on an invoice?</h3>
+  <p>The due date is automatically suggested based on the supplier's payment terms (e.g. NET30 = 30 days from invoice date). You can change it if needed. Overdue invoices are highlighted in red on the invoice list.</p>
+
+  <hr>
+
+  <div class="info">
+    <span class="icon">ℹ️</span>
+    <div>Need further help? Contact your system administrator or raise a support request through your internal helpdesk.</div>
+  </div>
+</section>
+
+</div><!-- /#main -->
+
+<script>
+// Active sidebar link on scroll
+const sections = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('#sidebar a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 60) current = s.id;
+  });
+  links.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

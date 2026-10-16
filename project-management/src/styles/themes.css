@@ -1,0 +1,580 @@
+.theme-default .theme-container,
+.theme-default [data-reka-popper-content-wrapper] {
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+}
+
+.theme-mono .theme-container,
+.theme-mono [data-reka-popper-content-wrapper] {
+  --font-sans: var(--font-mono);
+  --primary: var(--color-stone-600);
+  --primary-foreground: var(--color-stone-50);
+  --chart-1: var(--color-stone-300);
+  --chart-2: var(--color-stone-500);
+  --chart-3: var(--color-stone-600);
+  --chart-4: var(--color-stone-700);
+  --chart-5: var(--color-stone-800);
+  --sidebar-primary: var(--color-stone-600);
+  --sidebar-primary-foreground: var(--color-stone-50);
+  --sidebar-ring: var(--color-stone-400);
+
+  @variant dark {
+    --primary: var(--color-stone-500);
+    --primary-foreground: var(--color-stone-50);
+    --sidebar-primary: var(--color-stone-500);
+    --sidebar-primary-foreground: var(--color-stone-50);
+    --sidebar-ring: var(--color-stone-900);
+  }
+
+  @media (min-width: 1024px) {
+    --font-sans: var(--font-mono);
+    --radius: 0.45em;
+    --text-lg: 1rem;
+    --text-xl: 1.1rem;
+    --text-2xl: 1.2rem;
+    --text-3xl: 1.3rem;
+    --text-4xl: 1.4rem;
+    --text-5xl: 1.5rem;
+    --text-6xl: 1.6rem;
+    --text-7xl: 1.7rem;
+    --text-8xl: 1.8rem;
+    --text-base: 0.85rem;
+    --text-sm: 0.8rem;
+    --spacing: 0.222222rem;
+  }
+
+  .rounded-xs,
+  .rounded-sm,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl {
+    border-radius: 0;
+  }
+
+  .shadow-xs,
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg,
+  .shadow-xl {
+    box-shadow: none;
+  }
+
+  [data-slot="toggle-group"],
+  [data-slot="toggle-group-item"],
+  [data-slot="checkbox"],
+  [data-slot="radio"],
+  [data-slot="switch"],
+  [data-slot="switch-thumb"] {
+    @apply !rounded-none !shadow-none;
+  }
+}
+
+.theme-scaled .theme-container,
+.theme-scaled [data-reka-popper-content-wrapper] {
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+
+  @media (min-width: 1024px) {
+    --radius: 0.45em;
+    --text-lg: 1rem;
+    --text-xl: 1.1rem;
+    --text-2xl: 1.2rem;
+    --text-3xl: 1.3rem;
+    --text-4xl: 1.4rem;
+    --text-5xl: 1.5rem;
+    --text-6xl: 1.6rem;
+    --text-7xl: 1.7rem;
+    --text-8xl: 1.8rem;
+    --text-base: 0.85rem;
+    --text-sm: 0.8rem;
+    --spacing: 0.2rem;
+  }
+
+  [data-slot="select-trigger"],
+  [data-slot="toggle-group-item"] {
+    --spacing: 0.2rem;
+  }
+
+  [data-slot="card"] {
+    border-radius: var(--radius);
+    padding-block: calc(var(--spacing) * 4);
+    gap: calc(var(--spacing) * 2);
+  }
+
+  [data-slot="card"].pb-0 {
+    padding-bottom: 0;
+  }
+}
+
+.theme-rounded-none .theme-container,
+.theme-rounded-none [data-reka-popper-content-wrapper] {
+  --radius: 0;
+}
+
+.theme-rounded-small .theme-container,
+.theme-rounded-small [data-reka-popper-content-wrapper] {
+  --radius: 0.4rem;
+}
+
+.theme-rounded-medium .theme-container,
+.theme-rounded-medium [data-reka-popper-content-wrapper] {
+  --radius: 0.65rem;
+}
+
+.theme-rounded-large .theme-container,
+.theme-rounded-large [data-reka-popper-content-wrapper] {
+  --radius: 1rem;
+}
+
+.theme-rounded-full .theme-container,
+.theme-rounded-full [data-reka-popper-content-wrapper] {
+  --radius: 1.2rem;
+}
+
+.theme-inter .theme-container,
+.theme-inter [data-reka-popper-content-wrapper] {
+  --font-sans: var(--font-inter);
+}
+
+.theme-noto-sans .theme-container,
+.theme-noto-sans [data-reka-popper-content-wrapper] {
+  --font-sans: var(--font-noto-sans);
+}
+
+.theme-nunito-sans .theme-container,
+.theme-nunito-sans [data-reka-popper-content-wrapper] {
+  --font-sans: var(--font-nunito-sans);
+}
+
+.theme-figtree .theme-container,
+.theme-figtree [data-reka-popper-content-wrapper] {
+  --font-sans: var(--font-figtree);
+}
+
+.theme-blue .theme-container,
+.theme-blue [data-reka-popper-content-wrapper] {
+  --primary: var(--color-blue-700);
+  --primary-foreground: var(--color-blue-50);
+  /* --ring: var(--color-blue-100); */
+  --sidebar-primary: var(--color-blue-600);
+  --sidebar-primary-foreground: var(--color-blue-50);
+  /* --sidebar-ring: var(--color-blue-400); */
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+
+  @variant dark {
+    --primary: var(--color-blue-700);
+    --primary-foreground: var(--color-blue-50);
+    /* --ring: var(--color-blue-900); */
+    --sidebar-primary: var(--color-blue-500);
+    --sidebar-primary-foreground: var(--color-blue-50);
+    /* --sidebar-ring: var(--color-blue-900); */
+  }
+}
+
+.theme-green .theme-container,
+.theme-green [data-reka-popper-content-wrapper] {
+  --primary: var(--color-lime-600);
+  --primary-foreground: var(--color-lime-50);
+  --ring: var(--color-lime-400);
+  --chart-1: var(--color-green-300);
+  --chart-2: var(--color-green-500);
+  --chart-3: var(--color-green-600);
+  --chart-4: var(--color-green-700);
+  --chart-5: var(--color-green-800);
+  --sidebar-primary: var(--color-lime-600);
+  --sidebar-primary-foreground: var(--color-lime-50);
+  --sidebar-ring: var(--color-lime-400);
+
+  @variant dark {
+    --primary: var(--color-lime-600);
+    --primary-foreground: var(--color-lime-50);
+    --ring: var(--color-lime-900);
+    --sidebar-primary: var(--color-lime-500);
+    --sidebar-primary-foreground: var(--color-lime-50);
+    --sidebar-ring: var(--color-lime-900);
+  }
+}
+
+.theme-amber .theme-container,
+.theme-amber [data-reka-popper-content-wrapper] {
+  --primary: var(--color-amber-600);
+  --primary-foreground: var(--color-amber-50);
+  --ring: var(--color-amber-400);
+  --chart-1: var(--color-amber-300);
+  --chart-2: var(--color-amber-500);
+  --chart-3: var(--color-amber-600);
+  --chart-4: var(--color-amber-700);
+  --chart-5: var(--color-amber-800);
+  --sidebar-primary: var(--color-amber-600);
+  --sidebar-primary-foreground: var(--color-amber-50);
+  --sidebar-ring: var(--color-amber-400);
+
+  @variant dark {
+    --primary: var(--color-amber-500);
+    --primary-foreground: var(--color-amber-50);
+    --ring: var(--color-amber-900);
+    --sidebar-primary: var(--color-amber-500);
+    --sidebar-primary-foreground: var(--color-amber-50);
+    --sidebar-ring: var(--color-amber-900);
+  }
+}
+
+.theme-rose .theme-container,
+.theme-rose [data-reka-popper-content-wrapper] {
+  --primary: var(--color-rose-600);
+  --primary-foreground: var(--color-rose-50);
+  --ring: var(--color-rose-400);
+  --chart-1: var(--color-rose-300);
+  --chart-2: var(--color-rose-500);
+  --chart-3: var(--color-rose-600);
+  --chart-4: var(--color-rose-700);
+  --chart-5: var(--color-rose-800);
+  --sidebar-primary: var(--color-rose-600);
+  --sidebar-primary-foreground: var(--color-rose-50);
+  --sidebar-ring: var(--color-rose-400);
+
+  @variant dark {
+    --primary: var(--color-rose-500);
+    --primary-foreground: var(--color-rose-50);
+    --ring: var(--color-rose-900);
+    --sidebar-primary: var(--color-rose-500);
+    --sidebar-primary-foreground: var(--color-rose-50);
+    --sidebar-ring: var(--color-rose-900);
+  }
+}
+
+.theme-purple .theme-container,
+.theme-purple [data-reka-popper-content-wrapper] {
+  --primary: var(--color-purple-600);
+  --primary-foreground: var(--color-purple-50);
+  --ring: var(--color-purple-400);
+  --chart-1: var(--color-purple-300);
+  --chart-2: var(--color-purple-500);
+  --chart-3: var(--color-purple-600);
+  --chart-4: var(--color-purple-700);
+  --chart-5: var(--color-purple-800);
+  --sidebar-primary: var(--color-purple-600);
+  --sidebar-primary-foreground: var(--color-purple-50);
+  --sidebar-ring: var(--color-purple-400);
+
+  @variant dark {
+    --primary: var(--color-purple-500);
+    --primary-foreground: var(--color-purple-50);
+    --ring: var(--color-purple-900);
+    --sidebar-primary: var(--color-purple-500);
+    --sidebar-primary-foreground: var(--color-purple-50);
+    --sidebar-ring: var(--color-purple-900);
+  }
+}
+
+.theme-orange .theme-container,
+.theme-orange [data-reka-popper-content-wrapper] {
+  --primary: var(--color-orange-600);
+  --primary-foreground: var(--color-orange-50);
+  --ring: var(--color-orange-400);
+  --chart-1: var(--color-orange-300);
+  --chart-2: var(--color-orange-500);
+  --chart-3: var(--color-orange-600);
+  --chart-4: var(--color-orange-700);
+  --chart-5: var(--color-orange-800);
+  --sidebar-primary: var(--color-orange-600);
+  --sidebar-primary-foreground: var(--color-orange-50);
+  --sidebar-ring: var(--color-orange-400);
+
+  @variant dark {
+    --primary: var(--color-orange-500);
+    --primary-foreground: var(--color-orange-50);
+    --ring: var(--color-orange-900);
+    --sidebar-primary: var(--color-orange-500);
+    --sidebar-primary-foreground: var(--color-orange-50);
+    --sidebar-ring: var(--color-orange-900);
+  }
+}
+
+.theme-teal .theme-container,
+.theme-teal [data-reka-popper-content-wrapper] {
+  --primary: var(--color-teal-600);
+  --primary-foreground: var(--color-teal-50);
+  --chart-1: var(--color-teal-300);
+  --chart-2: var(--color-teal-500);
+  --chart-3: var(--color-teal-600);
+  --chart-4: var(--color-teal-700);
+  --chart-5: var(--color-teal-800);
+  --sidebar-primary: var(--color-teal-600);
+  --sidebar-primary-foreground: var(--color-teal-50);
+  --sidebar-ring: var(--color-teal-400);
+
+  @variant dark {
+    --primary: var(--color-teal-500);
+    --primary-foreground: var(--color-teal-50);
+    --sidebar-primary: var(--color-teal-500);
+    --sidebar-primary-foreground: var(--color-teal-50);
+    --sidebar-ring: var(--color-teal-900);
+  }
+}
+
+.theme-red .theme-container,
+.theme-red [data-reka-popper-content-wrapper] {
+  --primary: var(--color-red-600);
+  --primary-foreground: var(--color-red-50);
+  --ring: var(--color-red-400);
+  --chart-1: var(--color-red-300);
+  --chart-2: var(--color-red-500);
+  --chart-3: var(--color-red-600);
+  --chart-4: var(--color-red-700);
+  --chart-5: var(--color-red-800);
+  --sidebar-primary: var(--color-red-600);
+  --sidebar-primary-foreground: var(--color-red-50);
+  --sidebar-ring: var(--color-red-400);
+
+  @variant dark {
+    --primary: var(--color-red-500);
+    --primary-foreground: var(--color-red-50);
+    --ring: var(--color-red-900);
+    --sidebar-primary: var(--color-red-500);
+    --sidebar-primary-foreground: var(--color-red-50);
+    --sidebar-ring: var(--color-red-900);
+  }
+}
+
+.theme-yellow .theme-container,
+.theme-yellow [data-reka-popper-content-wrapper] {
+  --primary: var(--color-yellow-400);
+  --primary-foreground: var(--color-yellow-900);
+  --ring: var(--color-yellow-400);
+  --chart-1: var(--color-yellow-300);
+  --chart-2: var(--color-yellow-500);
+  --chart-3: var(--color-yellow-600);
+  --chart-4: var(--color-yellow-700);
+  --chart-5: var(--color-yellow-800);
+  --sidebar-primary: var(--color-yellow-600);
+  --sidebar-primary-foreground: var(--color-yellow-50);
+  --sidebar-ring: var(--color-yellow-400);
+
+  @variant dark {
+    --primary: var(--color-yellow-500);
+    --primary-foreground: var(--color-yellow-900);
+    --ring: var(--color-yellow-900);
+    --sidebar-primary: var(--color-yellow-500);
+    --sidebar-primary-foreground: var(--color-yellow-50);
+    --sidebar-ring: var(--color-yellow-900);
+  }
+}
+
+.theme-violet .theme-container,
+.theme-violet [data-reka-popper-content-wrapper] {
+  --primary: var(--color-violet-600);
+  --primary-foreground: var(--color-violet-50);
+  --ring: var(--color-violet-400);
+  --chart-1: var(--color-violet-300);
+  --chart-2: var(--color-violet-500);
+  --chart-3: var(--color-violet-600);
+  --chart-4: var(--color-violet-700);
+  --chart-5: var(--color-violet-800);
+  --sidebar-primary: var(--color-violet-600);
+  --sidebar-primary-foreground: var(--color-violet-50);
+  --sidebar-ring: var(--color-violet-400);
+
+  @variant dark {
+    --primary: var(--color-violet-500);
+    --primary-foreground: var(--color-violet-50);
+    --ring: var(--color-violet-900);
+    --sidebar-primary: var(--color-violet-500);
+    --sidebar-primary-foreground: var(--color-violet-50);
+    --sidebar-ring: var(--color-violet-900);
+  }
+}
+
+/* Midnight Theme (OLED Black) */
+.theme-midnight.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.1 0 0);
+  --popover: oklch(0.1 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0 0 0);
+  --border: oklch(1 0 0 / 15%);
+  --sidebar: oklch(0.05 0 0);
+}
+
+/* Nordic Theme (Arctic Blue) */
+/* Nord palette inspired: #2E3440 background */
+.theme-nordic.dark {
+  --background: oklch(0.25 0.02 260);
+  --foreground: oklch(0.95 0.01 260);
+  --card: oklch(0.28 0.02 260);
+  --primary: oklch(0.7 0.1 210);
+  /* Frosty Blue */
+  --primary-foreground: oklch(0.98 0.01 210);
+  --accent: oklch(0.75 0.12 180);
+  /* Teal accent */
+  --sidebar: oklch(0.22 0.02 260);
+}
+
+/* Emerald Dark Theme (Deep Forest) */
+.theme-emerald.dark {
+  --background: oklch(0.15 0.02 160);
+  --foreground: oklch(0.95 0.02 160);
+  --card: oklch(0.18 0.02 160);
+  --primary: oklch(0.65 0.2 160);
+  /* Vibrant Emerald */
+  --primary-foreground: oklch(0.98 0.02 160);
+  --accent: oklch(0.6 0.15 150);
+  --sidebar: oklch(0.12 0.02 160);
+}
+
+/* Charcoal Black Theme (Deep Grey) */
+.theme-charcoal.dark {
+  --background: oklch(0.18 0.01 260);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.22 0.01 260);
+  --popover: oklch(0.22 0.01 260);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.2 0 0);
+  --border: oklch(1 0 0 / 15%);
+  --sidebar: oklch(0.15 0.01 260);
+}
+
+/* Ruby Red Theme (Crimson Dark) */
+.theme-red.dark {
+  --background: oklch(0.14 0.04 20);
+  --foreground: oklch(0.985 0.01 20);
+  --card: oklch(0.17 0.04 20);
+  --primary: oklch(0.6 0.18 25);
+  --primary-foreground: oklch(0.985 0.01 25);
+  --accent: oklch(0.55 0.15 20);
+  --sidebar: oklch(0.12 0.04 20);
+  --border: oklch(1 0 0 / 10%);
+}
+
+/* Sunset Orange Theme (Amber Dark) */
+.theme-orange.dark {
+  --background: oklch(0.15 0.03 45);
+  --foreground: oklch(0.985 0.01 45);
+  --card: oklch(0.18 0.03 45);
+  --primary: oklch(0.7 0.18 50);
+  --primary-foreground: oklch(0.15 0.03 45);
+  --accent: oklch(0.65 0.15 45);
+  --sidebar: oklch(0.13 0.03 45);
+  --border: oklch(1 0 0 / 10%);
+}
+
+/* Forest Greenish Theme (Deep Moss) */
+.theme-green.dark {
+  --background: oklch(0.15 0.02 140);
+  --foreground: oklch(0.985 0.01 140);
+  --card: oklch(0.18 0.02 140);
+  --primary: oklch(0.75 0.15 140);
+  --primary-foreground: oklch(0.15 0.02 140);
+  --accent: oklch(0.7 0.12 140);
+  --sidebar: oklch(0.12 0.02 140);
+  --border: oklch(1 0 0 / 10%);
+}
+
+/* User-Requested New Emarald Theme (#00A63E) */
+.theme-new-emarald {
+  --brand-primary: #00A63E;
+  /* #00A63E (Primary Brand Color) */
+  --brand-secondary: #007A2E;
+  /* Darker variant for contrast if needed */
+  /* This configures components that rely on the brand-primary accent mapping */
+}
+
+/* Dark variant for New Emarald */
+.theme-new-emarald.dark {
+  --background: oklch(0.15 0.02 155);
+  --foreground: oklch(0.985 0.01 155);
+  --card: oklch(0.18 0.02 155);
+  --brand-primary: #00A63E;
+  --brand-secondary: #9BE0B4;
+}
+
+/* ============================================
+   NATURE THEME — Forest Canopy
+   Light: Morning meadow — warm cream, rich greens, golden sun
+   Dark:  Forest at dusk — deep moss, glowing leaves, amber glow
+   ============================================ */
+
+/* Nature Light */
+.theme-nature {
+  --background: oklch(0.97 0.014 118);
+  --foreground: oklch(0.17 0.03 100);
+  --card: oklch(0.955 0.018 116);
+  --card-foreground: oklch(0.17 0.03 100);
+  --popover: oklch(0.96 0.016 118);
+  --popover-foreground: oklch(0.17 0.03 100);
+  --primary: oklch(0.40 0.16 143);
+  --primary-foreground: oklch(0.98 0.01 120);
+  --secondary: oklch(0.90 0.022 125);
+  --secondary-foreground: oklch(0.22 0.04 120);
+  --muted: oklch(0.91 0.018 122);
+  --muted-foreground: oklch(0.44 0.06 120);
+  --accent: oklch(0.86 0.10 82);
+  --accent-foreground: oklch(0.22 0.05 75);
+  --destructive: oklch(0.55 0.22 27);
+  --border: oklch(0.80 0.045 128);
+  --input: oklch(0.86 0.025 120);
+  --ring: oklch(0.50 0.20 143);
+  --sidebar: oklch(0.93 0.026 120);
+  --sidebar-foreground: oklch(0.17 0.03 100);
+  --sidebar-primary: oklch(0.40 0.16 143);
+  --sidebar-primary-foreground: oklch(0.98 0.01 120);
+  --sidebar-accent: oklch(0.88 0.055 118);
+  --sidebar-accent-foreground: oklch(0.22 0.04 110);
+  --sidebar-border: oklch(0.80 0.045 128);
+  --sidebar-ring: oklch(0.50 0.20 143);
+  --chart-1: oklch(0.50 0.20 143);
+  --chart-2: oklch(0.62 0.16 155);
+  --chart-3: oklch(0.74 0.16 85);
+  --chart-4: oklch(0.55 0.14 165);
+  --chart-5: oklch(0.40 0.12 175);
+  --brand-primary: #4a8c12;
+  --brand-secondary: #d97706;
+}
+
+/* Nature Dark */
+.theme-nature.dark {
+  --background: oklch(0.12 0.036 145);
+  --foreground: oklch(0.93 0.025 128);
+  --card: oklch(0.16 0.040 143);
+  --card-foreground: oklch(0.93 0.025 128);
+  --popover: oklch(0.18 0.040 143);
+  --popover-foreground: oklch(0.93 0.025 128);
+  --primary: oklch(0.68 0.22 143);
+  --primary-foreground: oklch(0.10 0.03 143);
+  --secondary: oklch(0.21 0.042 143);
+  --secondary-foreground: oklch(0.90 0.022 128);
+  --muted: oklch(0.20 0.038 145);
+  --muted-foreground: oklch(0.60 0.09 128);
+  --accent: oklch(0.70 0.17 82);
+  --accent-foreground: oklch(0.12 0.04 78);
+  --destructive: oklch(0.68 0.20 22);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.68 0.22 143);
+  --sidebar: oklch(0.09 0.032 145);
+  --sidebar-foreground: oklch(0.93 0.025 128);
+  --sidebar-primary: oklch(0.68 0.22 143);
+  --sidebar-primary-foreground: oklch(0.10 0.03 143);
+  --sidebar-accent: oklch(0.20 0.038 145);
+  --sidebar-accent-foreground: oklch(0.90 0.022 128);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.68 0.22 143);
+  --chart-1: oklch(0.68 0.22 143);
+  --chart-2: oklch(0.58 0.18 155);
+  --chart-3: oklch(0.72 0.17 82);
+  --chart-4: oklch(0.52 0.15 165);
+  --chart-5: oklch(0.44 0.12 175);
+  --brand-primary: #79c21b;
+  --brand-secondary: #f59e0b;
+}

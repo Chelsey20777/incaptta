@@ -1,0 +1,1 @@
+const fs=require("fs");const path=require("path");const baseDir="c:/Users/REAL TIME/Documents/incaptta/IncapttaPro/incaptta-manage-next";function w(rel,c){const fp=path.join(baseDir,rel);fs.mkdirSync(path.dirname(fp),{recursive:true});fs.writeFileSync(fp,c,"utf-8");console.log("OK: "+rel);}

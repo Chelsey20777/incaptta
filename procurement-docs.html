@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IncapttaPro — Procurement Module Documentation</title>
+<style>
+  :root {
+    --brand:   #79c21b;
+    --accent:  #ff8903;
+    --bg:      #0f1117;
+    --surface: #181c25;
+    --card:    #1e2332;
+    --border:  #2a2f40;
+    --text:    #e8ecf0;
+    --muted:   #7a8499;
+    --code-bg: #12151e;
+    --green:   #22c55e;
+    --amber:   #f59e0b;
+    --red:     #ef4444;
+    --blue:    #3b82f6;
+    --purple:  #a855f7;
+    --sidebar: 280px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; font-size: 15px; line-height: 1.65; }
+
+  /* ── SIDEBAR ── */
+  aside {
+    width: var(--sidebar); min-width: var(--sidebar);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed; top: 0; left: 0; height: 100vh;
+    overflow-y: auto; display: flex; flex-direction: column;
+    z-index: 100;
+  }
+  .sidebar-brand {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .sidebar-brand h2 { font-size: 17px; font-weight: 800; letter-spacing: .02em; }
+  .sidebar-brand h2 span.g { color: var(--brand); }
+  .sidebar-brand h2 span.o { color: var(--accent); }
+  .sidebar-brand p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .sidebar-nav { padding: 12px 10px; flex: 1; }
+  .nav-section { margin-bottom: 18px; }
+  .nav-section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--muted); padding: 4px 10px 6px;
+  }
+  .nav-link {
+    display: block; padding: 7px 12px; border-radius: 6px;
+    color: #a0aabb; text-decoration: none; font-size: 13px;
+    transition: background .15s, color .15s;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .nav-link:hover { background: rgba(121,194,27,.08); color: var(--brand); }
+  .nav-link.active { background: rgba(121,194,27,.12); color: var(--brand); font-weight: 600; }
+  .nav-link .icon { margin-right: 8px; opacity: .7; }
+
+  /* ── MAIN ── */
+  main { margin-left: var(--sidebar); flex: 1; padding: 40px 48px; max-width: 1100px; }
+
+  /* ── HEADINGS ── */
+  h1 { font-size: 32px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 8px; }
+  h1 .accent { color: var(--brand); }
+  h2 { font-size: 22px; font-weight: 700; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  h3 { font-size: 16px; font-weight: 700; margin: 24px 0 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin: 16px 0 6px; color: #b0bac8; text-transform: uppercase; letter-spacing: .06em; }
+  p { margin-bottom: 10px; color: #c8d0dc; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, rgba(121,194,27,.08) 0%, rgba(255,137,3,.06) 100%);
+    border: 1px solid rgba(121,194,27,.2);
+    border-radius: 12px; padding: 32px 36px; margin-bottom: 32px;
+  }
+  .hero-meta { display: flex; gap: 20px; margin-top: 16px; flex-wrap: wrap; }
+  .hero-chip {
+    background: rgba(255,255,255,.06); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 14px; font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .hero-chip b { color: var(--text); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 20px;
+  }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .stat-card .num { font-size: 28px; font-weight: 800; color: var(--brand); }
+  .stat-card .label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: rgba(255,255,255,.03); }
+  th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+
+  /* ── CODE ── */
+  code { font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace; background: var(--code-bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 12.5px; color: #a8d8a8; }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 20px; overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    font-size: 12.5px; line-height: 1.7; margin-bottom: 16px;
+    color: #c8d8e8;
+  }
+  pre .kw { color: #c792ea; }
+  pre .st { color: #c3e88d; }
+  pre .ty { color: #82aaff; }
+  pre .cm { color: #546e7a; }
+  pre .nu { color: #f78c6c; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 10px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    border: 1px solid transparent;
+  }
+  .badge-green  { background: rgba(34,197,94,.15);  color: #4ade80;  border-color: rgba(34,197,94,.3);  }
+  .badge-amber  { background: rgba(245,158,11,.15); color: #fbbf24;  border-color: rgba(245,158,11,.3); }
+  .badge-red    { background: rgba(239,68,68,.15);  color: #f87171;  border-color: rgba(239,68,68,.3);  }
+  .badge-blue   { background: rgba(59,130,246,.15); color: #60a5fa;  border-color: rgba(59,130,246,.3); }
+  .badge-purple { background: rgba(168,85,247,.15); color: #c084fc;  border-color: rgba(168,85,247,.3); }
+  .badge-gray   { background: rgba(100,116,139,.15);color: #94a3b8;  border-color: rgba(100,116,139,.3);}
+  .badge-brand  { background: rgba(121,194,27,.15); color: var(--brand); border-color: rgba(121,194,27,.3); }
+
+  /* ── WORKFLOW DIAGRAM ── */
+  .flow {
+    display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+    margin: 16px 0; background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px; row-gap: 12px;
+  }
+  .flow-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 600;
+    white-space: nowrap; text-align: center; min-width: 90px;
+  }
+  .flow-arrow {
+    font-size: 18px; color: var(--muted); padding: 0 6px;
+  }
+  .flow-label {
+    font-size: 10px; color: var(--muted); display: block; margin-top: 2px; font-weight: 400;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--brand);
+    margin-bottom: 4px;
+  }
+
+  /* ── ALERT ── */
+  .alert {
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;
+    font-size: 13px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .alert-info  { background: rgba(59,130,246,.1);  border: 1px solid rgba(59,130,246,.3); color: #93c5fd; }
+  .alert-warn  { background: rgba(245,158,11,.1);  border: 1px solid rgba(245,158,11,.3); color: #fde68a; }
+  .alert-tip   { background: rgba(121,194,27,.1);  border: 1px solid rgba(121,194,27,.3); color: #bbf7d0; }
+
+  /* ── PAGE ENTRY ── */
+  .page-entry { margin-bottom: 36px; }
+  .page-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 12px; margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .page-title { font-size: 17px; font-weight: 700; }
+  .route-pill {
+    font-family: monospace; font-size: 12px;
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 3px 10px; color: var(--accent);
+  }
+
+  /* ── COLLECTION TABLE ── */
+  .field-type { color: #82aaff; font-family: monospace; font-size: 12px; }
+  .field-name { color: #c3e88d; font-family: monospace; font-size: 12px; font-weight: 600; }
+  .field-desc { color: var(--muted); font-size: 12px; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; padding: 0; margin-bottom: 12px; }
+  .checklist li { padding: 4px 0 4px 24px; position: relative; font-size: 13px; color: #c8d0dc; }
+  .checklist li::before { content: "✓"; position: absolute; left: 4px; color: var(--brand); font-weight: 700; }
+
+  /* ── ROLE GRID ── */
+  .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .role-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+  }
+  .role-card .role-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .role-card ul { list-style: none; }
+  .role-card ul li { font-size: 11px; color: var(--muted); padding: 2px 0; padding-left: 14px; position: relative; }
+  .role-card ul li::before { content: "·"; position: absolute; left: 4px; color: var(--brand); font-size: 16px; line-height: 1; }
+
+  /* ── ANCHOR OFFSET ── */
+  [id] { scroll-margin-top: 24px; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* ── FOOTER ── */
+  footer { margin-top: 60px; padding: 24px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px) {
+    aside { display: none; }
+    main { margin-left: 0; padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside>
+  <div class="sidebar-brand">
+    <h2><span class="g">INCAPTTA</span><span class="o">PRO</span></h2>
+    <p>Procurement Module — Technical Docs</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <a href="#overview"    class="nav-link">📦 Module Overview</a>
+      <a href="#architecture" class="nav-link">🏗 Architecture</a>
+      <a href="#collections"  class="nav-link">🗄 Firestore Collections</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Pages & Routes</div>
+      <a href="#suppliers"     class="nav-link">🏢 Suppliers</a>
+      <a href="#requisitions"  class="nav-link">📋 Requisitions</a>
+      <a href="#purchase-orders" class="nav-link">🛒 Purchase Orders</a>
+      <a href="#grns"          class="nav-link">📦 Goods Receipts</a>
+      <a href="#invoices"      class="nav-link">🧾 Supplier Invoices</a>
+      <a href="#payments"      class="nav-link">💳 Payment Processing</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Reference</div>
+      <a href="#types"       class="nav-link">📐 TypeScript Types</a>
+      <a href="#workflows"   class="nav-link">🔄 Workflows</a>
+      <a href="#roles"       class="nav-link">🔐 Role Permissions</a>
+      <a href="#matching"    class="nav-link">⚖ 3-Way Match Logic</a>
+      <a href="#numbering"   class="nav-link">🔢 Auto-Numbering</a>
+      <a href="#finance"     class="nav-link">💰 Finance Integration</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero" id="overview">
+    <div class="section-label">📦 Procurement Module</div>
+    <h1><span class="accent">IncapttaPro</span> Procurement</h1>
+    <p style="font-size:16px;color:#c8d0dc;max-width:680px;margin-top:8px;">
+      Full-lifecycle procurement management — from purchase requests through goods receipt,
+      3-way invoice matching, and integrated finance payment processing.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-chip">🗂 <b>6</b> modules</div>
+      <div class="hero-chip">📄 <b>14</b> pages / routes</div>
+      <div class="hero-chip">🗄 <b>5</b> Firestore collections</div>
+      <div class="hero-chip">🔐 <b>7</b> role levels</div>
+      <div class="hero-chip">Stack: <b>Vue 3.5 · Firebase 11 · Pinia</b></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card-grid">
+    <div class="stat-card"><div class="num">PR</div><div class="label">Purchase Requisitions — draft to approved</div></div>
+    <div class="stat-card"><div class="num">PO</div><div class="label">Purchase Orders — auto-created from approved PRs</div></div>
+    <div class="stat-card"><div class="num">GRN</div><div class="label">Goods Receipt Notes — receive and post to inventory</div></div>
+    <div class="stat-card"><div class="num">3WM</div><div class="label">3-Way Invoice Matching — GRN × PO × Invoice</div></div>
+    <div class="stat-card"><div class="num">PMT</div><div class="label">Payment Processing — wired into Finance ledger</div></div>
+  </div>
+
+  <!-- ALERT -->
+  <div class="alert alert-tip">
+    <span>💡</span>
+    <span>The procurement workflow is fully sequential: <b>PR → PO → GRN → Invoice → Payment</b>. Each stage is gated by the previous. Payments write directly into the existing <code>operationalExpenses</code> ledger — no separate collection is created.</span>
+  </div>
+
+  <!-- ═══════ ARCHITECTURE ═══════ -->
+  <h2 id="architecture">🏗 Architecture</h2>
+  <div class="card">
+    <h3>Technology Stack</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>Technology</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Frontend framework</td><td><code>Vue 3.5</code> + <code>script setup</code></td><td>Composition API throughout, no Options API</td></tr>
+          <tr><td>State management</td><td><code>Pinia</code> — <code>useProcurementStore</code></td><td>Real-time Firestore listeners; plain <code>let</code> for unsubscribe refs</td></tr>
+          <tr><td>Database</td><td>Firebase Firestore SDK 11</td><td>5 collections, all <code>serverTimestamp()</code> — never <code>new Date()</code></td></tr>
+          <tr><td>UI components</td><td><code>shadcn-vue</code> + Tailwind CSS 4</td><td>Card, Table, Badge, Button, Dialog, Alert, Separator, Skeleton</td></tr>
+          <tr><td>Icons</td><td><code>lucide-vue-next</code></td><td>Consistent icon set across all pages</td></tr>
+          <tr><td>Toasts</td><td><code>vue-sonner</code></td><td>All feedback via <code>toast.success/error/info</code></td></tr>
+          <tr><td>Router</td><td><code>vue-router</code></td><td>14 routes under <code>/procurement/</code>, all guarded by role</td></tr>
+          <tr><td>Auth</td><td><code>useSession()</code> composable</td><td>Provides <code>user</code>, <code>hasAnyRole()</code></td></tr>
+          <tr><td>File storage</td><td>Firebase Storage</td><td>Invoice scans at <code>procurement/invoices/</code></td></tr>
+          <tr><td>Finance integration</td><td><code>useFinanceStore</code></td><td>Payments write to <code>operationalExpenses</code> via <code>recordExpense()</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Store Pattern</h3>
+    <p>The store uses <strong>early-return guards</strong> on all <code>fetch*()</code> functions to prevent duplicate listeners:</p>
+    <pre><span class="kw">function</span> <span class="ty">fetchSupplierInvoices</span>() {
+  <span class="kw">if</span> (invoicesUnsubscribe) <span class="kw">return</span>   <span class="cm">// Guard — already listening</span>
+  loadingInvoices.value = <span class="kw">true</span>
+
+  invoicesUnsubscribe = onSnapshot(
+    query(collection(db, <span class="st">'procurementSupplierInvoices'</span>), orderBy(<span class="st">'createdAt'</span>, <span class="st">'desc'</span>)),
+    (snap) => { supplierInvoices.value = snap.docs.map(d => ({ id: d.id, ...d.data() })) }
+  )
+}</pre>
+    <p>All write functions (<code>add*</code>, <code>update*</code>) use <strong>dynamic Firestore imports</strong> to reduce initial bundle size:</p>
+    <pre><span class="kw">const</span> { collection, addDoc, serverTimestamp } =
+  <span class="kw">await import</span>(<span class="st">'firebase/firestore'</span>)</pre>
+    <p>All listeners are cleaned up by <code>cleanupListeners()</code> which is called on store disposal.</p>
+  </div>
+
+  <!-- ═══════ COLLECTIONS ═══════ -->
+  <h2 id="collections">🗄 Firestore Collections</h2>
+
+  <div class="card">
+    <h3>Collection Map</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Collection</th><th>Auto-ID Format</th><th>Size Estimate</th><th>Listener Order</th></tr></thead>
+        <tbody>
+          <tr><td><code>suppliers</code></td><td>Firestore auto-ID</td><td>Small</td><td><code>name asc</code></td></tr>
+          <tr><td><code>procurementRequisitions</code></td><td><code>PR-YYYY-NNNN</code></td><td>Medium</td><td><code>createdAt desc</code></td></tr>
+          <tr><td><code>procurementPurchaseOrders</code></td><td><code>PO-YYYY-NNNN</code></td><td>Medium</td><td><code>createdAt desc</code></td></tr>
+          <tr><td><code>procurementGrns</code></td><td><code>GRN-YYYY-NNNN</code></td><td>Medium</td><td><code>createdAt desc</code></td></tr>
+          <tr><td><code>procurementSupplierInvoices</code></td><td>Firestore auto-ID</td><td>Medium</td><td><code>createdAt desc</code></td></tr>
+          <tr><td><code>systemCounters</code></td><td>Fixed: <code>prNumbers</code>, <code>poNumbers</code>, <code>grnNumbers</code></td><td>3 docs</td><td>Transactional read/write</td></tr>
+          <tr><td><code>operationalExpenses</code></td><td>Firestore auto-ID</td><td>Large (shared with Finance)</td><td>N/A — Finance module owns this</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════ SUPPLIERS ═══════ -->
+  <h2 id="suppliers">🏢 Suppliers</h2>
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">Suppliers List &amp; Management</div>
+      <div class="route-pill">GET /procurement/suppliers</div>
+    </div>
+    <p>Manage the supplier master list. All active suppliers appear in requisition and PO forms. INACTIVE suppliers are hidden from selection.</p>
+    <div class="card">
+      <h3>Supplier Data Model — <code>suppliers</code> collection</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">string</td><td class="field-desc">Firestore auto-ID</td></tr>
+            <tr><td class="field-name">name</td><td class="field-type">string</td><td class="field-desc">Supplier company name</td></tr>
+            <tr><td class="field-name">contactPerson</td><td class="field-type">string</td><td class="field-desc">Primary contact name</td></tr>
+            <tr><td class="field-name">email</td><td class="field-type">string</td><td class="field-desc">Business email address</td></tr>
+            <tr><td class="field-name">phone</td><td class="field-type">string</td><td class="field-desc">Contact phone number</td></tr>
+            <tr><td class="field-name">address</td><td class="field-type">string</td><td class="field-desc">Physical or postal address</td></tr>
+            <tr><td class="field-name">paymentTerms</td><td class="field-type">PaymentTerms</td><td class="field-desc"><code>'COD' | 'NET30' | 'NET60' | 'NET90'</code> — used to auto-suggest invoice due dates</td></tr>
+            <tr><td class="field-name">categories</td><td class="field-type">string[]</td><td class="field-desc">Product/service categories supplied</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">SupplierStatus</td><td class="field-desc"><code>'ACTIVE' | 'INACTIVE'</code></td></tr>
+            <tr><td class="field-name">notes</td><td class="field-type">string</td><td class="field-desc">Internal notes</td></tr>
+            <tr><td class="field-name">createdBy</td><td class="field-type">string</td><td class="field-desc">UID of creator</td></tr>
+            <tr><td class="field-name">createdAt / updatedAt</td><td class="field-type">Timestamp</td><td class="field-desc">Firestore serverTimestamp()</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p><strong>Access:</strong> <span class="badge badge-brand">All roles</span> — All authenticated users can view and manage suppliers.</p>
+  </div>
+
+  <!-- ═══════ REQUISITIONS ═══════ -->
+  <h2 id="requisitions">📋 Purchase Requisitions (PR)</h2>
+
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">Requisitions List</div>
+      <div class="route-pill">GET /procurement/requisitions</div>
+    </div>
+    <p>Searchable, filterable list of all procurement requests. Status tabs: <span class="badge badge-gray">All</span> <span class="badge badge-amber">Draft</span> <span class="badge badge-blue">Submitted</span> <span class="badge badge-green">Approved</span> <span class="badge badge-red">Rejected</span></p>
+    <p><strong>Access:</strong> <span class="badge badge-brand">All roles</span></p>
+  </div>
+
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">New Requisition</div>
+      <div class="route-pill">GET /procurement/requisitions/new</div>
+    </div>
+    <p>Full form to create a purchase requisition with inventory-aware line items.</p>
+
+    <div class="card">
+      <h3>ProcurementRequisition — <code>procurementRequisitions</code> collection</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">prNumber</td><td class="field-type">string</td><td class="field-desc">Auto-generated: <code>PR-2026-0001</code> (atomic, resets annually)</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">string</td><td class="field-desc">Short description of request purpose</td></tr>
+            <tr><td class="field-name">description</td><td class="field-type">string</td><td class="field-desc">Full business justification</td></tr>
+            <tr><td class="field-name">procurementType</td><td class="field-type">ProcurementType</td><td class="field-desc"><code>PROJECT_MATERIAL | INVENTORY | CAPEX | SERVICE | ADHOC</code></td></tr>
+            <tr><td class="field-name">department</td><td class="field-type">string</td><td class="field-desc"><code>AGF | SALES | TECHNICAL | ADMIN | OTHER</code></td></tr>
+            <tr><td class="field-name">jobCardId / jobCardTitle</td><td class="field-type">string | null</td><td class="field-desc">Optional link to a job card</td></tr>
+            <tr><td class="field-name">supplierId / supplierName</td><td class="field-type">string | null</td><td class="field-desc">Preferred supplier (optional at PR stage)</td></tr>
+            <tr><td class="field-name">items</td><td class="field-type">ProcurementLineItem[]</td><td class="field-desc">See line item schema below</td></tr>
+            <tr><td class="field-name">totalEstimatedCost</td><td class="field-type">number</td><td class="field-desc">Sum of all <code>item.totalCost</code></td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">PRStatus</td><td class="field-desc"><code>DRAFT | SUBMITTED | APPROVED | REJECTED</code></td></tr>
+            <tr><td class="field-name">rejectionReason</td><td class="field-type">string | null</td><td class="field-desc">Required when status = REJECTED</td></tr>
+            <tr><td class="field-name">requestedBy / requestedByName</td><td class="field-type">string</td><td class="field-desc">UID and display name of requester</td></tr>
+            <tr><td class="field-name">approvedBy / approvedAt</td><td class="field-type">string | Timestamp | null</td><td class="field-desc">Approval audit trail</td></tr>
+            <tr><td class="field-name">linkedPoId</td><td class="field-type">string | null</td><td class="field-desc">Set when a PO is created from this PR</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>ProcurementLineItem — embedded array</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">description</td><td class="field-type">string</td><td class="field-desc">Item description</td></tr>
+            <tr><td class="field-name">uom</td><td class="field-type">string</td><td class="field-desc"><code>PCS | KG | METER | LITER | BOX | PACK | SET | UNIT</code></td></tr>
+            <tr><td class="field-name">qty</td><td class="field-type">number</td><td class="field-desc">Quantity requested</td></tr>
+            <tr><td class="field-name">unitCostPrice</td><td class="field-type">number</td><td class="field-desc">Unit purchase price</td></tr>
+            <tr><td class="field-name">freightDuty</td><td class="field-type">number</td><td class="field-desc">Freight / duty per unit</td></tr>
+            <tr><td class="field-name">totalCost</td><td class="field-type">number</td><td class="field-desc"><strong>Computed:</strong> <code>(unitCostPrice + freightDuty) × qty</code></td></tr>
+            <tr><td class="field-name">markupPercent</td><td class="field-type">number</td><td class="field-desc">Markup percentage for selling price</td></tr>
+            <tr><td class="field-name">sellingPrice</td><td class="field-type">number</td><td class="field-desc"><strong>Computed:</strong> <code>totalCost × (1 + markupPercent/100)</code></td></tr>
+            <tr><td class="field-name">marginAmount</td><td class="field-type">number</td><td class="field-desc"><strong>Computed:</strong> <code>sellingPrice - totalCost</code></td></tr>
+            <tr><td class="field-name">inventoryItemId</td><td class="field-type">string | null</td><td class="field-desc">Link to existing inventory item</td></tr>
+            <tr><td class="field-name">sku</td><td class="field-type">string | null</td><td class="field-desc">SKU code (auto-filled from inventory)</td></tr>
+            <tr><td class="field-name">inventoryItemStatus</td><td class="field-type">string</td><td class="field-desc"><code>EXISTING | NEW_PENDING | ADHOC</code></td></tr>
+            <tr><td class="field-name">newItemData</td><td class="field-type">NewItemData | null</td><td class="field-desc">Collected if NEW_PENDING — creates inventory record on GRN confirm</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>Inventory Item Status Logic</h3>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Status</th><th>Meaning</th><th>GRN Behaviour</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge badge-green">EXISTING</span></td><td>Item already in inventory master</td><td>Adds <code>qtyReceived</code> to existing inventory record</td></tr>
+            <tr><td><span class="badge badge-amber">NEW_PENDING</span></td><td>New item — not yet in inventory</td><td>Creates inventory record first, then posts received qty</td></tr>
+            <tr><td><span class="badge badge-gray">ADHOC</span></td><td>One-off expense — no stock tracking</td><td>Skips inventory posting entirely</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">Requisition Detail &amp; Approval</div>
+      <div class="route-pill">GET /procurement/requisitions/:id</div>
+    </div>
+    <p>Full detail view with approval/rejection actions. Shows line items, pricing, markup, margin analysis, and approval audit trail.</p>
+    <h3>PR Status Workflow</h3>
+    <div class="flow">
+      <div class="flow-box" style="border-color:#f59e0b;color:#fbbf24">DRAFT<span class="flow-label">User editing</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#3b82f6;color:#60a5fa">SUBMITTED<span class="flow-label">Awaiting review</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#4ade80">APPROVED<span class="flow-label">Can create PO</span></div>
+    </div>
+    <div class="flow">
+      <div class="flow-box" style="border-color:#3b82f6;color:#60a5fa">SUBMITTED</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#ef4444;color:#f87171">REJECTED<span class="flow-label">Reason required</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Action</th><th>From Status</th><th>Roles Allowed</th></tr></thead>
+        <tbody>
+          <tr><td>Submit for Approval</td><td>DRAFT</td><td><span class="badge badge-brand">All roles</span></td></tr>
+          <tr><td>Approve</td><td>SUBMITTED</td><td><span class="badge badge-blue">MANAGER</span> <span class="badge badge-purple">ADMIN</span> <span class="badge badge-amber">SUPER_ADMIN</span></td></tr>
+          <tr><td>Reject (with reason)</td><td>SUBMITTED</td><td><span class="badge badge-blue">MANAGER</span> <span class="badge badge-purple">ADMIN</span> <span class="badge badge-amber">SUPER_ADMIN</span></td></tr>
+          <tr><td>Create PO</td><td>APPROVED</td><td><span class="badge badge-blue">MANAGER</span> <span class="badge badge-purple">ADMIN</span> <span class="badge badge-amber">SUPER_ADMIN</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════ PURCHASE ORDERS ═══════ -->
+  <h2 id="purchase-orders">🛒 Purchase Orders (PO)</h2>
+
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">Purchase Orders List &amp; Detail</div>
+      <div class="route-pill">GET /procurement/purchase-orders</div>
+    </div>
+    <p>Purchase Orders are <strong>always created from an approved PR</strong> — there is no standalone "New PO" button. Items are automatically copied from the PR.</p>
+
+    <div class="card">
+      <h3>PurchaseOrder — <code>procurementPurchaseOrders</code> collection</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">poNumber</td><td class="field-type">string</td><td class="field-desc">Auto-generated: <code>PO-2026-0001</code></td></tr>
+            <tr><td class="field-name">prId / prNumber</td><td class="field-type">string</td><td class="field-desc">Source requisition (denormalized)</td></tr>
+            <tr><td class="field-name">supplierId / supplierName / supplierEmail / supplierPhone</td><td class="field-type">string</td><td class="field-desc">Supplier details (copied at PO creation)</td></tr>
+            <tr><td class="field-name">paymentTerms</td><td class="field-type">string</td><td class="field-desc"><code>COD | NET30 | NET60 | NET90</code></td></tr>
+            <tr><td class="field-name">items</td><td class="field-type">ProcurementLineItem[]</td><td class="field-desc">Copied from approved PR line items</td></tr>
+            <tr><td class="field-name">totalOrderValue</td><td class="field-type">number</td><td class="field-desc">Sum of all item totalCost</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">POStatus</td><td class="field-desc">See workflow below</td></tr>
+            <tr><td class="field-name">deliveryAddress</td><td class="field-type">string</td><td class="field-desc">Delivery destination</td></tr>
+            <tr><td class="field-name">expectedDeliveryDate</td><td class="field-type">string | null</td><td class="field-desc">ISO date string</td></tr>
+            <tr><td class="field-name">sentAt / acknowledgedAt</td><td class="field-type">Timestamp | null</td><td class="field-desc">Audit trail timestamps</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>PO Status Workflow</h3>
+    <div class="flow">
+      <div class="flow-box" style="border-color:#f59e0b;color:#fbbf24">DRAFT</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#3b82f6;color:#60a5fa">SENT<span class="flow-label">sentAt set</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#a855f7;color:#c084fc">ACKNOWLEDGED<span class="flow-label">acknowledgedAt set</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#f59e0b;color:#fbbf24">PARTIALLY<br>FULFILLED</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#4ade80">COMPLETE</div>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">PO transitions to <span class="badge badge-green">COMPLETE</span> when a GRN confirms all ordered quantities received. Transitions to <span class="badge badge-amber">PARTIALLY_FULFILLED</span> on partial receipt.</p>
+    <p><strong>Access:</strong> <span class="badge badge-amber">SUPER_ADMIN</span> <span class="badge badge-purple">ADMIN</span> <span class="badge badge-blue">MANAGER</span> <span class="badge badge-gray">STOREKEEPER</span></p>
+  </div>
+
+  <!-- ═══════ GRNs ═══════ -->
+  <h2 id="grns">📦 Goods Receipt Notes (GRN)</h2>
+
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">GRN List, Creation &amp; Detail</div>
+      <div class="route-pill">GET /procurement/grns</div>
+    </div>
+    <p>GRNs capture the physical receipt of goods. Quantities received may differ from ordered. On confirmation, an async Firebase Function posts received items to the inventory system.</p>
+
+    <div class="card">
+      <h3>GoodsReceiptNote — <code>procurementGrns</code> collection</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">grnNumber</td><td class="field-type">string</td><td class="field-desc">Auto-generated: <code>GRN-2026-0001</code></td></tr>
+            <tr><td class="field-name">poId / poNumber</td><td class="field-type">string</td><td class="field-desc">Source PO reference (denormalized)</td></tr>
+            <tr><td class="field-name">prId / prNumber</td><td class="field-type">string</td><td class="field-desc">Source PR reference (denormalized)</td></tr>
+            <tr><td class="field-name">supplierId / supplierName</td><td class="field-type">string</td><td class="field-desc">Supplier reference</td></tr>
+            <tr><td class="field-name">items</td><td class="field-type">GRNLineItem[]</td><td class="field-desc">Received items with variance calc</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">GRNStatus</td><td class="field-desc"><code>DRAFT | CONFIRMED | DISPUTED</code></td></tr>
+            <tr><td class="field-name">hasVariance</td><td class="field-type">boolean</td><td class="field-desc"><code>true</code> if any <code>qtyVariance !== 0</code></td></tr>
+            <tr><td class="field-name">disputeReason</td><td class="field-type">string | null</td><td class="field-desc">Required when status = DISPUTED</td></tr>
+            <tr><td class="field-name">receivedBy / receivedAt</td><td class="field-type">string / Timestamp | null</td><td class="field-desc">Set on CONFIRMED</td></tr>
+            <tr><td class="field-name">inventoryPostingStatus</td><td class="field-type">string</td><td class="field-desc"><code>PENDING | PROCESSING | COMPLETE | FAILED</code></td></tr>
+            <tr><td class="field-name">inventoryPostingError</td><td class="field-type">string | null</td><td class="field-desc">Error message if posting failed</td></tr>
+            <tr><td class="field-name">linkedInvoiceId</td><td class="field-type">string | null</td><td class="field-desc">Set after invoice created from this GRN</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>GRN Status Workflow</h3>
+    <div class="flow">
+      <div class="flow-box" style="border-color:#f59e0b;color:#fbbf24">DRAFT<span class="flow-label">Editing qtys</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#4ade80">CONFIRMED<span class="flow-label">Inventory posting begins</span></div>
+    </div>
+    <div class="flow">
+      <div class="flow-box" style="border-color:#f59e0b;color:#fbbf24">DRAFT</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#ef4444;color:#f87171">DISPUTED<span class="flow-label">Reason required</span></div>
+    </div>
+
+    <h3>Inventory Posting Pipeline</h3>
+    <div class="flow">
+      <div class="flow-box" style="border-color:#64748b;color:#94a3b8">PENDING</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#3b82f6;color:#60a5fa">PROCESSING<span class="flow-label">Cloud Function running</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#4ade80">COMPLETE</div>
+    </div>
+    <div class="flow" style="margin-top:8px">
+      <div class="flow-box" style="border-color:#3b82f6;color:#60a5fa">PROCESSING</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#ef4444;color:#f87171">FAILED<span class="flow-label">Error stored</span></div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:16px">
+      <span>ℹ️</span>
+      <span>The <strong>Create Invoice</strong> button on GRN Detail is shown only when: <code>status === 'CONFIRMED' AND inventoryPostingStatus === 'COMPLETE' AND !linkedInvoiceId</code>. This ensures inventory is fully posted before invoicing begins.</span>
+    </div>
+    <p><strong>Access:</strong> <span class="badge badge-amber">SUPER_ADMIN</span> <span class="badge badge-purple">ADMIN</span> <span class="badge badge-blue">MANAGER</span> <span class="badge badge-gray">STOREKEEPER</span></p>
+  </div>
+
+  <!-- ═══════ INVOICES ═══════ -->
+  <h2 id="invoices">🧾 Supplier Invoices</h2>
+
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">Invoice List, Creation &amp; Detail</div>
+      <div class="route-pill">GET /procurement/invoices</div>
+    </div>
+    <p>Supplier invoices are created from confirmed GRNs. The system performs automatic 3-way matching against the GRN's received quantities and costs. A 10% variance threshold controls whether an override reason is required.</p>
+
+    <div class="card">
+      <h3>SupplierInvoice — <code>procurementSupplierInvoices</code> collection</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">invoiceNumber</td><td class="field-type">string</td><td class="field-desc">Supplier's own reference number (manual entry)</td></tr>
+            <tr><td class="field-name">poId / poNumber</td><td class="field-type">string</td><td class="field-desc">Source PO (denormalized)</td></tr>
+            <tr><td class="field-name">grnId / grnNumber</td><td class="field-type">string</td><td class="field-desc">Source GRN (denormalized)</td></tr>
+            <tr><td class="field-name">prId / prNumber</td><td class="field-type">string</td><td class="field-desc">Source PR (denormalized)</td></tr>
+            <tr><td class="field-name">supplierId / supplierName / supplierEmail</td><td class="field-type">string</td><td class="field-desc">Supplier details (copied from PO)</td></tr>
+            <tr><td class="field-name">currency</td><td class="field-type">string</td><td class="field-desc"><code>'USD' | 'ZWL' | 'ZAR'</code></td></tr>
+            <tr><td class="field-name">invoiceDate / dueDate</td><td class="field-type">string</td><td class="field-desc">ISO date strings; dueDate auto-suggested from payment terms</td></tr>
+            <tr><td class="field-name">items</td><td class="field-type">InvoiceLineItem[]</td><td class="field-desc">Pre-populated from GRN, user-editable</td></tr>
+            <tr><td class="field-name">subtotal / tax / totalAmount</td><td class="field-type">number</td><td class="field-desc"><code>totalAmount = subtotal + tax</code></td></tr>
+            <tr><td class="field-name">expectedAmount</td><td class="field-type">number</td><td class="field-desc">GRN baseline: <code>Σ(qtyReceived × unitCostPrice)</code></td></tr>
+            <tr><td class="field-name">matchVariance</td><td class="field-type">number</td><td class="field-desc"><code>totalAmount − expectedAmount</code></td></tr>
+            <tr><td class="field-name">matchVariancePercent</td><td class="field-type">number</td><td class="field-desc"><code>abs(variance / expectedAmount × 100)</code></td></tr>
+            <tr><td class="field-name">matchStatus</td><td class="field-type">MatchStatus</td><td class="field-desc">See 3-way match logic section</td></tr>
+            <tr><td class="field-name">matchOverrideReason</td><td class="field-type">string | null</td><td class="field-desc">Required when VARIANCE_EXCEEDED to bypass block</td></tr>
+            <tr><td class="field-name">matchOverrideBy / matchOverrideAt</td><td class="field-type">string | Timestamp | null</td><td class="field-desc">Audit trail for overrides</td></tr>
+            <tr><td class="field-name">status</td><td class="field-type">InvoiceStatus</td><td class="field-desc">Full workflow — see below</td></tr>
+            <tr><td class="field-name">attachmentUrl</td><td class="field-type">string | null</td><td class="field-desc">Firebase Storage URL for invoice scan PDF/image</td></tr>
+            <tr><td class="field-name">operationalExpenseId</td><td class="field-type">string | null</td><td class="field-desc">Link to operationalExpenses record (set after payment)</td></tr>
+            <tr><td class="field-name">paymentMethod</td><td class="field-type">string | null</td><td class="field-desc"><code>ECOCASH | BANK | CASH | IRD</code> (uppercase)</td></tr>
+            <tr><td class="field-name">paymentReference</td><td class="field-type">string | null</td><td class="field-desc">EcoCash transaction ID, bank ref, or voucher number</td></tr>
+            <tr><td class="field-name">paymentProcessedAt</td><td class="field-type">Timestamp | null</td><td class="field-desc">Set when payment is processed</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>Invoice Status Workflow</h3>
+    <div class="flow">
+      <div class="flow-box" style="border-color:#f59e0b;color:#fbbf24">DRAFT</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#eab308;color:#fde047">PENDING_MATCH<span class="flow-label">Submitted</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#4ade80">APPROVED<span class="flow-label">By Accountant</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#a7f3d0">PAYMENT<br>PROCESSED<span class="flow-label">Ledger updated</span></div>
+    </div>
+    <div class="flow" style="margin-top:8px">
+      <div class="flow-box" style="border-color:#eab308;color:#fde047">PENDING_MATCH</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#ef4444;color:#f87171">DISPUTED<span class="flow-label">At any stage</span></div>
+    </div>
+    <p><strong>Access:</strong> <span class="badge badge-amber">SUPER_ADMIN</span> <span class="badge badge-purple">ADMIN</span> <span class="badge badge-green">ACCOUNTANT</span> <span class="badge badge-blue">MANAGER</span></p>
+  </div>
+
+  <!-- ═══════ PAYMENTS ═══════ -->
+  <h2 id="payments">💳 Payment Processing</h2>
+
+  <div class="page-entry">
+    <div class="page-header">
+      <div class="page-title">Process Payment View</div>
+      <div class="route-pill">GET /procurement/invoices/:id/payment</div>
+    </div>
+    <p>Processes payment for an <span class="badge badge-green">APPROVED</span> invoice and integrates directly with the Finance module's accounts ledger. Only accessible to ACCOUNTANT, ADMIN, SUPER_ADMIN — MANAGER is explicitly excluded from this route.</p>
+
+    <div class="card">
+      <h3>Payment Processing Steps</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Step</th><th>Action</th><th>Collection / Store Call</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-blue">1</span></td>
+              <td>Create operational expense record</td>
+              <td><code>financeStore.recordExpense(data)</code> → <code>operationalExpenses</code> collection</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">2</span></td>
+              <td>Retrieve the new expense doc ID</td>
+              <td>Query <code>operationalExpenses</code> where <code>supplierInvoiceId == invoiceId</code> (because <code>recordExpense()</code> returns <code>void</code>)</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">3</span></td>
+              <td>Process payment — hits ledger and deducts balance</td>
+              <td><code>financeStore.processExpensePayment(expenseId, processedBy, paymentData)</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">4</span></td>
+              <td>Update invoice record to PAYMENT_PROCESSED</td>
+              <td><code>procurementStore.updateSupplierInvoice(id, { status, operationalExpenseId, paymentMethod, paymentReference, paymentProcessedAt })</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Finance Record Created (in <code>operationalExpenses</code>)</h3>
+      <pre><span class="kw">const</span> expensePayload = {
+  title:          <span class="st">`Supplier Payment — ${supplierName}`</span>,
+  description:    <span class="st">`Invoice ${invoiceNumber} | GRN ${grnNumber}`</span>,
+  category:       <span class="st">'procurement-payment'</span>,
+  amount:         <span class="cm">invoice.totalAmount</span>,
+  paymentMethod:  <span class="st">'bank'</span>,           <span class="cm">// lowercase — e.g. "bank", "ecocash"</span>
+  pettyCashAccount: <span class="st">'bank'</span>,          <span class="cm">// same value as paymentMethod</span>
+  requestType:    <span class="st">'purchase'</span>,
+  type:           <span class="st">'INTERNAL_REQUISITION'</span>,
+  status:         <span class="st">'APPROVED_ACCOUNTANT'</span>,  <span class="cm">// skips accountant approval queue</span>
+  <span class="cm">// Procurement cross-reference fields:</span>
+  procurementOrderId: <span class="cm">invoice.poId</span>,
+  supplierInvoiceId:  <span class="cm">invoice.id</span>,
+  supplierId:         <span class="cm">invoice.supplierId</span>,
+  poNumber:           <span class="cm">invoice.poNumber</span>,
+}</pre>
+    </div>
+
+    <div class="card">
+      <h3>Account Codes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Display Name</th><th>Payload Value (lowercase)</th><th>Ledger Key (uppercase)</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>EcoCash</td><td><code>"ecocash"</code></td><td><code>ECOCASH</code></td><td>Mobile money (Zimbabwe)</td></tr>
+            <tr><td>Bank</td><td><code>"bank"</code></td><td><code>BANK</code></td><td>Bank account transfer</td></tr>
+            <tr><td>Cash on Hand</td><td><code>"cash"</code></td><td><code>CASH</code></td><td>Physical cash</td></tr>
+            <tr><td>IRD Account</td><td><code>"ird"</code></td><td><code>IRD</code></td><td>Inland Revenue Department / tax withholding</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-warn" style="margin-top:12px;margin-bottom:0">
+        <span>⚠️</span>
+        <span>The Finance module's <code>updateLedger()</code> calls <code>.toUpperCase()</code> on account codes internally. Always pass <strong>lowercase</strong> to <code>recordExpense()</code> and <code>processExpensePayment()</code>.</span>
+      </div>
+    </div>
+    <p><strong>Access:</strong> <span class="badge badge-amber">SUPER_ADMIN</span> <span class="badge badge-purple">ADMIN</span> <span class="badge badge-green">ACCOUNTANT</span> only — MANAGER excluded.</p>
+  </div>
+
+  <!-- ═══════ TYPES ═══════ -->
+  <h2 id="types">📐 TypeScript Types Reference</h2>
+  <div class="card">
+    <pre><span class="cm">// procurement/types/index.ts</span>
+<span class="kw">type</span> <span class="ty">ProcurementType</span> = <span class="st">'PROJECT_MATERIAL'</span> | <span class="st">'INVENTORY'</span> | <span class="st">'CAPEX'</span> | <span class="st">'SERVICE'</span> | <span class="st">'ADHOC'</span>
+<span class="kw">type</span> <span class="ty">PRStatus</span>        = <span class="st">'DRAFT'</span> | <span class="st">'SUBMITTED'</span> | <span class="st">'APPROVED'</span> | <span class="st">'REJECTED'</span>
+<span class="kw">type</span> <span class="ty">SupplierStatus</span>  = <span class="st">'ACTIVE'</span> | <span class="st">'INACTIVE'</span>
+<span class="kw">type</span> <span class="ty">PaymentTerms</span>    = <span class="st">'COD'</span> | <span class="st">'NET30'</span> | <span class="st">'NET60'</span> | <span class="st">'NET90'</span>
+<span class="kw">type</span> <span class="ty">InventoryItemStatus</span> = <span class="st">'EXISTING'</span> | <span class="st">'NEW_PENDING'</span> | <span class="st">'ADHOC'</span>
+
+<span class="cm">// procurement/types/procurement.ts</span>
+<span class="kw">type</span> <span class="ty">POStatus</span> = <span class="st">'DRAFT'</span> | <span class="st">'SENT'</span> | <span class="st">'ACKNOWLEDGED'</span> | <span class="st">'PARTIALLY_FULFILLED'</span> | <span class="st">'COMPLETE'</span> | <span class="st">'CANCELLED'</span>
+<span class="kw">type</span> <span class="ty">GRNStatus</span> = <span class="st">'DRAFT'</span> | <span class="st">'CONFIRMED'</span> | <span class="st">'DISPUTED'</span>
+
+<span class="kw">type</span> <span class="ty">InvoiceStatus</span> =
+  | <span class="st">'DRAFT'</span> | <span class="st">'PENDING_MATCH'</span> | <span class="st">'MATCHED'</span> | <span class="st">'VARIANCE_FLAGGED'</span>
+  | <span class="st">'APPROVED'</span> | <span class="st">'PAYMENT_PENDING'</span> | <span class="st">'PAYMENT_PROCESSED'</span> | <span class="st">'DISPUTED'</span>
+
+<span class="kw">type</span> <span class="ty">MatchStatus</span> =
+  | <span class="st">'PENDING'</span> | <span class="st">'MATCHED'</span> | <span class="st">'VARIANCE_WITHIN_THRESHOLD'</span>
+  | <span class="st">'VARIANCE_EXCEEDED'</span> | <span class="st">'OVERRIDE_APPROVED'</span></pre>
+  </div>
+
+  <!-- ═══════ WORKFLOWS ═══════ -->
+  <h2 id="workflows">🔄 End-to-End Workflow</h2>
+  <div class="card">
+    <h3>Full Procurement Lifecycle</h3>
+    <div class="flow" style="flex-wrap:wrap;row-gap:16px">
+      <div class="flow-box" style="border-color:var(--brand);color:var(--brand)">1. Requisition<span class="flow-label">Any user</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#a855f7;color:#c084fc">2. Approve PR<span class="flow-label">Manager/Admin</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#3b82f6;color:#60a5fa">3. Create PO<span class="flow-label">Auto from PR</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#f59e0b;color:#fbbf24">4. Send PO<span class="flow-label">To supplier</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#4ade80">5. Create GRN<span class="flow-label">On goods arrival</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#22c55e;color:#4ade80">6. Confirm GRN<span class="flow-label">Inventory posted</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#a855f7;color:#c084fc">7. Create Invoice<span class="flow-label">3-way match</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#3b82f6;color:#60a5fa">8. Approve Invoice<span class="flow-label">Accountant</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--brand);color:var(--brand)">9. Pay<span class="flow-label">Finance ledger</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════ ROLES ═══════ -->
+  <h2 id="roles">🔐 Role Permissions</h2>
+  <div class="role-grid">
+    <div class="role-card">
+      <div class="role-name">🔴 SUPER_ADMIN</div>
+      <ul><li>All pages, all actions</li><li>Process payments</li><li>Full supplier management</li></ul>
+    </div>
+    <div class="role-card">
+      <div class="role-name">🔵 ADMIN</div>
+      <ul><li>All pages, all actions</li><li>Process payments</li><li>Full supplier management</li></ul>
+    </div>
+    <div class="role-card">
+      <div class="role-name">🟣 MANAGER</div>
+      <ul><li>View all modules</li><li>Approve / reject PRs</li><li>Create POs</li><li>Confirm GRNs</li><li>View invoices (no payment)</li></ul>
+    </div>
+    <div class="role-card">
+      <div class="role-name">🟢 ACCOUNTANT</div>
+      <ul><li>View all modules</li><li>Approve / dispute invoices</li><li>Process payments</li><li>Cannot approve PRs</li></ul>
+    </div>
+    <div class="role-card">
+      <div class="role-name">🟡 STOREKEEPER</div>
+      <ul><li>Create requisitions</li><li>View POs</li><li>Create &amp; confirm GRNs</li><li>View invoices</li></ul>
+    </div>
+    <div class="role-card">
+      <div class="role-name">⚪ SALES</div>
+      <ul><li>Create / view requisitions</li><li>View suppliers</li><li>No PO/GRN/Invoice access</li></ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Detailed Route Access Matrix</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>S.Admin</th><th>Admin</th><th>Manager</th><th>Accountant</th><th>Storekeeper</th><th>Sales</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/procurement/suppliers</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td><code>/procurement/requisitions</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td><code>/procurement/requisitions/new</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td><code>/procurement/purchase-orders</code></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td></tr>
+          <tr><td><code>/procurement/grns</code></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td></tr>
+          <tr><td><code>/procurement/invoices</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+          <tr><td><code>/procurement/invoices/new</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+          <tr><td><code>/procurement/invoices/:id</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+          <tr><td><code>/procurement/invoices/:id/payment</code></td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════ 3-WAY MATCH ═══════ -->
+  <h2 id="matching">⚖ 3-Way Invoice Matching</h2>
+  <div class="card">
+    <h3>Match Algorithm — <code>computeInvoiceMatch()</code></h3>
+    <p>Pure function in <code>procurementStore</code> — no Firestore calls:</p>
+    <pre><span class="kw">function</span> <span class="ty">computeInvoiceMatch</span>(invoiceTotal: <span class="ty">number</span>, expectedAmount: <span class="ty">number</span>) {
+  <span class="kw">const</span> matchVariance        = invoiceTotal - expectedAmount
+  <span class="kw">const</span> matchVariancePercent = expectedAmount > <span class="nu">0</span>
+    ? Math.abs(matchVariance / expectedAmount * <span class="nu">100</span>)
+    : <span class="nu">0</span>
+
+  <span class="kw">let</span> matchStatus: <span class="ty">MatchStatus</span>
+  <span class="kw">if</span>      (matchVariancePercent === <span class="nu">0</span>)   matchStatus = <span class="st">'MATCHED'</span>
+  <span class="kw">else if</span> (matchVariancePercent <= <span class="nu">10</span>)  matchStatus = <span class="st">'VARIANCE_WITHIN_THRESHOLD'</span>
+  <span class="kw">else</span>                                    matchStatus = <span class="st">'VARIANCE_EXCEEDED'</span>
+
+  <span class="kw">return</span> { matchVariance, matchVariancePercent, matchStatus }
+}</pre>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>matchStatus</th><th>Condition</th><th>UI</th><th>Override Required?</th></tr></thead>
+        <tbody>
+          <tr><td><code>MATCHED</code></td><td>Variance = 0%</td><td><span class="badge badge-green">Matched</span></td><td>No — auto-approvable</td></tr>
+          <tr><td><code>VARIANCE_WITHIN_THRESHOLD</code></td><td>0% &lt; variance ≤ 10%</td><td><span class="badge badge-amber">Minor Variance</span></td><td>No — can approve directly</td></tr>
+          <tr><td><code>VARIANCE_EXCEEDED</code></td><td>Variance &gt; 10%</td><td><span class="badge badge-red">Variance</span></td><td>Yes — min 10-char reason required</td></tr>
+          <tr><td><code>OVERRIDE_APPROVED</code></td><td>Was EXCEEDED, override given</td><td><span class="badge badge-purple">Override</span></td><td>N/A — already overridden</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>expectedAmount Formula</h4>
+    <pre><span class="cm">// Computed from confirmed GRN items:</span>
+expectedAmount = grn.items
+  .filter(item => item.qtyReceived > <span class="nu">0</span>)
+  .reduce((sum, item) => sum + item.qtyReceived * item.unitCostPrice, <span class="nu">0</span>)</pre>
+  </div>
+
+  <!-- ═══════ NUMBERING ═══════ -->
+  <h2 id="numbering">🔢 Auto-Numbering System</h2>
+  <div class="card">
+    <p>All document numbers are generated using <strong>Firestore transactions on <code>systemCounters</code></strong> — atomic and collision-safe. Sequences reset annually.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Document Type</th><th>Format</th><th>Example</th><th>Counter Doc</th></tr></thead>
+        <tbody>
+          <tr><td>Purchase Requisition</td><td><code>PR-YYYY-NNNN</code></td><td><code>PR-2026-0001</code></td><td><code>systemCounters/prNumbers</code></td></tr>
+          <tr><td>Purchase Order</td><td><code>PO-YYYY-NNNN</code></td><td><code>PO-2026-0042</code></td><td><code>systemCounters/poNumbers</code></td></tr>
+          <tr><td>Goods Receipt Note</td><td><code>GRN-YYYY-NNNN</code></td><td><code>GRN-2026-0007</code></td><td><code>systemCounters/grnNumbers</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><span class="cm">// Pattern used in all three generators:</span>
+<span class="kw">const</span> newSeq = <span class="kw">await</span> runTransaction(db, <span class="kw">async</span> (tx) => {
+  <span class="kw">const</span> snap = <span class="kw">await</span> tx.get(counterRef)
+  <span class="kw">const</span> seq = snap.exists() && snap.data().currentYear === year
+    ? snap.data().lastSequence + <span class="nu">1</span>
+    : <span class="nu">1</span>                    <span class="cm">// new year = reset to 1</span>
+  tx.set(counterRef, { currentYear: year, lastSequence: seq, lastUpdatedAt: serverTimestamp() })
+  <span class="kw">return</span> seq
+})
+<span class="kw">return</span> <span class="st">`PR-${year}-${String(newSeq).padStart(4, '0')}`</span></pre>
+  </div>
+
+  <!-- ═══════ FINANCE INTEGRATION ═══════ -->
+  <h2 id="finance">💰 Finance Module Integration</h2>
+  <div class="card">
+    <div class="alert alert-tip" style="margin-bottom:16px">
+      <span>✅</span>
+      <span><strong>Zero new collections.</strong> Procurement payments write into the existing <code>operationalExpenses</code> collection via <code>useFinanceStore</code>. The Finance module's <code>updateLedger()</code> function handles all balance calculations automatically.</span>
+    </div>
+    <h3>Integration Points</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Procurement Action</th><th>Finance Function Called</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Submit payment form</td><td><code>financeStore.recordExpense(payload)</code></td><td>Creates <code>operationalExpenses</code> doc with <code>status: 'APPROVED_ACCOUNTANT'</code></td></tr>
+          <tr><td>After expense created</td><td><code>financeStore.processExpensePayment(id, by, data)</code></td><td>Sets <code>status: 'PAYMENT_PROCESSED'</code> → triggers <code>updateLedger()</code> → deducts from account balance</td></tr>
+          <tr><td>Invoice detail view</td><td>RouterLink to <code>/opex/:operationalExpenseId</code></td><td>Finance officer can view the linked OPEX record</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Balance Display on Payment Form</h3>
+    <p>The ProcessPaymentView calls all four finance fetch functions on mount so that <code>financeStore.finalBalances</code> is populated before the user selects an account:</p>
+    <pre><span class="kw">onMounted</span>(<span class="kw">async</span> () => {
+  financeStore.fetchExpenses()
+  financeStore.fetchTransfers()
+  financeStore.fetchJobPayments()
+  financeStore.fetchTopUps()
+  <span class="cm">// finalBalances.BANK / .CASH / .ECOCASH / .IRD now reactive</span>
+})</pre>
+  </div>
+
+  <hr class="divider" />
+
+  <footer>
+    <span><strong style="color:var(--brand)">INCAPTTA</strong><strong style="color:var(--accent)">PRO</strong> — Procurement Module Documentation</span>
+    <span>Generated 2026-03-28 · Vue 3.5 · Firebase 11 · Pinia · Phase 8A + 8B Complete</span>
+  </footer>
+
+</main>
+
+<script>
+  // Highlight active sidebar link based on scroll position
+  const links = document.querySelectorAll('.nav-link');
+  const sections = Array.from(document.querySelectorAll('h2[id], .hero[id]'));
+
+  function onScroll() {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 60) current = s.id;
+    });
+    links.forEach(l => {
+      const href = l.getAttribute('href')?.slice(1);
+      l.classList.toggle('active', href === current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>

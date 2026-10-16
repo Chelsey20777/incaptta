@@ -1,0 +1,13 @@
+# Cloudflare Pages / Workers configuration for Incaptta Marketing Site (Vue 3 + Vite)
+name = "incaptta-web"
+compatibility_date = "2026-10-16"
+
+# For Cloudflare Pages deployment:
+# Build Command: npm run build
+# Build Output Directory: dist
+
+[assets]
+directory = "./dist"
+
+[site]
+bucket = "./dist"

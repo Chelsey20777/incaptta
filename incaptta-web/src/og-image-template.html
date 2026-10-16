@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incaptta OG Image Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0D1F12;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .og-container {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(135deg, #0D1F12 0%, #1a3d24 100%);
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .left-side {
+      flex: 1;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .wordmark {
+      font-size: 72px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+      line-height: 1;
+    }
+    
+    .wordmark .accent {
+      color: #F9A825;
+    }
+    
+    .tagline {
+      font-size: 28px;
+      font-weight: 600;
+      color: #F9A825;
+      margin-bottom: 16px;
+    }
+    
+    .sub-tagline {
+      font-size: 22px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.4;
+    }
+    
+    .right-side {
+      width: 350px;
+      background: rgba(27, 94, 32, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px;
+      border-left: 3px solid #F9A825;
+    }
+    
+    .stat-item {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .stat-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      color: #F9A825;
+      line-height: 1;
+    }
+    
+    .stat-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 8px;
+    }
+    
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #1B5E20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .website-url {
+      font-size: 20px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="og-container">
+    <div class="left-side">
+      <div class="wordmark">INC<span class="accent">A</span>PTT<span class="accent">A</span></div>
+      <div class="tagline">Agri-Structures & Equipment</div>
+      <div class="sub-tagline">Zimbabwe's Leading Fowlrun Specialists</div>
+    </div>
+    
+    <div class="right-side">
+      <div class="stat-item">
+        <div class="stat-number">8+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">60K+</div>
+        <div class="stat-label">Birds Housed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">4+</div>
+        <div class="stat-label">Major Clients</div>
+      </div>
+    </div>
+    
+    <div class="bottom-bar">
+      <div class="website-url">app.incaptta.co.zw</div>
+    </div>
+  </div>
+  
+  <!-- README Note -->
+  <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); max-width: 600px; text-align: center;">
+    <p style="margin: 0; font-size: 14px; color: #333; font-weight: 500;">
+      📸 <strong>How to generate OG image:</strong> Open this file in Chrome/Firefox, 
+      set window size to 1200×630, take a screenshot, and save as <code>public/og-default.jpg</code>
+    </p>
+  </div>
+</body>
+</html>

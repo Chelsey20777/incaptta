@@ -1,0 +1,9 @@
+# The production backend must have its Environment name set to "production".
+# Production-specific values currently inherit from apphosting.yaml so the
+# existing deployment behavior remains unchanged.
+runConfig:
+  minInstances: 0
+  maxInstances: 15
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 1024

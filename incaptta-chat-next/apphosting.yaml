@@ -1,0 +1,9 @@
+# Firebase App Hosting configuration for incaptta-chat-next
+# See https://firebase.google.com/docs/app-hosting/configure for details
+
+runConfig:
+  minInstances: 0        # Scale down to 0 when idle to save costs
+  maxInstances: 5        # Max instances for autoscaling (lower limit for chat backend)
+  concurrency: 80        # Concurrent requests handled by a single instance
+  cpu: 1                 # 1 vCPU
+  memoryMiB: 1024        # 1 GB RAM

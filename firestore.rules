@@ -1,0 +1,919 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isActive() {
+      return request.auth.token.get('isActive', null) == true;
+    }
+
+    function authed() {
+      return isSignedIn() && isActive();
+    }
+
+    function roles() {
+      return request.auth.token.get('roles', []);
+    }
+
+    function hasRole(role) {
+      return roles() is list ? roles().hasAny([role]) : roles() == role;
+    }
+
+    function isStagingPayroll() {
+      return request.auth != null && request.auth.token.get('aud', '') == 'incaptta-pro-staging';
+    }
+
+    function isPayrollExpense(data) {
+      return data.get('type', '') in ['PAYROLL_NET', 'PAYROLL_SETTLEMENT', 'STATUTORY_LIABILITY']
+        || data.get('payrollId', '') != '' || data.get('paymentRequestId', '') != ''
+        || data.get('category', '') in ['Salaries & Wages', 'Statutory Liabilities', 'Payroll Settlement'];
+    }
+
+    function payrollExpenseWritable(data) {
+      return data.get('type', '') != 'PAYROLL_SETTLEMENT' && !(isStagingPayroll() && isPayrollExpense(data));
+    }
+
+    function isSuperAdmin() {
+      return hasRole('SUPER_ADMIN');
+    }
+
+    function isAdmin() {
+      return isSuperAdmin() || hasRole('ADMIN');
+    }
+
+    function isAdminOrManager() {
+      return isAdmin() || hasRole('MANAGER') || hasRole('DIRECTOR');
+    }
+
+    // Finance: ACCOUNTANT, MANAGER, ADMIN, SUPER_ADMIN
+    function isFinance() {
+      return authed() && (isAdminOrManager() || hasRole('ACCOUNTANT'));
+    }
+
+    // Inventory write access: STOREKEEPER, MANAGER, ADMIN, SUPER_ADMIN
+    function isInventoryWriter() {
+      return authed() && (isAdminOrManager() || hasRole('STOREKEEPER') || hasRole('ACCOUNTANT') || hasRole('TECHNICAL') || hasRole('SALES'));
+    }
+
+    // Inventory Master maintenance is limited to administrators. Operational
+    // stock movements continue through trusted server endpoints/Admin SDK.
+    function isInventoryMasterAdmin() {
+      return authed() && isAdmin();
+    }
+
+    // Inventory read access: all authenticated staff
+    function isInventoryReader() {
+      return authed();
+    }
+
+    // CRM access: all staff except STOREKEEPER
+    function isCrmStaff() {
+      return authed() && (isAdminOrManager() || hasRole('SALES') || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+    }
+
+    // Job card access: all except STOREKEEPER
+    function isJobCardStaff() {
+      return authed() && (isAdminOrManager() || hasRole('SALES') || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+    }
+
+    function isCommittedJobCardExpenseCreate() {
+      return request.resource.data.get('category', '') == 'Job Card Expense'
+        && request.resource.data.get('sourceJobId', '') != ''
+        && request.resource.data.get('sourceItemId', '') != ''
+        && request.resource.data.get('status', 'PENDING_ACCOUNTANT') in
+          ['APPROVED', 'APPROVED_FOR_PAYMENT', 'PAYMENT_PROCESSED'];
+    }
+
+    function isApprovedExpense(data) {
+      return data.get('status', '') in ['APPROVED', 'APPROVED_FOR_PAYMENT', 'PAYMENT_PROCESSED'];
+    }
+
+    function isExpenseCreator(data) {
+      return authed()
+        && data.get('createdByEmail', '') != ''
+        && request.auth.token.email == data.get('createdByEmail', '');
+    }
+
+    function isCreatorPdfMetadataUpdate() {
+      return isExpenseCreator(resource.data)
+        && isApprovedExpense(resource.data)
+        && request.resource.data.get('status', '') == resource.data.get('status', '')
+        && (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verificationToken'])
+          || (
+            resource.data.get('pdfGenerated', false) == false
+            && request.resource.data.get('pdfGenerated', false) == true
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+              'pdfGenerated', 'pdfLockedAt', 'pdfDownloadedBy'
+            ])
+          )
+        );
+    }
+
+    // ─── Pekka Poultry ────────────────────────────────────────────────────────
+    function isPoultryStaff() {
+      return authed() && (isAdminOrManager() || hasRole('POULTRY_MANAGER') || hasRole('FARM_HAND') || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+    }
+    
+    match /poultryFlocks/{id} {
+      allow read: if isPoultryStaff();
+      allow write: if authed() && (isAdminOrManager() || hasRole('POULTRY_MANAGER') || hasRole('ACCOUNTANT'));
+    }
+
+    match /poultryDailyLogs/{id} {
+      allow read: if isPoultryStaff();
+      allow write: if isPoultryStaff();
+    }
+
+    match /poultryInventory/{id} {
+      allow read: if isPoultryStaff();
+      allow write: if authed() && (isAdminOrManager() || hasRole('POULTRY_MANAGER') || hasRole('ACCOUNTANT')); 
+    }
+    
+    match /poultrySales/{id} {
+      allow read: if isPoultryStaff();
+      allow write: if authed() && (isAdminOrManager() || hasRole('POULTRY_MANAGER') || hasRole('ACCOUNTANT'));
+    }
+
+    // ─── Users ────────────────────────────────────────────────────────────────
+    // Client reads only — all writes go through Admin SDK via /api/users
+    match /users/{userId} {
+      allow read: if authed();
+      allow write: if false;
+    }
+
+    // ─── App Settings ─────────────────────────────────────────────────────────
+    match /appSettings/{doc} {
+      allow read: if authed();
+      allow write: if authed() && isSuperAdmin();
+    }
+
+    // ─── Lookup / Reference Collections ───────────────────────────────────────
+    match /departments/{id} {
+      allow read: if authed();
+      allow write: if authed() && isAdminOrManager();
+    }
+
+    match /categories/{id} {
+      allow read: if authed();
+      allow write: if authed() && isAdminOrManager();
+    }
+
+    match /jobCategories/{id} {
+      allow read: if authed();
+      allow write: if authed() && isAdminOrManager();
+    }
+
+    match /expenseCategories/{id} {
+      allow read: if authed();
+      allow write: if authed() && isAdminOrManager();
+    }
+
+    match /inventoryCategories/{id} {
+      allow read: if authed();
+      allow write: if isInventoryMasterAdmin();
+    }
+
+    // ─── Cash Accounts ────────────────────────────────────────────────────────
+    match /cashAccounts/{id} {
+      allow read: if isFinance() || (authed() && hasRole('TECHNICAL'));
+      allow write: if authed() && isAdmin();
+    }
+
+    // ─── Inventory ────────────────────────────────────────────────────────────
+    match /inventoryItems/{id} {
+      allow read: if isInventoryReader();
+      allow create: if isInventoryMasterAdmin() && request.resource.data.onHand == 0;
+      allow update: if isInventoryMasterAdmin()
+                    && request.resource.data.onHand == resource.data.onHand
+                    && request.resource.data.get('reserved', 0) == resource.data.get('reserved', 0);
+      allow delete: if authed() && isAdmin();
+    }
+
+    match /inventoryAuditLogs/{id} {
+      allow read: if isInventoryReader();
+      allow write: if false;
+    }
+
+    match /stockLedger/{id} {
+      allow read: if authed();
+      // All movements are written by trusted server code using the Admin SDK.
+      allow create, update, delete: if false;
+    }
+
+    match /inventoryReceipts/{id} {
+      allow read: if authed();
+      allow create, update, delete: if false;
+    }
+
+    // ─── Job Cards ────────────────────────────────────────────────────────────
+    match /jobCards/{id} {
+      allow read: if isJobCardStaff();
+      allow create: if isJobCardStaff();
+      allow update: if isJobCardStaff()
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+                      'inventoryDeducted', 'inventoryPostingStatus', 'postingState',
+                      'postingLedgerId', 'postingError'
+                    ])
+                    && (
+                      request.resource.data.status == resource.data.status
+                      || (resource.data.status == 'DRAFT' && request.resource.data.status == 'SUBMITTED')
+                      || ((hasRole('ACCOUNTANT') || isAdmin()) && resource.data.status == 'SUBMITTED' && request.resource.data.status == 'APPROVAL_PENDING_ACCOUNTANT')
+                      || ((hasRole('ACCOUNTANT') || isAdmin()) && resource.data.status == 'APPROVAL_PENDING_ACCOUNTANT' && request.resource.data.status == 'APPROVED_ACCOUNTANT')
+                      || ((hasRole('ACCOUNTANT') || isAdmin()) && resource.data.status == 'APPROVED_ACCOUNTANT' && request.resource.data.status == 'APPROVAL_PENDING_MANAGER')
+                      || (isAdminOrManager() && resource.data.status == 'APPROVAL_PENDING_MANAGER' && request.resource.data.status == 'APPROVED_MANAGER')
+                      || (isAdminOrManager() && resource.data.status == 'APPROVED_MANAGER' && request.resource.data.status == 'COMPLETED')
+                      || (isAdminOrManager() && resource.data.status == 'APPROVED_MANAGER' && request.resource.data.status == 'CLOSED')
+                      || (isAdminOrManager() && resource.data.status == 'COMPLETED' && request.resource.data.status == 'CLOSED')
+                      || (isJobCardStaff() && resource.data.status in ['DRAFT', 'SUBMITTED', 'APPROVAL_PENDING_ACCOUNTANT', 'APPROVED_ACCOUNTANT', 'APPROVAL_PENDING_MANAGER'] && request.resource.data.status == 'CANCELLED')
+                      || ((hasRole('ACCOUNTANT') || isAdminOrManager()) && resource.data.status in ['SUBMITTED', 'APPROVAL_PENDING_ACCOUNTANT', 'APPROVED_ACCOUNTANT', 'APPROVAL_PENDING_MANAGER'] && request.resource.data.status == 'REJECTED')
+                    );
+      allow delete: if authed() && isAdmin();
+    }
+
+    match /jobCards/{jobCardId}/items/{itemId} {
+      allow read: if isJobCardStaff();
+      allow write: if isJobCardStaff();
+    }
+
+    match /jobCards/{jobCardId}/expenses/{expenseId} {
+      allow read: if isJobCardStaff();
+      allow write: if isJobCardStaff();
+    }
+
+    match /jobCards/{jobCardId}/returns/{returnId} {
+      allow read: if isJobCardStaff();
+      allow write: if isJobCardStaff();
+    }
+
+    // ─── Agric Structures ─────────────────────────────────────────────────────
+    match /agricJobCards/{id} {
+      allow read: if isJobCardStaff();
+      allow create: if isJobCardStaff();
+      allow update: if isJobCardStaff();
+      allow delete: if authed() && isAdmin();
+    }
+
+    match /Agric-Material-Inventory/{id} {
+      allow read: if isInventoryReader();
+      allow write: if isInventoryWriter();
+    }
+
+    match /agricStockLedger/{id} {
+      allow read: if authed();
+      allow write: if isInventoryWriter();
+    }
+
+    match /agricStructureSettings/{doc} {
+      allow read: if authed();
+      allow write: if authed() && isAdminOrManager();
+    }
+
+    // ─── Payments & Finance ───────────────────────────────────────────────────
+    match /jobPayments/{id} {
+      allow read: if isFinance() || (authed() && hasRole('TECHNICAL'));
+      allow create: if isFinance();
+      allow update: if isFinance();
+      allow delete: if authed() && isAdmin();
+    }
+
+    // Status machine: PENDING_ACCOUNTANT -> PENDING_MANAGER -> COMPLETED | REJECTED | CANCELLED.
+    // Only COMPLETED transfers move cash balances, so reaching COMPLETED requires a manager.
+    match /fundTransfers/{id} {
+      allow read: if isFinance() || (authed() && hasRole('TECHNICAL'));
+      allow create: if isFinance() && (
+        request.resource.data.get('status', '') == 'PENDING_ACCOUNTANT'
+        // Manager-created transfers are finalized by the Admin SDK approval endpoint.
+        || (request.resource.data.get('status', '') == 'PENDING_MANAGER' && isAdminOrManager())
+      );
+      allow update: if isFinance() && (
+        // Non-status edits (status unchanged, including legacy docs with no status)
+        request.resource.data.get('status', '') == resource.data.get('status', '')
+        || (resource.data.get('status', '') == 'PENDING_ACCOUNTANT'
+            && request.resource.data.get('status', '') in ['PENDING_MANAGER', 'REJECTED', 'CANCELLED'])
+        || (resource.data.get('status', '') == 'PENDING_MANAGER'
+            && request.resource.data.get('status', '') in ['REJECTED', 'CANCELLED'])
+        // PENDING_MANAGER -> COMPLETED is reserved for the Admin SDK endpoint.
+      );
+      allow delete: if authed() && isAdmin();
+    }
+
+    // Status machine mirrors fundTransfers; only COMPLETED top-ups credit balances.
+    match /ledgerTopUps/{id} {
+      allow read: if isFinance() || (authed() && hasRole('TECHNICAL'));
+      allow create: if isFinance() && (
+        request.resource.data.get('status', '') == 'PENDING_ACCOUNTANT'
+        || (request.resource.data.get('status', '') == 'COMPLETED' && isAdminOrManager())
+      );
+      allow update: if isFinance() && (
+        request.resource.data.get('status', '') == resource.data.get('status', '')
+        || (resource.data.get('status', '') == 'PENDING_ACCOUNTANT'
+            && request.resource.data.get('status', '') in ['PENDING_MANAGER', 'REJECTED'])
+        || (resource.data.get('status', '') == 'PENDING_MANAGER'
+            && request.resource.data.get('status', '') in ['REJECTED'])
+        || (resource.data.get('status', '') == 'PENDING_MANAGER'
+            && request.resource.data.get('status', '') == 'COMPLETED'
+            && isAdminOrManager())
+      );
+      allow delete: if isFinance();
+    }
+
+    match /businessLoanLenders/{id} {
+      allow read: if isFinance();
+      allow create: if isFinance()
+        && request.resource.data.get('status', '') == 'ACTIVE'
+        && request.resource.data.get('currency', '') == 'USD'
+        && request.resource.data.get('outstandingPrincipal', -1) == 0;
+      // Outstanding principal is maintained only during manager final approval.
+      allow update: if authed() && isAdminOrManager()
+        && request.resource.data.get('outstandingPrincipal', -1) >= 0
+        && request.resource.data.get('currency', '') == 'USD';
+      allow delete: if authed() && isAdmin()
+        && resource.data.get('outstandingPrincipal', 0) == 0;
+    }
+
+    match /businessLoanTransactions/{id} {
+      allow read: if isFinance();
+      allow create: if isFinance()
+        && request.resource.data.get('status', '') == 'PENDING_ACCOUNTANT'
+        && request.resource.data.get('transactionType', '') in ['RECEIPT', 'REPAYMENT']
+        && request.resource.data.get('account', '') in ['BANK', 'CASH', 'ECOCASH', 'RESERVE']
+        && request.resource.data.get('currency', '') == 'USD'
+        && request.resource.data.get('amount', 0) > 0;
+      allow update: if isFinance() && (
+        (resource.data.get('status', '') == 'PENDING_ACCOUNTANT'
+          && request.resource.data.get('status', '') == 'PENDING_MANAGER'
+          && (hasRole('ACCOUNTANT') || isAdmin()))
+        || (resource.data.get('status', '') in ['PENDING_ACCOUNTANT', 'PENDING_MANAGER']
+          && request.resource.data.get('status', '') == 'REJECTED')
+        || (resource.data.get('status', '') == 'PENDING_MANAGER'
+          && request.resource.data.get('status', '') == 'COMPLETED'
+          && isAdminOrManager())
+      );
+      allow delete: if authed() && isAdmin()
+        && resource.data.get('status', '') != 'COMPLETED';
+    }
+
+    // ─── Operational Expenses ─────────────────────────────────────────────────
+    // All staff can create (submit) expenses; only finance can approve/edit.
+    // Status machine (balance-affecting statuses are APPROVED / APPROVED_FOR_PAYMENT /
+    // PAYMENT_PROCESSED, deduct-at-approval model):
+    //   PENDING_ACCOUNTANT -> APPROVED_ACCOUNTANT | APPROVED_FOR_PAYMENT (<$300) | REJECTED_ACCOUNTANT
+    //   APPROVED_ACCOUNTANT -> APPROVED_FOR_PAYMENT | REJECTED_MANAGER   (manager only)
+    //   APPROVED_FOR_PAYMENT / APPROVED / PENDING -> PAYMENT_PROCESSED
+    // Direct creation with a committed status (job-card ad-hoc, SCN, payroll,
+    // reserve/salaries funding) is reserved for finance roles.
+    match /operationalExpenses/{id} {
+      allow read: if authed() && (
+        isFinance() ||
+        (
+          'createdByEmail' in resource.data && 
+          request.auth.token.email == resource.data.createdByEmail
+        )
+      );
+      allow create: if authed() && payrollExpenseWritable(request.resource.data) && (
+        (!isCommittedJobCardExpenseCreate() && isFinance())
+          ? request.resource.data.get('status', 'PENDING_ACCOUNTANT') in
+              ['PENDING_ACCOUNTANT', 'PENDING', 'DRAFT', 'APPROVED', 'APPROVED_ACCOUNTANT', 'APPROVED_FOR_PAYMENT']
+          : request.resource.data.get('status', 'PENDING_ACCOUNTANT') in
+              ['PENDING_ACCOUNTANT', 'PENDING', 'DRAFT']
+      );
+      allow update: if payrollExpenseWritable(resource.data) && payrollExpenseWritable(request.resource.data) && (isCreatorPdfMetadataUpdate() || (isFinance() && (
+        // Non-status edits (attachments, pdf locks, metadata). Only super admins
+        // may reset a consumed one-time PDF download.
+        (request.resource.data.get('status', '') == resource.data.get('status', '')
+          && !(
+            resource.data.get('pdfGenerated', false) == true
+            && request.resource.data.get('pdfGenerated', false) == false
+          )
+        )
+        || (isSuperAdmin()
+            && request.resource.data.get('status', '') == resource.data.get('status', ''))
+        || (resource.data.get('status', '') in ['PENDING_ACCOUNTANT', 'DRAFT']
+            && request.resource.data.get('status', '') in
+              ['PENDING_ACCOUNTANT', 'APPROVED_ACCOUNTANT', 'APPROVED_FOR_PAYMENT', 'REJECTED_ACCOUNTANT'])
+        || (resource.data.get('status', '') == 'APPROVED_ACCOUNTANT'
+            && request.resource.data.get('status', '') in ['APPROVED_FOR_PAYMENT', 'REJECTED_MANAGER']
+            && isAdminOrManager())
+        || (resource.data.get('status', '') in ['APPROVED_FOR_PAYMENT', 'APPROVED', 'PENDING']
+            && request.resource.data.get('status', '') == 'PAYMENT_PROCESSED')
+      )));
+      allow delete: if authed() && isAdmin() && payrollExpenseWritable(resource.data);
+    }
+
+    // ─── Commissions ─────────────────────────────────────────────────────────
+    // Sales reps can read their own; finance manages all
+    match /commissions/{id} {
+      allow read: if isFinance() || (authed() && request.auth.uid == resource.data.userId);
+      allow write: if isFinance();
+    }
+
+    // ─── CRM ──────────────────────────────────────────────────────────────────
+    match /customers/{id} {
+      allow read: if isCrmStaff();
+      // Server endpoints validate profiles and atomically audit sensitive edits.
+      allow write: if false;
+    }
+
+    match /customerAuditLogs/{id} {
+      allow read: if isCrmStaff();
+      allow write: if false;
+    }
+
+    match /crmQuotes/{id} {
+      allow read: if isCrmStaff();
+      allow write: if isCrmStaff();
+    }
+
+    match /crmInvoices/{id} {
+      allow read: if isCrmStaff();
+      // All writes go through protected Next.js endpoints so customer credit
+      // limits and payment validation cannot be bypassed by browser clients.
+      allow write: if false;
+    }
+
+    match /leads/{id} {
+      allow read: if isCrmStaff();
+      allow write: if isCrmStaff();
+    }
+
+    match /clientCreditAccounts/{id} {
+      allow read: if isCrmStaff();
+      allow write: if authed() && (isAdmin() || isFinance());
+    }
+
+    match /clientCreditTransactions/{id} {
+      allow read: if isCrmStaff();
+      allow write: if authed() && (isAdmin() || isFinance());
+    }
+
+    // ─── Tools Registry ───────────────────────────────────────────────────────
+    match /toolsRegistry/{id} {
+      allow read: if authed();
+      allow write: if authed() && (isAdminOrManager() || hasRole('STOREKEEPER') || hasRole('ACCOUNTANT'));
+    }
+
+    match /companyTools/{id} {
+      allow read: if authed();
+      allow write: if authed() && (isAdminOrManager() || hasRole('STOREKEEPER') || hasRole('ACCOUNTANT'));
+      allow update: if isJobCardStaff()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']);
+    }
+
+    match /toolCheckouts/{id} {
+      allow read: if authed();
+      allow write: if authed() && (isAdminOrManager() || hasRole('STOREKEEPER') || hasRole('ACCOUNTANT'));
+      allow create, update: if isJobCardStaff();
+    }
+
+    match /toolRepairs/{id} {
+      allow read: if authed();
+      allow write: if authed() && (isAdminOrManager() || hasRole('STOREKEEPER') || hasRole('ACCOUNTANT'));
+    }
+
+    // ─── HR ───────────────────────────────────────────────────────────────────
+    match /employees/{id} {
+      allow read: if isFinance() || isAdmin() || isSuperAdmin();
+      allow write: if authed() && (isAdminOrManager() || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+    }
+
+    match /leaveRequests/{id} {
+      allow read: if authed();
+      allow create: if authed();
+      allow update: if authed() && (isAdminOrManager() || request.auth.uid == resource.data.userId);
+      allow delete: if authed() && isAdmin();
+    }
+
+    match /hrTasks/{id} {
+      allow read: if authed();
+      allow write: if authed();
+    }
+
+    match /kpis/{id} {
+      allow read: if authed() && (isAdminOrManager() || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+      allow write: if authed() && (isAdminOrManager() || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+    }
+
+    match /performanceReviews/{id} {
+      allow read: if authed() && (isAdminOrManager() || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+      allow write: if authed() && (isAdminOrManager() || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+    }
+
+    // Recognition, settlements, policies and corrections are server-authoritative.
+    match /payrollJournal/{id} { allow read: if isFinance(); allow write: if false; }
+    match /payrollPayments/{id} { allow read: if isFinance(); allow write: if false; }
+    match /payrollPolicies/{id} { allow read: if isFinance(); allow write: if false; }
+    match /payrollPaymentRequests/{id} { allow read, write: if false; }
+    match /payroll/{id} {
+      allow read: if isFinance() || (authed() && hasRole('TECHNICAL'));
+      allow create: if !isStagingPayroll() && request.resource.data.get('schemaVersion', 1) != 2
+        && (isFinance() || (authed() && hasRole('TECHNICAL')));
+      allow delete: if !isStagingPayroll() && resource.data.get('schemaVersion', 1) != 2
+        && (isFinance() || (authed() && hasRole('TECHNICAL')));
+      allow update: if !isStagingPayroll() && resource.data.get('schemaVersion', 1) != 2
+        && request.resource.data.get('schemaVersion', 1) != 2
+        && (isFinance() || (authed() && hasRole('TECHNICAL'))) && (
+          !(request.resource.data.status == 'Paid' && resource.data.status != 'Paid')
+          || isAdminOrManager() || resource.data.get('approvalStatus', '') == 'APPROVED_MANAGER'
+          || resource.data.get('basicSalary', 0) == 0
+        );
+    }
+
+    match /jobCardPayrollPostings/{id} {
+      allow read: if isFinance() || (authed() && hasRole('TECHNICAL'));
+      allow write: if !isStagingPayroll() && (isFinance() || (authed() && hasRole('TECHNICAL')));
+    }
+
+    match /salariesAccountTransactions/{id} {
+      allow read: if isFinance() || (authed() && hasRole('TECHNICAL'));
+      allow write: if !id.matches('payroll-.*') && (isFinance() || (authed() && hasRole('TECHNICAL'))) && (
+        request.resource.data.get('source', '') != 'SALARY_ADVANCE'
+        || (id == 'salary-advance-' + request.resource.data.referenceId
+          && getAfter(/databases/$(database)/documents/salaryAdvances/$(request.resource.data.referenceId)).data.status == 'ACTIVE'
+          && getAfter(/databases/$(database)/documents/salaryAdvances/$(request.resource.data.referenceId)).data.paidBy.uid == request.auth.uid)
+      );
+    }
+
+    match /reserveAccountTransactions/{id} {
+      allow read: if isFinance();
+      allow write: if !id.matches('payroll-.*') && isFinance();
+    }
+
+    // Finance deletion audit trails (OPEX UI + job-card adhoc cascade)
+    match /opexAuditLogs/{id} {
+      allow read: if isFinance();
+      allow create: if isFinance();
+      allow update, delete: if false;
+    }
+
+    match /jobCardAuditLogs/{id} {
+      allow read: if isFinance();
+      allow create: if isFinance();
+      allow update, delete: if false;
+    }
+
+    match /adminAuditLogs/{id} {
+      allow read: if isFinance();
+      allow create: if isFinance() || isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /recruitment/{id} {
+      allow read: if authed() && (isAdminOrManager() || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+      allow write: if authed() && (isAdminOrManager() || hasRole('ACCOUNTANT') || hasRole('TECHNICAL'));
+    }
+
+    match /salaryAdvances/{id} {
+      allow read: if isFinance() || isAdmin() || isSuperAdmin();
+      allow create: if isFinance()
+        && request.resource.data.status == 'PENDING_ACCOUNTANT'
+        && request.resource.data.originalAmount > 0
+        && request.resource.data.requestedBy.uid == request.auth.uid;
+      allow update: if isFinance() && (
+        // Accountant verification. Requester may not verify their own request.
+        (resource.data.status == 'PENDING_ACCOUNTANT'
+          && request.resource.data.status == 'PENDING_MANAGER'
+          && hasRole('ACCOUNTANT')
+          && resource.data.requestedBy.uid != request.auth.uid
+          && request.resource.data.verifiedBy.uid == request.auth.uid)
+        // Manager approval. Verifier may not approve their own verification.
+        || (resource.data.status == 'PENDING_MANAGER'
+          && request.resource.data.status == 'APPROVED_FOR_PAYMENT'
+          && (hasRole('MANAGER') || hasRole('DIRECTOR'))
+          && resource.data.verifiedBy.uid != request.auth.uid
+          && request.resource.data.approvedBy.uid == request.auth.uid)
+        // Separate finance disbursement from the dedicated Salaries wallet.
+        || (resource.data.status == 'APPROVED_FOR_PAYMENT'
+          && request.resource.data.status == 'ACTIVE'
+          && resource.data.approvedBy.uid != request.auth.uid
+          && request.resource.data.paidBy.uid == request.auth.uid
+          && request.resource.data.walletTransactionId == 'salary-advance-' + id)
+        // Rejection before disbursement.
+        || (resource.data.status in ['PENDING_ACCOUNTANT', 'PENDING_MANAGER', 'APPROVED_FOR_PAYMENT']
+          && request.resource.data.status == 'REJECTED'
+          && request.resource.data.rejectedBy.uid == request.auth.uid
+          && request.resource.data.rejectionReason != '')
+        // Payroll reservation/recovery balance updates. Recovery documents are
+        // separately protected below and the balance may never be negative.
+        || (!isStagingPayroll() && resource.data.status == 'ACTIVE'
+          && request.resource.data.status in ['ACTIVE', 'SETTLED']
+          && request.resource.data.outstandingBalance >= 0
+          && request.resource.data.reservedBalance >= 0
+          && request.resource.data.recoveredAmount >= resource.data.get('recoveredAmount', 0))
+        // Audited reversal of an active, wholly unrecovered advance.
+        || (resource.data.status == 'ACTIVE'
+          && resource.data.get('recoveredAmount', 0) == 0
+          && (!isStagingPayroll() || resource.data.get('reservedBalance', 0) == 0)
+          && request.resource.data.status == 'REVERSED'
+          && (hasRole('MANAGER') || hasRole('DIRECTOR'))
+          && request.resource.data.reversedBy.uid == request.auth.uid
+          && request.resource.data.reversalReason != '')
+      );
+      allow delete: if isAdmin()
+        && resource.data.status in ['PENDING_ACCOUNTANT', 'REJECTED'];
+    }
+
+    match /salaryAdvanceRecoveries/{id} {
+      allow read: if isFinance();
+      allow create: if !isStagingPayroll() && isFinance()
+        && request.resource.data.status == 'RESERVED'
+        && request.resource.data.amount > 0
+        && request.resource.data.createdBy.uid == request.auth.uid;
+      allow update: if !isStagingPayroll() && isFinance()
+        && resource.data.status == 'RESERVED'
+        && request.resource.data.status in ['RESERVED', 'RECOVERED', 'RELEASED'];
+      allow delete: if false;
+    }
+
+    // ─── Tasks ────────────────────────────────────────────────────────────────
+    match /projectTasks/{id} {
+      allow read: if authed();
+      allow write: if authed();
+    }
+
+    // ─── Procurement ──────────────────────────────────────────────────────────
+    match /suppliers/{id} {
+      allow read: if isFinance();
+      allow write: if isFinance();
+    }
+
+    // ─── Subcontractors ───────────────────────────────────────────────────────
+    // Registry + payable ledger. Finance roles manage write; job-card staff may
+    // read for the subcontract-works picker on job cards.
+    match /subcontractors/{id} {
+      allow read: if isFinance() || isJobCardStaff();
+      allow create, update: if isFinance();
+      allow delete: if isAdmin();
+    }
+
+    match /subcontractorTransactions/{id} {
+      allow read: if isFinance() || isJobCardStaff();
+      allow create: if isFinance() || isJobCardStaff();
+      allow update: if isFinance();
+      allow delete: if isAdmin();
+    }
+
+    // SCN contracts (created in Subcontractors module, optionally linked to job cards)
+    match /subcontractorJobs/{id} {
+      allow read: if isFinance() || isJobCardStaff();
+      allow create, update: if isFinance() || isJobCardStaff();
+      allow delete: if isAdmin();
+    }
+
+    // Partial payments against SCN contracts (manager approve → OPEX)
+    match /subcontractorJobPayments/{id} {
+      allow read: if isFinance() || isJobCardStaff();
+      allow create: if isFinance() || isJobCardStaff();
+      // Approval/rejection and posting fields are written only by the
+      // authenticated server approval endpoint (Admin SDK bypasses rules).
+      allow update: if isFinance()
+        && request.resource.data.get('approvalStatus', 'PENDING') == resource.data.get('approvalStatus', 'PENDING')
+        && request.resource.data.get('opexId', null) == resource.data.get('opexId', null)
+        && request.resource.data.get('transactionPaymentId', null) == resource.data.get('transactionPaymentId', null);
+      allow delete: if isAdmin();
+    }
+
+    match /procurementRequisitions/{id} {
+      allow read: if authed();
+      allow create: if authed();
+      allow update: if authed() && isAdminOrManager();
+      allow delete: if authed() && isAdmin();
+    }
+
+    match /procurementPurchaseOrders/{id} {
+      allow read: if isFinance();
+      allow write: if isFinance();
+    }
+
+    match /procurementGrns/{id} {
+      allow read: if authed() && (isInventoryWriter() || isFinance());
+      allow create: if authed() && (isInventoryWriter() || isFinance())
+                    && request.resource.data.inventoryPostingStatus == 'PENDING';
+      allow update: if authed() && (isInventoryWriter() || isFinance())
+                    && request.resource.data.inventoryPostingStatus == resource.data.inventoryPostingStatus
+                    && request.resource.data.inventoryPostingError == resource.data.inventoryPostingError;
+      allow delete: if authed() && isAdmin();
+    }
+
+    match /procurementSupplierInvoices/{id} {
+      allow read: if isFinance();
+      allow write: if isFinance();
+    }
+
+    // ─── Support ──────────────────────────────────────────────────────────────
+    match /supportTickets/{id} {
+      allow read: if authed();
+      allow create: if authed();
+      allow update: if authed() && (
+        isAdminOrManager() || 
+        (
+          request.auth.uid == resource.data.createdBy && 
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['status', 'assignedTo', 'priority', 'repliesCount'])
+        )
+      );
+      allow delete: if authed() && isAdmin();
+    }
+
+    // ─── Chat ─────────────────────────────────────────────────────────────────
+    match /chats/{id} {
+      allow read: if authed() && (
+        request.auth.uid in resource.data.participants ||
+        isAdmin() ||
+        // Initiative chats are shared collaboration surfaces for staff with MBDI access
+        resource.data.get('type', '') == 'mbdi'
+      );
+      allow create: if authed() && 
+                    request.auth.uid in request.resource.data.participants &&
+                    (
+                      // Private chats (isGroup != true) don't require an admins field
+                      request.resource.data.get('isGroup', false) != true ||
+                      // Group chats require an admins list with the creator in it
+                      (request.resource.data.admins is list && request.auth.uid in request.resource.data.admins)
+                    );
+      allow update: if authed() && (
+        request.auth.uid in resource.data.participants ||
+        isAdmin() ||
+        resource.data.get('type', '') == 'mbdi'
+      ) && (
+        // Only group admins can modify participant/admin lists — except MBDI self-join
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['participants', 'admins']) ||
+        request.auth.uid in resource.data.get('admins', []) ||
+        isAdmin() ||
+        (
+          resource.data.get('type', '') == 'mbdi' &&
+          request.auth.uid in request.resource.data.participants &&
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admins'])
+        )
+      );
+      allow delete: if authed() && isAdmin();
+
+      match /messages/{messageId} {
+        allow read, create: if authed() && (
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(id)).data.participants || 
+          isAdmin()
+        );
+        allow update: if authed() && (
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(id)).data.participants || 
+          isAdmin()
+        ) && (
+          // Case 1: Original sender editing text content
+          (request.auth.uid == resource.data.senderId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text'])) ||
+          // Case 2: Any participant updating reactions
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reactions'])) ||
+          // Case 3: Any participant updating read receipts
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readBy']))
+        );
+      }
+    }
+
+    // ─── Projects ─────────────────────────────────────────────────────────────
+    match /projects/{id} {
+      allow read: if authed();
+      allow write: if authed() && isAdminOrManager();
+    }
+
+    // ─── BOM Templates ───────────────────────────────────────────────────────
+    // All authenticated staff can read; admins/managers and technical can manage
+    match /bomTemplates/{id} {
+      allow read: if authed();
+      allow write: if authed() && (isAdminOrManager() || hasRole('TECHNICAL'));
+    }
+
+    // ─── Container Access Authorization (CAAD) ────────────────────────────────
+    // All authenticated staff can submit requests and read them.
+    // Only managers/admins can approve or reject (update status fields).
+    match /containerAccessRequests/{id} {
+      allow read: if authed();
+      allow create: if authed();
+      allow update: if isAdminOrManager();
+      allow delete: if authed() && isAdmin();
+    }
+
+    // Access logs are append-only for all authenticated users; no deletion.
+    match /containerAccessLogs/{id} {
+      allow read: if authed();
+      allow create: if authed();
+      allow update, delete: if false;
+    }
+
+    // ─── MBDI Scheme ──────────────────────────────────────────────────────────
+    // Authenticated staff can read and create initiatives.
+    // Owners may update their own (claims); managers/admins approve & pay.
+    match /mbdiInitiatives/{id} {
+      allow read: if authed();
+      allow create: if authed();
+      allow update: if authed() && (
+        isAdminOrManager() ||
+        request.auth.uid == resource.data.ownerId ||
+        (
+          request.auth.token.email != null &&
+          resource.data.ownerEmail is string &&
+          request.auth.token.email.lower() == resource.data.ownerEmail.lower()
+        )
+      );
+      allow delete: if authed() && isAdminOrManager();
+
+      match /comments/{commentId} {
+        allow read: if authed();
+        allow create: if authed()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 4000
+          && (
+            !('attachments' in request.resource.data)
+            || (
+              request.resource.data.attachments is list
+              && request.resource.data.attachments.size() <= 5
+            )
+          );
+        allow update, delete: if authed() && (
+          resource.data.authorUid == request.auth.uid || isAdminOrManager()
+        );
+      }
+    }
+
+    // Deduped payroll postings for staged MBDI rewards (50% / 50%).
+    match /mbdiPayrollPostings/{id} {
+      allow read: if isFinance();
+      allow write: if !isStagingPayroll() && (isAdminOrManager() || isFinance());
+    }
+
+    // Per-user MBDI activity notifications (header Rocket badge).
+    match /mbdiNotifications/{id} {
+      allow read: if authed() && resource.data.userId == request.auth.uid;
+      allow create: if authed();
+      allow update: if authed() && resource.data.userId == request.auth.uid;
+      allow delete: if authed() && resource.data.userId == request.auth.uid;
+    }
+
+    // ─── System Counters ─────────────────────────────────────────────────────
+    // Required for CAA request number generation (and any other auto-increment counters).
+    match /systemCounters/{doc} {
+      allow read, write: if authed();
+    }
+
+    // ─── Role Permissions Config ──────────────────────────────────────────────
+    // All authenticated users read (router needs it); only admins write
+    match /rolePermissions/{doc} {
+      allow read: if authed();
+      allow write: if authed() && isSuperAdmin();
+    }
+
+    // ─── Document Verification (public-facing) ────────────────────────────────
+    // /verify/:token is a public page — allow public read of the token doc
+    match /docVerifications/{token} {
+      allow read: if true;
+      allow write: if authed();
+
+      match /auditLog/{logId} {
+        allow read: if isFinance();
+        allow create: if true;     // public clients can trigger audit entries
+        allow update, delete: if false;
+      }
+    }
+
+    // Payment submissions: clients submit without login; finance reviews
+    match /paymentSubmissions/{id} {
+      allow read: if isFinance();
+      allow create: if true;
+      allow update: if isFinance();
+      allow delete: if authed() && isAdmin();
+    }
+
+    // ─── B2B Equipment Hire ───────────────────────────────────────────────────
+    function isEquipmentStaff() {
+      return authed() && (isAdminOrManager() || hasRole('TECHNICAL'));
+    }
+
+    match /equipmentAssets/{id} {
+      allow read, write: if isEquipmentStaff();
+    }
+
+    match /hireContracts/{id} {
+      allow read, write: if isEquipmentStaff();
+    }
+
+    match /inspectionLogs/{id} {
+      allow read, write: if isEquipmentStaff();
+    }
+
+    match /userStatus/{uid} {
+      allow read: if authed() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Login device sessions — all reads/writes go through Cloud Functions (Admin SDK)
+    match /userSessions/{uid} {
+      allow read, write: if false;
+      match /devices/{sessionId} {
+        allow read, write: if false;
+      }
+    }
+  }
+}

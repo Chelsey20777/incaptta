@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incaptta Project Management System - Staff Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #79c21b;
+            --brand-secondary: #ff8903;
+            --bg-dark: #0a0c10;
+            --card-bg: rgba(23, 27, 34, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #e6edf3;
+            --text-dim: #8b949e;
+            --accent-blue: #38bdf8;
+            --accent-purple: #a855f7;
+            --status-pending: #eab308;
+            --status-approved: #22c55e;
+            --status-rejected: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+        }
+
+        .blur-gradient {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(121, 194, 27, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(255, 137, 3, 0.1) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo-placeholder {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--brand-primary);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--brand-primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-card:hover::before {
+            opacity: 1;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+            padding-bottom: 4rem;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 0.8rem;
+            position: relative;
+        }
+
+        .flow-arrow {
+            color: var(--text-dim);
+            font-size: 1.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-primary { background: var(--brand-primary); color: #000; }
+        .badge-secondary { background: var(--brand-secondary); color: #000; }
+        .badge-pending { border: 1px solid var(--status-pending); color: var(--status-pending); }
+        .badge-approved { border: 1px solid var(--status-approved); color: var(--status-approved); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--brand-primary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .role-tag {
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .status-chip {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .back-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-dim);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--text-main);
+            border-color: var(--brand-primary);
+        }
+
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(121, 194, 27, 0.4); }
+            100% { box-shadow: 0 0 0 20px rgba(121, 194, 27, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="blur-gradient"></div>
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">INCAPTTA</div>
+            <h1>Project Management System</h1>
+            <p style="color: var(--text-dim); margin-top: 0.5rem;">Official Staff Operational Guide & Approval Protocol</p>
+        </header>
+
+        <nav id="main-nav">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.2rem; color: var(--brand-primary);">SYSTEM MODULES</h2>
+            <div class="nav-grid">
+                <div class="nav-card" onclick="showSection('job-card')">
+                    <h3 style="color: var(--brand-primary);">Job Card</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Project tracking, dimensions, and client deliverables.</p>
+                </div>
+                <div class="nav-card" onclick="showSection('bom-templates')">
+                    <h3 style="color: var(--brand-secondary);">BOM Templates</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Standardized material bills for structure automation.</p>
+                </div>
+                <div class="nav-card" onclick="showSection('hr')">
+                    <h3 style="color: var(--accent-blue);">HR Module</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Personnel, payroll, attendance, and recruitment.</p>
+                </div>
+                <div class="nav-card" onclick="showSection('opex')">
+                    <h3 style="color: var(--status-rejected);">OPEX</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Operational expenditures and multi-stage approvals.</p>
+                </div>
+                <div class="nav-card" onclick="showSection('finance')">
+                    <h3 style="color: var(--accent-purple);">Finance</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Ledgers, fund transfers, and top-up management.</p>
+                </div>
+                <div class="nav-card" onclick="showSection('caa')">
+                    <h3 style="color: #fff;">CAA Analytics</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Container Access Authorization & security tracking.</p>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ── Job Card Section ────────────────────────────────────────── -->
+        <section id="job-card" class="section">
+            <button class="back-btn" onclick="showNav()">← Back to Modules</button>
+            <div class="content-card">
+                <h2 style="color: var(--brand-primary); margin-bottom: 1rem;">Job Card Management</h2>
+                <p>The Job Card is the central document for project execution. It captures critical structure data and serves as the source for sales commissions.</p>
+                
+                <h3 style="margin-top: 2rem; font-size: 1.1rem; border-left: 3px solid var(--brand-primary); padding-left: 1rem;">Approval Flow</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">
+                        <span class="status-chip">DRAFT</span>
+                        <p style="margin-top: 5px; font-weight: 600;">Staff Create</p>
+                        <small>Sales/Technical</small>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step pulse" style="border-color: var(--brand-primary);">
+                        <span class="status-chip" style="color: var(--brand-primary);">SUBMITTED</span>
+                        <p style="margin-top: 5px; font-weight: 600;">Manager Review</p>
+                        <small>Final Approval</small>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <span class="status-chip" style="color: var(--status-approved);">APPROVED</span>
+                        <p style="margin-top: 5px; font-weight: 600;">Project Active</p>
+                        <small>Commission Generated</small>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 2rem; font-size: 1.1rem; border-left: 3px solid var(--brand-primary); padding-left: 1rem;">How to Make Entries</h3>
+                <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--text-dim);">
+                    <li style="margin-bottom: 0.5rem;">Navigate to <strong>Job Cards > New</strong>.</li>
+                    <li style="margin-bottom: 0.5rem;">Select the <strong>Requesting Department</strong> and <strong>Job Category</strong>.</li>
+                    <li style="margin-bottom: 0.5rem;">Enter <strong>Structure Dimensions</strong> (e.g., 80x10m) and <strong>Location</strong>.</li>
+                    <li style="margin-bottom: 0.5rem;">If creating for Sales, the system will auto-calculate a <strong>3% commission</strong> upon manager approval.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ── BOM Templates Section ────────────────────────────────────── -->
+        <section id="bom-templates" class="section">
+            <button class="back-btn" onclick="showNav()">← Back to Modules</button>
+            <div class="content-card">
+                <h2 style="color: var(--brand-secondary); margin-bottom: 1rem;">BOM Templates</h2>
+                <p>Bill of Materials (BOM) templates allow for rapid calculation of materials based on structure dimensions.</p>
+                
+                <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h3 style="font-size: 1.1rem; border-left: 3px solid var(--brand-secondary); padding-left: 1rem;">Standard Templates</h3>
+                        <table style="font-size: 0.85rem;">
+                            <thead>
+                                <tr><th>Template Name</th><th>Usage</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Water System</td><td>Plumbing & irrigation kits</td></tr>
+                                <tr><td>Curtains</td><td>Structure side-coverings</td></tr>
+                                <tr><td>Electric Fencing</td><td>Security perimeters</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; border-left: 3px solid var(--brand-secondary); padding-left: 1rem;">Integration</h3>
+                        <p style="color: var(--text-dim); margin-top: 1rem;">When creating a Job Card, select a BOM template to automatically populate the required hardware. Admin users can update template quantities via the <strong>Admin Dashboard</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── HR Module Section ───────────────────────────────────────── -->
+        <section id="hr" class="section">
+            <button class="back-btn" onclick="showNav()">← Back to Modules</button>
+            <div class="content-card">
+                <h2 style="color: var(--accent-blue); margin-bottom: 1rem;">HR & Personnel</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
+                    <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-blue);">Attendance</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-dim);">Real-time clock-in tracking via the HR Dashboard.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-blue);">Payroll</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-dim);">Monthly payslip generation and tax calculations.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-blue);">Performance</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-dim);">KPI tracking and staff reviews.</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 2rem; font-size: 1.1rem; border-left: 3px solid var(--accent-blue); padding-left: 1rem;">Staff Entry Flow</h3>
+                <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--text-dim);">
+                    <li style="margin-bottom: 0.5rem;"><strong>New Employees:</strong> Registered in <strong>HR > Employees</strong> with ID and Contract docs.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Payroll:</strong> Must be finalized by the <span class="role-tag">MANAGER</span> before distribution.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ── OPEX Section ────────────────────────────────────────────── -->
+        <section id="opex" class="section">
+            <button class="back-btn" onclick="showNav()">← Back to Modules</button>
+            <div class="content-card">
+                <h2 style="color: var(--status-rejected); margin-bottom: 1rem;">Operational Expenses (OPEX)</h2>
+                <p>All business expenditures must follow the multi-stage approval protocol before funds are disbursed.</p>
+                
+                <h3 style="margin-top: 2rem; font-size: 1.1rem; border-left: 3px solid var(--status-rejected); padding-left: 1rem;">The 4-Stage Protocol</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">
+                        <span class="status-chip">STAGE 1</span>
+                        <p style="margin-top: 5px; font-weight: 600;">Request</p>
+                        <small>Created: PENDING_ACCOUNTANT</small>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <span class="status-chip" style="color: var(--accent-blue);">STAGE 2</span>
+                        <p style="margin-top: 5px; font-weight: 600;">Verification</p>
+                        <small>Accountant Set: APPROVED_ACCOUNTANT</small>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <span class="status-chip" style="color: var(--brand-secondary);">STAGE 3</span>
+                        <p style="margin-top: 5px; font-weight: 600;">Authorization</p>
+                        <small>Manager Set: APPROVED_FOR_PAYMENT</small>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <span class="status-chip" style="color: var(--status-approved);">STAGE 4</span>
+                        <p style="margin-top: 5px; font-weight: 600;">Disbursement</p>
+                        <small>Status: PAYMENT_PROCESSED</small>
+                    </div>
+                </div>
+
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px dashed var(--status-rejected); padding: 1rem; border-radius: 0.8rem; margin-top: 1rem;">
+                    <p style="font-size: 0.9rem;"><strong style="color: var(--status-rejected);">REJECTION NOTE:</strong> If rejected at any stage, the verifier must provide a comment. The request returns to the creator for adjustment.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Finance Section ─────────────────────────────────────────── -->
+        <section id="finance" class="section">
+            <button class="back-btn" onclick="showNav()">← Back to Modules</button>
+            <div class="content-card">
+                <h2 style="color: var(--accent-purple); margin-bottom: 1rem;">Finance & Treasury</h2>
+                <div style="display: grid; grid-cols: 1fr; gap: 1.5rem;">
+                    <div style="background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                        <h3 style="color: var(--accent-purple); font-size: 1rem;">Real-time Ledger</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-dim);">The system maintains a holistic view of BANK, CASH, ECOCASH, and IRD accounts. <strong>Final Balances</strong> are calculated as: <code>Income + Topups - (Paid Expenses + Transfers Out) + Transfers In</code>.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                        <h3 style="color: var(--accent-purple); font-size: 1rem;">Fund Transfers</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-dim);">Transfers between internal accounts require initialing by the <span class="role-tag">ACCOUNTANT</span> and final approval by the <span class="role-tag">MANAGER</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── CAA Section ─────────────────────────────────────────────── -->
+        <section id="caa" class="section">
+            <button class="back-btn" onclick="showNav()">← Back to Modules</button>
+            <div class="content-card">
+                <h2 style="color: #fff; margin-bottom: 1rem;">Container Access Authorization (CAA)</h2>
+                <p>Security protocol for physical inventory containers.</p>
+                
+                <h3 style="margin-top: 2rem; font-size: 1.1rem; border-left: 3px solid #fff; padding-left: 1rem;">Operating Procedure</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; text-align: center;">
+                    <div class="flow-step">
+                        <h4 style="color: var(--status-pending);">1. Request</h4>
+                        <p style="font-size: 0.8rem;">Staff submits purpose, date, and time window.</p>
+                    </div>
+                    <div class="flow-step">
+                        <h4 style="color: var(--status-approved);">2. Authorize</h4>
+                        <p style="font-size: 0.8rem;">Manager approves and system generates a PDF.</p>
+                    </div>
+                    <div class="flow-step">
+                        <h4 style="color: var(--accent-purple);">3. Log</h4>
+                        <p style="font-size: 0.8rem;">Staff must LOG each entry physical visit in the system.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 1rem;">
+                    <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem;">Analytics & Audit</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-dim);">The system tracks "Accessed Count" and cross-references it with authorizations to ensure no unauthorized physical access occurs.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer style="text-align: center; margin-top: 4rem; padding-bottom: 4rem; color: var(--text-dim); font-size: 0.8rem;">
+            &copy; 2026 Incaptta Project Management System. Confidential Internal Document.
+        </footer>
+    </div>
+
+    <script>
+        function showSection(id) {
+            document.getElementById('main-nav').style.display = 'none';
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showNav() {
+            document.getElementById('main-nav').style.display = 'block';
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

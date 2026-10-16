@@ -1,0 +1,22 @@
+{
+  "projects": {
+    "default": "incaptta-pro",
+    "production": "incaptta-pro",
+    "staging": "incaptta-pro-staging"
+  },
+  "targets": {
+    "incaptta-pro": {
+      "hosting": {
+        "main": [
+          "incaptta-pro"
+        ],
+        "manager": [
+          "incaptta-man"
+        ],
+        "mobile": [
+          "incaptta-mobile-app"
+        ]
+      }
+    }
+  }
+}

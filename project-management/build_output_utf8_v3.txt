@@ -1,0 +1,34 @@
+﻿
+> project-management@0.0.0 build
+> vue-tsc -b && vite build
+
+src/features/jobCards/components/InventoryRequisitionGrid.vue(158,43): error TS7006: Parameter '_' implicitly has an 'any' type.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(158,46): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(290,73): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(298,69): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(299,89): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(300,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(301,59): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(316,69): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(317,89): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(318,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(319,59): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(329,69): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(330,89): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(331,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(332,59): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(348,69): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(349,89): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(350,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(351,59): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(360,69): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(361,89): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(362,79): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(363,59): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+src/features/jobCards/components/InventoryRequisitionGrid.vue(375,172): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.

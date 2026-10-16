@@ -1,0 +1,42 @@
+
+> project-management@0.0.0 build
+> vue-tsc -b && vite build
+
+src/components/ai/AiChatSlideOver.vue(44,3): error TS2305: Module '"@/features/analytics/types/analytics"' has no exported member 'ConversationTurn'.
+src/components/ai/AiChatSlideOver.vue(201,51): error TS2339: Property 'mode' does not exist on type '{ answer: string; highlights: { label: string; value: string; severity: AnalyticsChatSeverity; }[]; recommendedActions: string[]; relatedRecords: { type: "job_card" | "department" | "expense" | "account" | "transfer"; id: string; label: string; }[]; generatedAt: string; }'.
+src/components/ai/AiChatSlideOver.vue(206,64): error TS2554: Expected 2 arguments, but got 3.
+src/components/ai/AiChatSlideOver.vue(396,39): error TS2339: Property 'mode' does not exist on type '{ answer: string; highlights: { label: string; value: string; severity: AnalyticsChatSeverity; }[]; recommendedActions: string[]; relatedRecords: { type: "job_card" | "department" | "expense" | "account" | "transfer"; id: string; label: string; }[]; generatedAt: string; }'.
+src/components/ai/AiChatSlideOver.vue(399,41): error TS2339: Property 'mode' does not exist on type '{ answer: string; highlights: { label: string; value: string; severity: AnalyticsChatSeverity; }[]; recommendedActions: string[]; relatedRecords: { type: "job_card" | "department" | "expense" | "account" | "transfer"; id: string; label: string; }[]; generatedAt: string; }'.
+src/components/ai/AiChatSlideOver.vue(403,46): error TS2339: Property 'mode' does not exist on type '{ answer: string; highlights: { label: string; value: string; severity: AnalyticsChatSeverity; }[]; recommendedActions: string[]; relatedRecords: { type: "job_card" | "department" | "expense" | "account" | "transfer"; id: string; label: string; }[]; generatedAt: string; }'.
+src/components/ai/AiChatSlideOver.vue(404,36): error TS2339: Property 'mode' does not exist on type '{ answer: string; highlights: { label: string; value: string; severity: AnalyticsChatSeverity; }[]; recommendedActions: string[]; relatedRecords: { type: "job_card" | "department" | "expense" | "account" | "transfer"; id: string; label: string; }[]; generatedAt: string; }'.
+src/components/ai/AiChatSlideOver.vue(488,38): error TS2339: Property 'suggestedFollowUps' does not exist on type '{ answer: string; highlights: { label: string; value: string; severity: AnalyticsChatSeverity; }[]; recommendedActions: string[]; relatedRecords: { type: "job_card" | "department" | "expense" | "account" | "transfer"; id: string; label: string; }[]; generatedAt: string; }'.
+src/components/ai/AiChatSlideOver.vue(494,52): error TS2339: Property 'suggestedFollowUps' does not exist on type '{ answer: string; highlights: { label: string; value: string; severity: AnalyticsChatSeverity; }[]; recommendedActions: string[]; relatedRecords: { type: "job_card" | "department" | "expense" | "account" | "transfer"; id: string; label: string; }[]; generatedAt: string; }'.
+src/features/admin/components/BomTemplatesAdmin.vue(157,34): error TS2538: Type 'undefined' cannot be used as an index type.
+src/features/admin/components/BomTemplatesAdmin.vue(159,63): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+src/features/admin/components/BomTemplatesAdmin.vue(178,43): error TS2538: Type 'undefined' cannot be used as an index type.
+src/features/containerAccess/pages/CreateCAA.vue(157,40): error TS2339: Property 'setTimeout' does not exist on type '{ router: Router; jobSearch: string; showJobDropdown: boolean; selectedJobCard: { id: string; jobNumber: string; clientName: string; location: string; } | null; clearJobCard: () => void; ... 38 more ...; $router: Router; }'.
+src/features/crm/utils/generateAccountStatement.ts(49,17): error TS2554: Expected 1 arguments, but got 2.
+src/features/hr/store/hrStore.ts(208,32): error TS18048: 'existingDoc' is possibly 'undefined'.
+src/features/hr/store/hrStore.ts(212,48): error TS18048: 'existingDoc' is possibly 'undefined'.
+src/features/hr/utils/generatePayslipPdf.ts(279,50): error TS2339: Property 'employeeId' does not exist on type 'Employee'.
+src/features/hr/utils/generatePayslipPdf.ts(288,51): error TS2339: Property 'employeeId' does not exist on type 'Employee'.
+src/features/hr/utils/generatePayslipPdf.ts(288,89): error TS2339: Property 'employeeId' does not exist on type 'Employee'.
+src/features/jobCards/pages/JobCardDetail.vue(67,20): error TS18047: 'financialBreakdown.value' is possibly 'null'.
+src/features/jobCards/pages/JobCardDetail.vue(485,30): error TS18048: 'r' is possibly 'undefined'.
+src/features/jobCards/pages/JobCardDetail.vue(485,62): error TS18048: 'r' is possibly 'undefined'.
+src/features/jobCards/pages/JobCardDetail.vue(485,94): error TS18048: 'r' is possibly 'undefined'.
+src/features/jobCards/pages/JobCardDetail.vue(485,110): error TS18048: 'r' is possibly 'undefined'.
+src/features/jobCards/pages/JobCardDetail.vue(1603,49): error TS2538: Type 'undefined' cannot be used as an index type.
+src/features/jobCards/pages/JobCardDetail.vue(1605,74): error TS2538: Type 'undefined' cannot be used as an index type.
+src/features/jobCards/pages/JobCardDetail.vue(2805,110): error TS18047: '__VLS_ctx.financialBreakdown' is possibly 'null'.
+src/features/jobCards/pages/JobCardDetail.vue(2826,75): error TS18047: '__VLS_ctx.financialBreakdown' is possibly 'null'.
+src/features/jobCards/utils/generateAgfPdf.ts(139,17): error TS2554: Expected 1 arguments, but got 2.
+src/features/jobCards/utils/generatePerformanceReportPdf.ts(59,19): error TS2554: Expected 1 arguments, but got 2.
+src/features/jobCards/utils/generatePerformanceReportPdf.ts(130,32): error TS2339: Property 'impCostAmount' does not exist on type 'FinancialSummary'.
+src/features/jobCards/utils/payrollIntegration.ts(111,27): error TS18048: 'payrollDoc' is possibly 'undefined'.
+src/features/jobCards/utils/payrollIntegration.ts(118,42): error TS18048: 'payrollDoc' is possibly 'undefined'.
+src/features/jobCards/utils/payrollIntegration.ts(136,20): error TS18048: 'payrollDoc' is possibly 'undefined'.
+src/features/procurement/pages/PurchaseOrderDetailView.vue(84,31): error TS2339: Property 'updateJobCardItemPrLink' does not exist on type 'Store<"jobCards", Pick<{ jobCards: Ref<any[], any[]>; loading: Ref<boolean, boolean>; error: Ref<string | null, string | null>; fetchJobCards: () => void; createJobCard: (data: any) => Promise<...>; ... 10 more ...; cleanup: () => void; }, "jobCards" | ... 1 more ... | "error">, Pick<...>, Pick<...>>'.
+src/features/procurement/pages/PurchaseOrderDetailView.vue(127,33): error TS2339: Property 'updateJobCardItemPrLink' does not exist on type 'Store<"jobCards", Pick<{ jobCards: Ref<any[], any[]>; loading: Ref<boolean, boolean>; error: Ref<string | null, string | null>; fetchJobCards: () => void; createJobCard: (data: any) => Promise<...>; ... 10 more ...; cleanup: () => void; }, "jobCards" | ... 1 more ... | "error">, Pick<...>, Pick<...>>'.
+src/features/procurement/store/procurementStore.ts(371,31): error TS2339: Property 'syncAdHocProcurementToJobCard' does not exist on type 'Store<"jobCards", Pick<{ jobCards: Ref<any[], any[]>; loading: Ref<boolean, boolean>; error: Ref<string | null, string | null>; fetchJobCards: () => void; createJobCard: (data: any) => Promise<...>; ... 10 more ...; cleanup: () => void; }, "jobCards" | ... 1 more ... | "error">, Pick<...>, Pick<...>>'.
+src/features/procurement/utils/generatePOPdf.ts(50,19): error TS2554: Expected 1 arguments, but got 2.

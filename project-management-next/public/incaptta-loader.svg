@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg-circle {
+        fill: none;
+        stroke: #72BF44;
+        stroke-width: 6;
+        stroke-linecap: round;
+        stroke-dasharray: 260 80;
+        transform-origin: 150px 150px;
+        animation: spin 3s linear infinite;
+      }
+      
+      .rooster-head {
+        transform-origin: 160px 160px;
+        animation: crow-head 1.2s ease-in-out infinite alternate;
+      }
+
+      .top-beak {
+        transform-origin: 145px 125px;
+        animation: crow-beak-top 1.2s ease-in-out infinite alternate;
+      }
+
+      .bottom-beak {
+        transform-origin: 145px 132px;
+        animation: crow-beak-bottom 1.2s ease-in-out infinite alternate;
+      }
+
+      .sound-wave {
+        fill: none;
+        stroke: #FF9900;
+        stroke-width: 3;
+        stroke-linecap: round;
+        opacity: 0;
+        animation: wave-emit 1.2s ease-out infinite;
+      }
+
+      .wave2 {
+        animation-delay: 0.2s;
+      }
+
+      /* Keyframe Animations */
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes crow-head {
+        0%, 30% { transform: rotate(0deg) translate(0, 0); }
+        60%, 100% { transform: rotate(-8deg) translate(-4px, -6px); }
+      }
+
+      @keyframes crow-beak-top {
+        0%, 30% { transform: rotate(0deg); }
+        60%, 100% { transform: rotate(-12deg); }
+      }
+
+      @keyframes crow-beak-bottom {
+        0%, 30% { transform: rotate(0deg); }
+        60%, 100% { transform: rotate(18deg); }
+      }
+
+      @keyframes wave-emit {
+        0%, 35% { opacity: 0; transform: scale(0.6) translate(10px, 10px); }
+        60% { opacity: 1; }
+        100% { opacity: 0; transform: scale(1.3) translate(-15px, -15px); }
+      }
+    </style>
+  </defs>
+
+  <!-- Outer Animated Green Ring -->
+  <circle class="bg-circle" cx="150" cy="150" r="110" />
+
+  <!-- Sound Waves (Crowing effect) -->
+  <g>
+    <path class="sound-wave" d="M 105 110 A 25 25 0 0 0 95 140" />
+    <path class="sound-wave wave2" d="M 95 100 A 40 40 0 0 0 80 145" />
+  </g>
+
+  <!-- Eggs Section -->
+  <g id="eggs">
+    <path d="M 102 165 C 90 140 120 125 138 148 C 150 165 130 195 108 190 C 95 187 95 175 102 165 Z" fill="#FF8C00" />
+    <path d="M 105 167 C 95 147 120 133 133 153 C 122 140 102 148 100 163 Z" fill="#FFA500" />
+    <ellipse cx="112" cy="150" rx="3" ry="7" transform="rotate(-25 112 150)" fill="#FFF" opacity="0.6"/>
+
+    <path d="M 125 178 C 115 155 145 140 162 162 C 172 178 152 205 130 200 C 118 197 118 187 125 178 Z" fill="#FF8C00" />
+    <ellipse cx="135" cy="163" rx="3.5" ry="8" transform="rotate(-25 135 163)" fill="#FFF" opacity="0.6"/>
+  </g>
+
+  <!-- Animated Rooster Head Group -->
+  <g class="rooster-head">
+    <!-- Grey Neck & Body Feathers -->
+    <path d="M 155 135 C 165 145 190 140 205 165 C 215 182 205 210 185 220 C 175 225 165 215 165 200 C 160 210 150 215 145 200 C 145 180 150 160 155 135 Z" fill="#D3D3D3" />
+    <path d="M 170 145 C 180 155 195 160 200 180 C 190 170 175 160 170 145 Z" fill="#EAEAEA" />
+
+    <!-- Red Comb -->
+    <path d="M 150 125 C 145 105 130 100 135 85 C 145 70 165 85 165 75 C 175 60 195 80 190 90 C 200 85 210 95 200 110 C 210 112 210 125 195 125 C 180 125 160 120 150 125 Z" fill="#ED1C24" />
+
+    <!-- Top Beak -->
+    <path class="top-beak" d="M 152 120 C 142 120 130 128 125 130 C 135 133 148 132 154 128 Z" fill="#FFC20E" />
+
+    <!-- Bottom Beak -->
+    <path class="bottom-beak" d="M 152 128 C 142 131 133 133 128 134 C 136 139 146 137 153 132 Z" fill="#E5AB00" />
+
+    <!-- Red Wattle / Throat -->
+    <path d="M 152 132 C 145 135 138 145 142 155 C 148 165 160 160 158 145 C 162 148 168 145 165 135 Z" fill="#ED1C24" />
+
+    <!-- Eye -->
+    <circle cx="165" cy="118" r="3.5" fill="#1A1A1A" />
+    <circle cx="166" cy="117" r="1" fill="#FFF" />
+  </g>
+</svg>

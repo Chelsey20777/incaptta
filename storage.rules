@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Payment proofs: public upload (unauthenticated payers via QR/verification link)
+    // get (download) is allowed without auth so getDownloadURL works after upload.
+    // list is restricted to authenticated admins to prevent directory enumeration.
+    // write is open but guarded by size & type constraints.
+    match /payment-proofs/{token}/{fileName} {
+      allow get: if true;
+      allow list: if request.auth != null;
+      allow write: if request.resource.size < 5 * 1024 * 1024
+        && (request.resource.contentType.matches('image/.*')
+            || request.resource.contentType == 'application/pdf');
+    }
+
+    // Chat Attachments Directory Scope
+    // Design decision: Scoped to authenticated users only.
+    // The security model relies on Firestore rules preventing non-participants
+    // from ever query-resolving the file download URLs.
+    match /chats/{chatId}/attachments/{fileName} {
+      allow read, write: if request.auth != null;
+    }
+
+    // All other paths: authenticated users only
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

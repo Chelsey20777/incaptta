@@ -1,0 +1,386 @@
+@import "tailwindcss";
+@import "tailwindcss/theme" theme(reference);
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --breakpoint-3xl: 1600px;
+  --breakpoint-4xl: 2000px;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-text: var(--brand-text);
+  --color-brand-solid: var(--brand-solid);
+  --color-glass-bg: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+  --shadow-glass: var(--glass-shadow);
+}
+
+/* ── Light Theme ───────────────────────────────────────────────────────────── */
+:root {
+  --radius: 0.625rem;
+  --background: rgba(248, 250, 252, 0.4);
+  --foreground: oklch(0.145 0 0);
+  --card: rgba(255, 255, 255, 0.45);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: rgba(255, 255, 255, 0.7);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0 / 50%);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0 / 50%);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0 / 50%);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.05);
+  --ring: oklch(0.708 0 0);
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+  --sidebar: rgba(255, 255, 255, 0.5);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0 / 50%);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: oklch(0.708 0 0);
+  --brand-primary: #79c21b;
+  --brand-secondary: #ff8903;
+  --brand-text: #41780a;
+  --brand-solid: #41780a;
+  --glow-primary: rgba(121, 194, 27, 0.06);
+  --glow-secondary: rgba(255, 137, 3, 0.06);
+  --bg-solid: #f8fafc;
+  --bg-overlay: rgba(248, 250, 252, 0.85);
+  --glass-blur: 16px;
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.04);
+}
+
+/* ── Dark Theme ────────────────────────────────────────────────────────────── */
+.dark {
+  --background: rgba(9, 13, 22, 0.4);
+  --foreground: oklch(0.985 0 0);
+  --card: rgba(20, 26, 42, 0.45);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: rgba(22, 29, 48, 0.75);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0 / 50%);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0 / 50%);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.371 0 0 / 50%);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.05);
+  --ring: oklch(0.556 0 0);
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+  --sidebar: rgba(15, 20, 32, 0.5);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0 / 50%);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: oklch(0.439 0 0);
+  --brand-primary: #74b419;
+  --brand-secondary: #ff8903;
+  --brand-text: #79c21b;
+  --brand-solid: #41780a;
+  --glow-primary: rgba(116, 180, 25, 0.15);
+  --glow-secondary: rgba(255, 137, 3, 0.12);
+  --bg-solid: #090d16;
+  --bg-overlay: rgba(11, 12, 16, 0.65);
+  --glass-blur: 16px;
+  --glass-bg: rgba(20, 26, 42, 0.22);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply overscroll-y-none scroll-smooth h-full;
+    color-scheme: light dark;
+    font-size: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  /* Root/Global Scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html.light {
+    color-scheme: light;
+  }
+
+  /* Background image layer — sits behind all content */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image: var(--bg-image, url('/background-farming.svg'));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(var(--bg-brightness, 0.45));
+    transition: filter 0.3s ease;
+  }
+
+  /* Ambient glow overlay on top of the background image */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      radial-gradient(circle at 15% 25%, var(--glow-primary) 0%, transparent 50%),
+      radial-gradient(circle at 85% 75%, var(--glow-secondary) 0%, transparent 50%),
+      linear-gradient(160deg, rgba(9,13,22,0.70) 0%, rgba(9,13,22,0.55) 100%);
+    pointer-events: none;
+  }
+
+  body {
+    @apply text-foreground h-full;
+    font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    /* Transparent — the farming SVG in body::before shows through */
+    background-color: transparent;
+  }
+}
+
+/* ── Glassmorphism — UI UX Pro Max Skill Spec ──────────────────────────────
+   Core spec: backdrop-filter blur(10-20px), rgba(255,255,255,0.10-0.20) light
+   Dark spec:  rgba(20,26,42,0.12-0.22), border rgba(255,255,255,0.08-0.15)
+   Source: styles.csv row #3 Glassmorphism + row #71 Modern Dark Cinema
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Light glass ── */
+[data-slot="card"],
+.card,
+aside,
+header,
+[data-slot="dialog-content"],
+[data-slot="popover-content"],
+[data-slot="dropdown-menu-content"],
+[data-slot="select-content"],
+.glass-panel {
+  backdrop-filter: blur(16px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* ── Dark glass (per skill: rgba(20,26,42,0.22), border rgba(255,255,255,0.08)) ── */
+.dark [data-slot="card"],
+.dark .card,
+.dark aside,
+.dark header,
+.dark [data-slot="dialog-content"],
+.dark [data-slot="popover-content"],
+.dark [data-slot="dropdown-menu-content"],
+.dark [data-slot="select-content"],
+.dark .glass-panel {
+  backdrop-filter: blur(20px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+  background: rgba(20, 26, 42, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ── Hover micro-animations ── */
+[data-slot="card"]:hover,
+.card:hover {
+  border-color: rgba(121, 194, 27, 0.30) !important;
+  box-shadow:
+    0 12px 40px 0 rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+.dark [data-slot="card"]:hover,
+.dark .card:hover {
+  border-color: rgba(116, 180, 25, 0.35) !important;
+  box-shadow:
+    0 16px 48px 0 rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.10) !important;
+  transform: translateY(-1px);
+}
+
+/* ── Utility glass classes (use on any div) ── */
+.glass-card {
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  background: rgba(20, 26, 42, 0.20);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+  border-radius: 16px;
+}
+
+.glass-surface {
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  background: rgba(9, 13, 22, 0.40);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Ensure backdrop filters work properly on modals/dialog overlays */
+[data-slot="dialog-overlay"] {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark [data-slot="dialog-overlay"] {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ── Scrollbar Utilities ─────────────────────────────────────────────────────── */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    border: 1px solid transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ring);
+  }
+
+  .scrollbar-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.2) transparent;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.25);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(156, 163, 175, 0.45);
+  }
+}
+
+/* Fix native select option background and text contrast across light/dark themes */
+option {
+  background-color: #ffffff !important;
+  color: #18181b !important;
+}
+
+.dark option,
+[data-theme='dark'] option {
+  background-color: #141a2a !important;
+  color: #ffffff !important;
+}

@@ -1,0 +1,60 @@
+SKU,Name,Description,UOM,New Count (Stock Take),Category Name,Location,Reorder Level,Purchase Price,Freight Duty,Markup %,Active (TRUE/FALSE)
+PNFS-1,Storage Silo,,PCS,2,Pan Feeders,,,1696.90,164.31,110,TRUE
+PNFS-2,PNFS 01 Full Spec Line (Auger Pipe Base Antiroost),,Meters,2520,Pan Feeders,,,8.21,0.01,110,TRUE
+PNFS-3,Power Control Box PNFS 02,,PCS,14,Pan Feeders,,,200.00,2.77,110,TRUE
+PNFS-4,Driving Motor Set PNFS Silo Auger,,PCS,2,Pan Feeders,,,218.77,21.19,110,TRUE
+PNFS-5,End Mechanical Switch / Silo Auger,,PCS,2,Pan Feeders,,,69.00,6.68,110,TRUE
+PNFS-6,Feed Sensor / Silo Auger,,PCS,18,Pan Feeders,,,68.29,0.73,110,TRUE
+PNFS-7,Feedline Strobe with x3 Outlets / Silo Auger,,PCS,6,Pan Feeders,,,6.38,0.21,110,TRUE
+PNFS-8,Silo Auger Feed Drop Accessories,,PCS,4,Pan Feeders,,,4.68,0.23,110,TRUE
+PNFS-9,Silo Auger Main Feedline Pipe + Auger,,PCS,20,Pan Feeders,,,14.36,0.14,110,TRUE
+PNFS-10,Silo Auger / Silo Bottom Outlet Accessories,,PCS,2,Pan Feeders,,,83.61,8.10,110,TRUE
+PNFS-11,Silo Auger Other Accessories Miscellaneous,,PCS,2,Pan Feeders,,,34.00,3.29,110,TRUE
+PNFS-12,Vice Feed Hopper 90kgs PNFS 11,,PCS,32,Pan Feeders,,,62.90,0.38,110,TRUE
+PNFS-13,Driving Motor Full Sets (Inhouse Lines),,PCS,32,Pan Feeders,,,361.00,2.18,110,TRUE
+PNFS-14,End Mechanical Switch / Inhouse Lines,,PCS,32,Pan Feeders,,,65.00,0.39,110,TRUE
+PNFS-15,Winch Winder,,PCS,5,Pan Feeders,,,3.76,0.15,110,TRUE
+PNFS-16,Lifting Winch,,PCS,32,Pan Feeders,,,80.00,0.48,110,TRUE
+PNFS-17,Suspending Pulleys Red Cast Iron,,PCS,4,Pan Feeders,,,15.00,0.73,110,TRUE
+PNFS-18,Steel Wire Rope 5mm PNFS,,Meters,3590,Pan Feeders,,,0.33,0.01,110,TRUE
+PNFS-19,Steel Wire Rope 1.5mm PNFS,,Meters,2680,Pan Feeders,,,0.07,0.01,110,TRUE
+WTS-01,Curtain and Ceiling Fixing Hooks (For Pulleys),,PCS,6880,Climate Control Curtains,,,0.25,0.01,110,TRUE
+WAT-43,Pan Feeder Auger,,PCS,126,Pan Feeders,,,2.12,0.01,110,TRUE
+WAT-21,Red Curtain Winches 1200LBS,,PCS,200,Climate Control Curtains,,,13.00,0.01,110,TRUE
+WAT-26,3mm Steel Water System Rope,,Meters,1000,Water systems installation,,,0.12,0.01,110,TRUE
+WAT-22,Clippers 25mm,,PCS,7000,Water systems installation,,,0.07,0.01,110,TRUE
+WAT-08,Red Curtain Pulleys 45mm,,PCS,5000,Climate Control Curtains,,,0.32,0.01,110,TRUE
+WAT-09,Crosby Clamps 3mm Galvanised,,PCS,3000,Water systems installation,,,0.04,0.01,110,TRUE
+WAT-10,Nylon Rope 4mm Water System,,Meters,10000,Water systems installation,,,0.04,0.01,110,TRUE
+WAT-11,Grey Pressure Regulators,,PCS,140,Water systems installation,,,16.55,0.02,110,TRUE
+WAT-12,Flex Pipe 20mm Nipples,,Meters,500,Water systems installation,,,0.50,0.01,110,TRUE
+WAT-13,Coach Screws,,PCS,2000,Water systems installation,,,0.04,0.01,110,TRUE
+WAT-14,Code Adjusters,,PCS,7000,Water systems installation,,,0.07,0.01,110,TRUE
+WAT-15,Nipple Drinker Winches,,PCS,80,Water systems installation,,,13.92,0.03,110,TRUE
+WAT-16,Welding Rods 12 Gauge,,kg,50,Water systems installation,,,1.85,0.01,110,TRUE
+WAT-17,Nylon Rope 5mm for Curtains,,PCS,10000,Water systems installation,,,0.13,0.01,110,TRUE
+WAT-18,2mm Wire Rope for Curtains,,PCS,5000,Water systems installation,,,0.07,0.01,110,TRUE
+WAT-19,Water Meter Nipple Drinkers,,PCS,20,Water systems installation,,,5.00,0.05,110,TRUE
+WAT-20,Water Front Panel,,units,20,Water systems installation,,,56.00,0.54,110,TRUE
+WAT-21B,Main Steel Pulley V40 For Curtains,,PCS,300,Water systems installation,,,1.59,0.01,110,TRUE
+WAT-22B,Ball Valve 25mm White,,PCS,1500,Water systems installation,,,0.33,0.01,110,TRUE
+WAT-23,T-Connector 25mm White,,PCS,1500,Water systems installation,,,0.15,0.01,110,TRUE
+WAT-24,3 Way Ball Valve 25mm,,PCS,20,Water systems installation,,,1.40,0.01,110,TRUE
+WAT-25,Expansion Bolts,,PCS,300,Climate Control Curtains,,,0.70,0.01,110,TRUE
+WAT-26B,Socket Union 25mm White,,PCS,800,Water systems installation,,,0.24,0.01,110,TRUE
+WAT-27,Plain Socket 25mm White,,PCS,2000,Water systems installation,,,0.10,0.01,110,TRUE
+WAT-28,Elbow 25mm White,,PCS,3000,Water systems installation,,,0.11,0.01,110,TRUE
+WAT-29,Vertical T Connector 3 Way 25mm,,PCS,500,Water systems installation,,,0.14,0.01,110,TRUE
+WAT-30,Vertical T Connector 4 Way 25mm,,PCS,1600,Water systems installation,,,0.17,0.01,110,TRUE
+WAT-31,Male Connector VSP 25mm White,,PCS,1400,Water systems installation,,,0.06,0.01,110,TRUE
+WAT-32,Reducer 32mm to 25mm White,,PCS,900,Water systems installation,,,0.06,0.01,110,TRUE
+WAT-33,45 Degree Elbow 25mm White,,PCS,2000,Water systems installation,,,0.04,0.01,110,TRUE
+WAT-34,Female 25mm Connector White,,PCS,2000,Water systems installation,,,0.11,0.01,110,TRUE
+WAT-35,105mm Pulley,,PCS,20,Water systems installation,,,3.63,0.04,110,TRUE
+WAT-36,90mm Pulley,,PCS,20,Water systems installation,,,1.80,0.02,110,TRUE
+WAT-37,Electric Cable for Pan Feeders,,PCS,3500,Pan Feeders,,,1.56,0.01,110,TRUE
+WAT-38,Pipe Holders 25mm,,PCS,4000,Pan Feeders,,,0.08,0.01,110,TRUE
+WAT-39,Dosatron Medicator Set,,PCS,20,Water systems installation,,,296.00,2.87,110,TRUE
+CTN-01,PVC Curtains Green 500gsm,,sqm,462,Climate Control Curtains,,,0.86,0.01,110,TRUE
+CTN-02,PVC Curtains Grey 500gsm,,sqm,6300,Climate Control Curtains,,,0.86,0.01,110,TRUE
+CTN-03,PVC Curtains Blue 500gsm,,sqm,2700,Climate Control Curtains,,,0.86,0.01,110,TRUE

@@ -1,0 +1,25 @@
+{
+  "JC-2026-0344": {
+    "expectedSelectedCount": 4,
+    "expectedDeleteTotal": 144,
+    "keepOpexIds": [
+      "jc-adhoc-01a64939-cf72-49af-b1eb-08c827b6cdf9",
+      "jc-adhoc-be5a281e-d61d-4c0b-95eb-3dde84a03e31"
+    ],
+    "deleteOpexIds": [
+      "jc-adhoc-1a60f79d-12fc-4d0e-a18d-635110e1ed95",
+      "jc-adhoc-10d0c090-8f9d-4ec9-a5bb-eff82689b667"
+    ],
+    "deleteRowIds": [],
+    "links": [
+      {
+        "rowId": "01a64939-cf72-49af-b1eb-08c827b6cdf9",
+        "opexId": "jc-adhoc-01a64939-cf72-49af-b1eb-08c827b6cdf9"
+      },
+      {
+        "rowId": "10d0c090-8f9d-4ec9-a5bb-eff82689b667",
+        "opexId": "jc-adhoc-be5a281e-d61d-4c0b-95eb-3dde84a03e31"
+      }
+    ]
+  }
+}

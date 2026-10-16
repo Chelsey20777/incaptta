@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+:root {
+  --c-dark:       #0D1F12;
+  --c-dark-deep:  #060E07;
+  --c-green:      #1B5E20;
+  --c-green-mid:  #25A244;
+  --c-yellow:     #F9A825;
+  --c-yellow-dark:#4A3000;
+  --c-muted:      #8FB897;
+  --c-muted-dark: #6B9A72;
+  --c-muted-deep: #4A7A50;
+  --c-light-text: #C8E6CB;
+  --c-card-dark:  #1B3A20;
+  --c-light-bg:   #F5F7F5;
+  --c-tag-bg:     #EAF3DE;
+  --c-tag-text:   #3B6D11;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body, p, span, a, button, input, select, textarea {
+    font-family: 'DM Sans', sans-serif;
+  }
+}

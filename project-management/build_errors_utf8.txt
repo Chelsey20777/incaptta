@@ -1,0 +1,12 @@
+﻿
+> project-management@0.0.0 build
+> vue-tsc -b && vite build
+
+src/features/jobCards/pages/JobCardDetail.vue(566,48): error TS7006: Parameter 'sAcc' implicitly has an 'any' type.
+src/features/jobCards/pages/JobCardDetail.vue(566,54): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/features/jobCards/pages/JobCardDetail.vue(582,48): error TS7006: Parameter 'sAcc' implicitly has an 'any' type.
+src/features/jobCards/pages/JobCardDetail.vue(582,54): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/features/jobCards/pages/JobCardDetail.vue(1199,88): error TS2551: Property 'inventoryMUTotal' does not exist on type '{ inventoryIRDTotal?: undefined; inventorySubtotal?: undefined; adHocTotal?: undefined; returnsTotal?: undefined; grandTotal?: undefined; expensesByMethod?: undefined; } | { inventoryIRDTotal: any; ... 4 more ...; expensesByMethod: any; }'. Did you mean 'inventorySubtotal'?
+  Property 'inventoryMUTotal' does not exist on type '{ inventoryIRDTotal?: undefined; inventorySubtotal?: undefined; adHocTotal?: undefined; returnsTotal?: undefined; grandTotal?: undefined; expensesByMethod?: undefined; }'.
+src/features/jobCards/pages/JobCardDetail.vue(1203,86): error TS2551: Property 'inventoryIMPCostTotal' does not exist on type '{ inventoryIRDTotal?: undefined; inventorySubtotal?: undefined; adHocTotal?: undefined; returnsTotal?: undefined; grandTotal?: undefined; expensesByMethod?: undefined; } | { inventoryIRDTotal: any; ... 4 more ...; expensesByMethod: any; }'. Did you mean 'inventoryIRDTotal'?
+  Property 'inventoryIMPCostTotal' does not exist on type '{ inventoryIRDTotal?: undefined; inventorySubtotal?: undefined; adHocTotal?: undefined; returnsTotal?: undefined; grandTotal?: undefined; expensesByMethod?: undefined; }'.

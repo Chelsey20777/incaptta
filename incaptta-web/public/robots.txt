@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Sitemap: https://app.incaptta.co.zw/sitemap.xml
+
+Disallow: /api/

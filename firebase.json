@@ -1,0 +1,96 @@
+{
+    "functions": [
+        {
+            "source": "deploy",
+            "codebase": "default"
+        }
+    ],
+    "hosting": [
+        {
+            "target": "web",
+            "public": "incaptta-web/dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*"
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
+        {
+            "target": "main",
+            "public": "project-management/dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*"
+            ],
+            "rewrites": [
+                {
+                    "source": "/api/**",
+                    "function": "api"
+                },
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
+        {
+            "target": "manager",
+            "public": "incaptta-manage/dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*"
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
+        {
+            "target": "mobile",
+            "public": "incaptta-mobile-rn/dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*"
+            ],
+            "headers": [
+                {
+                    "source": "**/*.ttf",
+                    "headers": [
+                        {
+                            "key": "Access-Control-Allow-Origin",
+                            "value": "*"
+                        },
+                        {
+                            "key": "Content-Type",
+                            "value": "font/ttf"
+                        },
+                        {
+                            "key": "Cache-Control",
+                            "value": "max-age=31536000"
+                        }
+                    ]
+                }
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        }
+    ],
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "storage": {
+        "rules": "storage.rules"
+    }
+}

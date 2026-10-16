@@ -1,0 +1,59 @@
+name: Staging backend
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: Git commit SHA to deploy functions, rules, and indexes to incaptta-pro-staging
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: incaptta-projects-staging-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      DEPLOYMENT_ENV: staging
+      FIREBASE_PROJECT_ID: incaptta-pro-staging
+      GCLOUD_PROJECT: incaptta-pro-staging
+      GCP_PROJECT: incaptta-pro-staging
+    steps:
+      - name: Pin staging project
+        run: |
+          test "${{ vars.STAGING_FIREBASE_PROJECT_ID }}" = "incaptta-pro-staging"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_STAGING_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Build and stage functions
+        run: npm run stage:functions
+
+      - name: Deploy functions, rules, and indexes to staging
+        run: >-
+          npx --yes firebase-tools@15.28.1 deploy
+          --only functions,firestore,storage
+          --project incaptta-pro-staging
+          --non-interactive
+          --force

@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Production and Build Outputs
+dist/
+**/dist/
+.next/
+**/.next/
+.open-next/
+**/.open-next/
+.wrangler/
+**/.wrangler/
+out/
+build/
+coverage/
+
+# Environment and Secrets
+.env
+.env*.local
+.env.production
+.env.staging
+!.env.example
+!.env.staging.example
+*.pem
+*service-account*.json
+*firebase-adminsdk*.json
+
+# Archives & Large Bundles
+*.zip
+*.tar.gz
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+firebase-debug*.log
+.system_generated/
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+.gemini/
+.idea/
+.vscode/
+
+# Firebase Cache
+.firebase/

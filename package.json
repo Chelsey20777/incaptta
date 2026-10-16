@@ -1,0 +1,54 @@
+{
+  "name": "incaptta-pro",
+  "version": "1.0.0",
+  "engines": {
+    "node": "20"
+  },
+  "main": "dist/server.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "migrate:firestore-to-mongodb": "node scripts/migrate-firestore-to-mongodb.mjs",
+    "seed:mongodb-admin": "node project-management-next/scripts/seed-mongodb-admin.mjs",
+    "stage:functions": "npm run build && node scripts/stage-functions-deploy.mjs",
+    "deploy:staging-backend": "node scripts/deploy-staging-backend.mjs",
+    "start": "node dist/server.js",
+    "dev": "nodemon --exec \"ts-node --transpile-only src/server.ts\""
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "bcryptjs": "^3.0.3",
+    "commander": "^14.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "firebase": "^11.3.1",
+    "firebase-admin": "^13.6.1",
+    "firebase-functions": "^7.0.5",
+    "helmet": "^8.1.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
+    "mongodb": "^7.7.0",
+    "morgan": "^1.10.1",
+    "qrcode": "^1.5.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/helmet": "^0.0.48",
+    "@types/jest": "^30.0.0",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^25.2.3",
+    "@types/supertest": "^6.0.3",
+    "eslint": "^10.0.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.8.1",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

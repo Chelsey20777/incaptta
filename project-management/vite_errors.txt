@@ -1,0 +1,109 @@
+﻿[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 1812 modules transformed.
+npx : [31mΓ£ù[39m Build 
+failed in 4.65s
+At line:1 char:1
++ npx vite build 2>&1 | 
+Out-File -Encoding utf8 
+vite_errors.txt
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (  
+  [31mΓ£ù[39m Build fa   
+ iled in 4.65s:String)    
+ [], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+[31merror during build:
+[31m[vite:vue] [plugin 
+vite:vue] src/features/job
+Cards/components/Inventory
+RequisitionGrid.vue 
+(27:27): Element is 
+missing end tag.[31m
+file: [36mC:/Users/REAL T
+IME/Documents/incaptta/Inc
+apttaPro/project-managemen
+t/src/features/jobCards/co
+mponents/InventoryRequisit
+ionGrid.vue:27:27[31m
+SyntaxError: [plugin 
+vite:vue] src/features/job
+Cards/components/Inventory
+RequisitionGrid.vue 
+(27:27): Element is 
+missing end tag.
+    at 
+createCompilerError 
+(C:\Users\REAL TIME\Docume
+nts\incaptta\IncapttaPro\p
+roject-management\node_mod
+ules\@vue\compiler-core\di
+st\compiler-core.cjs.prod.
+js:1374:17)
+    at emitError 
+(C:\Users\REAL TIME\Docume
+nts\incaptta\IncapttaPro\p
+roject-management\node_mod
+ules\@vue\compiler-core\di
+st\compiler-core.cjs.prod.
+js:2980:5)
+    at Object.onend 
+(C:\Users\REAL TIME\Docume
+nts\incaptta\IncapttaPro\p
+roject-management\node_mod
+ules\@vue\compiler-core\di
+st\compiler-core.cjs.prod.
+js:2612:7)
+    at Tokenizer.finish 
+(C:\Users\REAL TIME\Docume
+nts\incaptta\IncapttaPro\p
+roject-management\node_mod
+ules\@vue\compiler-core\di
+st\compiler-core.cjs.prod.
+js:1246:14)
+    at Tokenizer.parse 
+(C:\Users\REAL TIME\Docume
+nts\incaptta\IncapttaPro\p
+roject-management\node_mod
+ules\@vue\compiler-core\di
+st\compiler-core.cjs.prod.
+js:1224:10)
+    at Object.baseParse 
+(C:\Users\REAL TIME\Docume
+nts\incaptta\IncapttaPro\p
+roject-management\node_mod
+ules\@vue\compiler-core\di
+st\compiler-core.cjs.prod.
+js:3012:13)
+    at Object.parse 
+(C:\Users\REAL TIME\Docume
+nts\incaptta\IncapttaPro\p
+roject-management\node_mod
+ules\@vue\compiler-dom\dis
+t\compiler-dom.cjs.prod.js
+:665:23)
+    at Object.parse$1 [as 
+parse] (C:\Users\REAL TIME
+\Documents\incaptta\Incapt
+taPro\project-management\n
+ode_modules\@vue\compiler-
+sfc\dist\compiler-sfc.cjs.
+js:1824:24)
+    at createDescriptor (f
+ile:///C:/Users/REAL%20TIM
+E/Documents/incaptta/Incap
+ttaPro/project-management/
+node_modules/@vitejs/plugi
+n-vue/dist/index.mjs:54:42
+)
+    at transformMain (file
+:///C:/Users/REAL%20TIME/D
+ocuments/incaptta/Incaptta
+Pro/project-management/nod
+e_modules/@vitejs/plugin-v
+ue/dist/index.mjs:1319:33)
+[39m

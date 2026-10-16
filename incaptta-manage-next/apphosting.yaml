@@ -1,0 +1,21 @@
+# Firebase App Hosting configuration for incaptta-manage-next
+# See https://firebase.google.com/docs/app-hosting/configure for details
+
+runConfig:
+  minInstances: 0        # Scale down to 0 when idle to save costs
+  maxInstances: 10       # Max instances for autoscaling
+  concurrency: 80        # Concurrent requests handled by a single instance
+  cpu: 1                 # 1 vCPU
+  memoryMiB: 1024        # 1 GB RAM
+
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "incaptta-pro"
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: "incaptta-pro.firebaseapp.com"
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: "incaptta-pro.firebasestorage.app"
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "408940478113"
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:408940478113:web:8ea03252b84d1e29e7bae0"

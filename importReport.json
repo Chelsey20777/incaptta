@@ -1,0 +1,15 @@
+{
+  "fileName": "inventorydata.xlsx",
+  "sheetName": "Extracting General Information ",
+  "timestamp": "2026-02-18T22:58:09.680Z",
+  "totalRowsRead": 58,
+  "rowsAfterMerge": 58,
+  "validCount": 58,
+  "invalidCount": 0,
+  "createdCount": 58,
+  "updatedCount": 0,
+  "skippedExistingCount": 0,
+  "mergedCount": 0,
+  "failures": [],
+  "merges": []
+}
