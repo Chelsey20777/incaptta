@@ -70,6 +70,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.20.12",
     "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
@@ -78,6 +79,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.151.1"
   }
 }
