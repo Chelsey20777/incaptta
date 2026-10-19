@@ -1,4 +1,4 @@
-# Cloudflare Pages / Workers configuration for Incaptta Marketing Site (Vue 3 + Vite)
+# Cloudflare Pages configuration for Incaptta Marketing Site (Vue 3 + Vite)
 name = "incaptta-web"
 compatibility_date = "2026-10-16"
 
@@ -8,6 +8,3 @@ compatibility_date = "2026-10-16"
 
 [assets]
 directory = "./dist"
-
-[site]
-bucket = "./dist"
